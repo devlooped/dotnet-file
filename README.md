@@ -24,9 +24,9 @@ dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.io/ind
 
 Example usage:
 
-    file download url [-path=]   // downloads file to given path or local dir
-    file update [file or url]*   // updates a specific file(s) or all (if none provided)
-    file delete [file]*          // deletes a file and its entry in .netconfig
+    file download [-u|url=]* [-path=]     // downloads file(s) to given path or the current dir
+    file update [-p|path=]* [-u|url=]*    // updates a specific file(s) or all (if none provided)
+    file delete [-p|path=]* [-u|url=]*    // deletes a file and its entry in .netconfig
 
 After downloading a file, a new entry is created in a local `.netconfig` file, which
 leverages [dotnet config](https://github.com/kzu/dotnet-config):
