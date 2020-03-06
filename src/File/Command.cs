@@ -8,7 +8,7 @@ namespace Microsoft.DotNet
 {
     abstract class Command
     {
-        public List<FileSpec> Files { get; } = new List<FileSpec>();
+        public List<FileSpec> Files { get; protected set; } = new List<FileSpec>();
 
         protected Command(Config configuration) => Configuration = configuration;
 
@@ -23,7 +23,7 @@ namespace Microsoft.DotNet
                 var url = Configuration.Get<string>("file", file.Key, "url");
                 yield return new FileSpec(file.Key!,
                     url == null ? null : new Uri(url),
-                    Configuration.Get<string>("file", file.Key, "url"));
+                    Configuration.Get<string>("file", file.Key, "etag"));
             }
         }
 

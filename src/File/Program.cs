@@ -17,7 +17,7 @@ namespace Microsoft.DotNet
 
             var options = new OptionSet
             {
-                { "p|path:", "path of file to download, update or delete", p => { path = p; files.Add(new FileSpec(p)); } },
+                { "f|file:", "file to download, update or delete", p => { path = p; files.Add(new FileSpec(p)); } },
                 { "u|url:", "url of the remote file", u => files.Add(new FileSpec(new Uri(u))) },
 
                 { "?|h|help", "Display this help", h => help = h != null },
@@ -33,14 +33,20 @@ namespace Microsoft.DotNet
             var config = Config.FromFile(Config.FileName);
             var command = extraArgs[0].ToLowerInvariant() switch
             {
-                "download" => new DownloadCommand(config),
-                "update" => new UpdateCommand(config),
+                "changes" => new ChangesCommand(config),
                 "delete" => new DeleteCommand(config),
+                "download" => new DownloadCommand(config),
                 "list" => new ListCommand(config),
+                "update" => new UpdateCommand(config),
                 _ => Command.NullCommand,
             };
 
             command.Files.AddRange(files);
+            // Add remainder arguments as if they were just files or urls provided 
+            // to the command. Allows skipping the -f|-u switches.
+            command.Files.AddRange(extraArgs.Skip(1).Select(x =>
+                Uri.TryCreate(extraArgs[1], UriKind.Absolute, out var uri) ?
+                new FileSpec(uri) : new FileSpec(x)));
 
             switch (command)
             {
@@ -66,7 +72,7 @@ namespace Microsoft.DotNet
 
         static int ShowHelp(OptionSet options)
         {
-            Console.WriteLine($"Usage: {ThisAssembly.Metadata.AssemblyName} [download|update|delete|list] [options]");
+            Console.WriteLine($"Usage: {ThisAssembly.Metadata.AssemblyName} [changes|delete|download|list|update] [file|url]* [options]");
             options.WriteOptionDescriptions(Console.Out);
             return 0;
         }

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Superpower.Model;
 
 namespace Microsoft.DotNet
 {
@@ -19,11 +17,16 @@ namespace Microsoft.DotNet
             var http = new HttpClient();
             var result = 0;
 
+            var length = Files.Select(x => x.Path).Max(x => x.Length) + 1;
+            Action<string> writefixed = s => Console.Write(s + new string(' ', length - s.Length));
+
             // TODO: allow configuration to provide HTTP headers, i.e. auth?
             foreach (var file in Files)
             {
                 var etag = Configuration.Get<string?>("file", file.Path, "etag");
                 var weak = Configuration.Get<bool?>("file", file.Path, "weak");
+
+                writefixed(file.Path);
 
                 try
                 {
@@ -37,11 +40,9 @@ namespace Microsoft.DotNet
                     if (response.StatusCode == HttpStatusCode.NotModified)
                     {
                         // No need to download
-                        Console.WriteLine($"{file.Path} ✓");
+                        Console.WriteLine($"✓ <= {file.Uri}");
                         continue;
                     }
-
-                    Console.WriteLine($"{file.Path} <= {file.Uri}");
 
                     etag = response.Headers.ETag?.Tag?.Trim('"');
                     var path = file.Path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
@@ -64,15 +65,23 @@ namespace Microsoft.DotNet
                     else
                         Configuration.Unset("file", file.Path, "weak");
 
+                    Console.WriteLine($"v <= {file.Uri}");
                 }
+                //catch (HttpRequestException re)
+                //{
+                //    Console.WriteLine($"x <= {file.Uri?.OriginalString}");
+                //    Console.WriteLine($"{new string(' ', length)} {re.Message}");
+                //}
                 catch (Exception e)
                 {
-                    Console.WriteLine("    x " + e.Message);
+                    Console.WriteLine($"x <= {file.Uri?.OriginalString}");
+                    Console.Write(new string(' ', length + 5));
+                    Console.WriteLine(e.Message);
                     result = 1;
                 }
             }
 
-            return 0;
+            return result;
         }
     }
 }

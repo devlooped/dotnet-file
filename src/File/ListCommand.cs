@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,11 @@ namespace Microsoft.DotNet
             foreach (var file in configured)
             {
                 Console.Write(file.Path + new string(' ', length - file.Path.Length));
+                if (File.Exists(file.Path))
+                    Console.Write('✓');
+                else
+                    Console.Write('?');
+
                 Console.Write(" <= ");
                 Console.WriteLine(file.Uri?.OriginalString);
             }
