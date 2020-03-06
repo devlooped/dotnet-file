@@ -4,8 +4,8 @@
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
 [![Build Status](https://dev.azure.com/kzu/oss/_apis/build/status/dotnet-file?branchName=master)](https://dev.azure.com/kzu/oss/_build/latest?definitionId=35&branchName=master)
-[![Version](https://img.shields.io/nuget/v/dotnet-file.svg)](https://www.nuget.org/packages/dotnet-file)
-[![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg)](https://www.nuget.org/packages/dotnet-file)
+[![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
+[![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
 [![License](https://img.shields.io/github/license/kzu/dotnet-file.svg?color=blue)](https://github.com/kzu/dotnet-file/blob/master/LICENSE)
 
 Installing or updating (same command for both):
