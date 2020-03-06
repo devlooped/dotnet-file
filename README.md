@@ -27,6 +27,9 @@ Usage:
         -u, --url[=VALUE]          url of the remote file
         -?, -h, --help             Display this help
 
+Use of the `-f` and `-u` is optional, since all arguments after the action are tried for URL parsing automatically to 
+disambiguate.    
+
 Examples:
 
     dotnet file download [url]     // downloads a file to the current directory and records its URL+ETag in dotnet-config
@@ -36,9 +39,6 @@ Examples:
     dotnet file list               // lists all configured files
     dotnet file changes            // lists all configured files and their status with regards to the configured 
                                    // remote URL and ETag matching
-
-Use of the `-f` and `-u` is optional, since all arguments after the action are tried for URL parsing automatically to 
-disambiguate.    
 
 After downloading a file, a new entry is created in a local `.netconfig` file, which
 leverages [dotnet config](https://github.com/kzu/dotnet-config):
@@ -62,7 +62,7 @@ Symbols are used to denote actions (pending or performed) on files:
 * `?`: file not found locally. A new version can be downloaded from the remote.
 * `x`: could not update file or refresh ETag status, with reason noted in subsequent line.
 
-Examples:
+Concrete examples:
 
     > dotnet file download https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
     azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml

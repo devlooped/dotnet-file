@@ -1,7 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.</Description>
+    <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.
+    
+Usage: dotnet file [changes|delete|download|list|update] [file|url]*
+</Description>
 
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
