@@ -8,7 +8,7 @@ namespace Microsoft.DotNet
 {
     abstract class Command
     {
-        public List<FileSpec> Files { get; protected set; } = new List<FileSpec>();
+        public List<FileSpec> Files { get; } = new List<FileSpec>();
 
         protected Command(Config configuration) => Configuration = configuration;
 

@@ -2,7 +2,7 @@
   "profiles": {
     "Config.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "changes icon.png index.html foo.bar"
+      "commandLineArgs": "update"
     }
   }
 }

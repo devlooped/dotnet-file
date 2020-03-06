@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Microsoft.DotNet
@@ -21,7 +17,7 @@ namespace Microsoft.DotNet
             var configured = Files;
             if (Files.Count == 0)
             {
-                // Implicitly, running update with no files means updating all
+                // Implicitly, running with no files means listing all
                 configured = GetConfiguredFiles().ToList();
             }
             else
@@ -52,7 +48,7 @@ namespace Microsoft.DotNet
                     if (File.Exists(file.Path))
                     {
                         if (response.Headers.ETag?.Tag?.Trim('"') != file.ETag)
-                            Console.Write('v');
+                            Console.Write('^');
                         else
                             Console.Write('✓');
                     }
@@ -66,7 +62,7 @@ namespace Microsoft.DotNet
                 else
                 {
                     Console.WriteLine($"x <= {file.Uri?.OriginalString}");
-                    Console.WriteLine($"{new string(' ', length)} {(int)response.StatusCode}: {response.ReasonPhrase}");
+                    Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
                 }
             }
 

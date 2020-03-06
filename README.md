@@ -20,11 +20,25 @@ To get the CI version:
 dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.io/index.json
 ```
 
-Example usage:
+Usage:
 
-    dotnet file download [-u|url=]* [-path=]     // downloads file(s) to given path or the current dir
-    dotnet file update [-p|path=]* [-u|url=]*    // updates a specific file(s) or all (if none provided)
-    dotnet file delete [-p|path=]* [-u|url=]*    // deletes a file and its entry in .netconfig
+    dotnet file [changes|delete|download|list|update] [file|url]* [options]
+        -f, --file[=VALUE]         file to download, update or delete
+        -u, --url[=VALUE]          url of the remote file
+        -?, -h, --help             Display this help
+
+Examples:
+
+    dotnet file download [url]     // downloads a file to the current directory and records its URL+ETag in dotnet-config
+    dotnet file update [file]      // updates a specific file, based on its dotnet-config configuration
+    dotnet file update             // updates all recorded files, according to the dotnet-config configuration
+    dotnet file delete [file]      // deletes a file and its entry in .netconfig
+    dotnet file list               // lists all configured files
+    dotnet file changes            // lists all configured files and their status with regards to the configured 
+                                   // remote URL and ETag matching
+
+Use of the `-f` and `-u` is optional, since all arguments after the action are tried for URL parsing automatically to 
+disambiguate.    
 
 After downloading a file, a new entry is created in a local `.netconfig` file, which
 leverages [dotnet config](https://github.com/kzu/dotnet-config):
@@ -37,6 +51,46 @@ This information is used to later update the file contents if necessary, by issu
 conditional http get to retrieve updates. It’s generally advisable to commit the .netconfig file 
 to source control, so that updating is simply a matter of running `dotnet file update`. 
 
-Note also that if matching `[file]` entries are not present for the files being updated, 
-the can still be synced by just specifying `file update [url]` instead, which behaves 
-just like `download` and overwrites the target file if the retrieved content is different.
+> Note: `dotnet file update [url]` behaves just like `dotnet file download [url]` when a matching 
+> entry for the file isn't found in the `.netconfig` file.
+
+Symbols are used to denote actions (pending or performed) on files:
+
+* `√`: file has no pending updated (ETag matches) or it was just downloaded successfully.
+* `^`: file has pending updates (ETag doesn't match the remote).
+* `=`: no changes to file were necessary in an update
+* `?`: file not found locally. A new version can be downloaded from the remote.
+* `x`: could not update file or refresh ETag status, with reason noted in subsequent line.
+
+Examples:
+
+    > dotnet file download https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+
+    > dotnet file download https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    .editorconfig √ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+
+    > dotnet file list
+    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    .editorconfig       √ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+
+    > del .editorconfig
+    > dotnet file list
+    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    .editorconfig       ? <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+
+    ; missing file downloaded successfully
+    > dotnet file update
+    azure-pipelines.yml = <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    .editorconfig       √ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+
+    ; file updated on remote, changes detected
+    > dotnet file changes
+    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    .editorconfig       ^ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+
+    ; file renamed or moved from remote
+    > dotnet file changes
+    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    .editorconfig       x <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+                             404: Not Found

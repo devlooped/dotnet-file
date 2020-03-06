@@ -13,11 +13,10 @@ namespace Microsoft.DotNet
         {
             var help = false;
             var files = new List<FileSpec>();
-            string? path = default;
 
             var options = new OptionSet
             {
-                { "f|file:", "file to download, update or delete", p => { path = p; files.Add(new FileSpec(p)); } },
+                { "f|file:", "file to download, update or delete", p => files.Add(new FileSpec(p)) },
                 { "u|url:", "url of the remote file", u => files.Add(new FileSpec(new Uri(u))) },
 
                 { "?|h|help", "Display this help", h => help = h != null },
@@ -48,31 +47,12 @@ namespace Microsoft.DotNet
                 Uri.TryCreate(extraArgs[1], UriKind.Absolute, out var uri) ?
                 new FileSpec(uri) : new FileSpec(x)));
 
-            switch (command)
-            {
-                case DownloadCommand download:
-                    if (path != null && files.Count == 1)
-                    {
-                        files[0] = new FileSpec(path, files[0].Uri);
-                    }
-                    else if (path != null && files.Count > 1)
-                    {
-                        Console.WriteLine("Cannot provide path when downloading multiple files.");
-                        return 1;
-                    }
-                    else if (extraArgs.Count > 1 && Uri.TryCreate(extraArgs[1], UriKind.Absolute, out var uri))
-                    {
-                        download.Files.Add(new FileSpec(uri));
-                    }
-                    return await download.ExecuteAsync();
-                default:
-                    return await command.ExecuteAsync();
-            }
+            return await command.ExecuteAsync();
         }
 
         static int ShowHelp(OptionSet options)
         {
-            Console.WriteLine($"Usage: {ThisAssembly.Metadata.AssemblyName} [changes|delete|download|list|update] [file|url]* [options]");
+            Console.WriteLine($"Usage: dotnet {ThisAssembly.Metadata.AssemblyName} [changes|delete|download|list|update] [file|url]* [options]");
             options.WriteOptionDescriptions(Console.Out);
             return 0;
         }
