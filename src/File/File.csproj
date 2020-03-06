@@ -10,7 +10,7 @@
     <RootNamespace>Microsoft.DotNet</RootNamespace>
 
     <PackageId>dotnet-file</PackageId>
-    <ToolCommandName>file</ToolCommandName>
+    <ToolCommandName>dotnet-file</ToolCommandName>
     <PackAsTool>true</PackAsTool>
     <Nullable>enable</Nullable>
   </PropertyGroup>
