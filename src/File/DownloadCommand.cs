@@ -26,6 +26,13 @@ namespace Microsoft.DotNet
             // TODO: allow configuration to provide HTTP headers, i.e. auth?
             foreach (var file in Files)
             {
+                if (File.Exists(file.Path) && File.GetAttributes(file.Path).HasFlag(FileAttributes.ReadOnly))
+                {
+                    writefixed(file.Path);
+                    Console.WriteLine("? Readonly, skipping");
+                    continue;
+                }
+
                 var uri = file.Uri;
                 if (uri == null)
                 {
