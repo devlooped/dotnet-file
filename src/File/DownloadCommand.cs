@@ -17,6 +17,9 @@ namespace Microsoft.DotNet
             var http = new HttpClient();
             var result = 0;
 
+            if (Files.Count == 0)
+                return 0;
+
             var length = Files.Select(x => x.Path).Max(x => x.Length) + 1;
             Action<string> writefixed = s => Console.Write(s + new string(' ', length - s.Length));
 
