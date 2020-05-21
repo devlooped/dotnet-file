@@ -54,6 +54,13 @@ namespace Microsoft.DotNet
         {
             Console.WriteLine($"Usage: dotnet {ThisAssembly.Metadata.AssemblyName} [changes|delete|download|list|update] [file|url]* [options]");
             options.WriteOptionDescriptions(Console.Out);
+            Console.WriteLine();
+            Console.WriteLine($"Statuses:");
+
+            Console.WriteLine($"  = <= [URI]        remote file equals local file");
+            Console.WriteLine($"  x <= [URI]        there was an error processing the entry");
+            Console.WriteLine($"  ✓ <= [URI]        remote file is newer than local copy");
+
             return 0;
         }
     }
