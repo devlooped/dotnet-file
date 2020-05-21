@@ -69,12 +69,12 @@ namespace Microsoft.DotNet
                     if (response.StatusCode == HttpStatusCode.NotModified)
                     {
                         // No need to download
-                        Console.WriteLine($"= <= {uri}");
+                        Console.WriteLine($"= <- {uri}");
                         continue;
                     }
                     if (!response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine($"x <= {uri}");
+                        Console.WriteLine($"x <- {uri}");
                         Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
                         continue;
                     }
@@ -105,11 +105,11 @@ namespace Microsoft.DotNet
                     else
                         Configuration.Unset("file", file.Path, "weak");
 
-                    Console.WriteLine($"✓ <= {uri}");
+                    Console.WriteLine($"✓ <- {uri}");
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"x <= {uri}");
+                    Console.WriteLine($"x <- {uri}");
                     Console.Write(new string(' ', length + 5));
                     Console.WriteLine(e.Message);
                     result = 1;

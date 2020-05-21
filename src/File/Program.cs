@@ -57,9 +57,9 @@ namespace Microsoft.DotNet
             Console.WriteLine();
             Console.WriteLine($"Statuses:");
 
-            Console.WriteLine($"  = <= [URI]        remote file equals local file");
-            Console.WriteLine($"  x <= [URI]        there was an error processing the entry");
-            Console.WriteLine($"  ✓ <= [URI]        remote file is newer than local copy");
+            Console.WriteLine($"  = <- [url]        remote file equals local file");
+            Console.WriteLine($"  x <- [url]        there was an error processing the entry");
+            Console.WriteLine($"  ✓ <- [url]        remote file is newer than local copy");
 
             return 0;
         }
