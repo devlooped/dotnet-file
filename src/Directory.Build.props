@@ -50,7 +50,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     
-    <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <NoWarn>NU5105;$(NoWarn)</NoWarn>
 
     <!-- Because it's sooo much better than GeneratePackageOnBuild! -->
