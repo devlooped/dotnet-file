@@ -1,0 +1,3 @@
+[submodule "gcm"]
+	path = gcm
+	url = https://github.com/microsoft/Git-Credential-Manager-Core
