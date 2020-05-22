@@ -22,6 +22,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitHub", "gcm\src\shared\Gi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.Git.CredentialManager", "gcm\src\shared\Microsoft.Git.CredentialManager\Microsoft.Git.CredentialManager.csproj", "{585C5D54-927E-473B-A19E-EE1C81176A12}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlassian.Bitbucket", "gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj", "{F51AD403-4C4B-4A09-AA7A-0C432982748E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AzureRepos", "gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj", "{2E5862BA-4B16-4619-9EAA-D347D39F728F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +44,14 @@ Global
 		{585C5D54-927E-473B-A19E-EE1C81176A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{585C5D54-927E-473B-A19E-EE1C81176A12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{585C5D54-927E-473B-A19E-EE1C81176A12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F51AD403-4C4B-4A09-AA7A-0C432982748E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F51AD403-4C4B-4A09-AA7A-0C432982748E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F51AD403-4C4B-4A09-AA7A-0C432982748E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F51AD403-4C4B-4A09-AA7A-0C432982748E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E5862BA-4B16-4619-9EAA-D347D39F728F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E5862BA-4B16-4619-9EAA-D347D39F728F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E5862BA-4B16-4619-9EAA-D347D39F728F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E5862BA-4B16-4619-9EAA-D347D39F728F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +59,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{16C29C1C-E248-4DF5-84DA-DDF0D2ADD235} = {F0D2DF05-3B25-467D-B27B-5D697C6ADE85}
 		{585C5D54-927E-473B-A19E-EE1C81176A12} = {F0D2DF05-3B25-467D-B27B-5D697C6ADE85}
+		{F51AD403-4C4B-4A09-AA7A-0C432982748E} = {F0D2DF05-3B25-467D-B27B-5D697C6ADE85}
+		{2E5862BA-4B16-4619-9EAA-D347D39F728F} = {F0D2DF05-3B25-467D-B27B-5D697C6ADE85}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {19B804F2-469A-40CA-9387-C9C1F7D231E8}

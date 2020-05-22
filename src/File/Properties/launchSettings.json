@@ -2,7 +2,7 @@
   "profiles": {
     "Config.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "-?"
+      "commandLineArgs": "download https://bitbucket.org/kzu/private/raw/master/README.md"
     }
   }
 }

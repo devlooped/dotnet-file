@@ -37,7 +37,9 @@ Usage: dotnet file [changes|delete|download|list|update] [file|url]*
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj" />
     <ProjectReference Include="..\..\gcm\src\shared\GitHub\GitHub.csproj" />
+    <ProjectReference Include="..\..\gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj" />
     <ProjectReference Include="..\..\gcm\src\shared\Microsoft.Git.CredentialManager\Microsoft.Git.CredentialManager.csproj" />
   </ItemGroup>
 
