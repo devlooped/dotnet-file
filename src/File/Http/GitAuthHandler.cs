@@ -26,6 +26,8 @@ namespace Microsoft.DotNet
                 { "github.com", new GitHubAuthHandler(handler) },
                 { "raw.githubusercontent.com", new GitHubAuthHandler(handler) },
                 { "bitbucket.org", new BitbucketAuthHandler(handler) },
+                { "dev.azure.com", new AzureReposAuthHandler(handler) },
+                { "visualstudio.com", new AzureReposAuthHandler(handler) },
             };
         }
 

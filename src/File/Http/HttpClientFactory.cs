@@ -9,6 +9,7 @@ namespace Microsoft.DotNet
                 new GitAuthHandler(
                     new GitHubRawHandler(
                         new BitbucketRawHandler(
-                            new HttpClientHandler { AllowAutoRedirect = false }))));
+                            new AzureReposRawHandler(
+                                new HttpClientHandler { AllowAutoRedirect = false })))));
     }
 }
