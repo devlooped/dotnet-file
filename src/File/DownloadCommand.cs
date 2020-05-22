@@ -15,7 +15,7 @@ namespace Microsoft.DotNet
 
         public override async Task<int> ExecuteAsync()
         {
-            var http = new HttpClient();
+            var http = HttpClientFactory.Create();
             var result = 0;
 
             if (Files.Count == 0)
@@ -23,8 +23,6 @@ namespace Microsoft.DotNet
 
             var length = Files.Select(x => x.Path).Max(x => x.Length) + 1;
             Action<string> writefixed = s => Console.Write(s + new string(' ', length - s.Length));
-
-            var credentials = new GitCredentials();
 
             // TODO: allow configuration to provide HTTP headers, i.e. auth?
             foreach (var file in Files)
@@ -67,26 +65,6 @@ namespace Microsoft.DotNet
                     }
 
                     var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-
-                    if (response.StatusCode == HttpStatusCode.NotFound && uri.Host.Equals("github.com", StringComparison.OrdinalIgnoreCase))
-                    {
-                        var creds = await credentials.GetCredentials(uri);
-                        // https://github.com/xamarin/ide/raw/master/README.md 
-                        if (uri.PathAndQuery.Contains("/raw/"))
-                        {
-                            uri = new Uri($"https://{creds.Password}:@raw.githubusercontent.com{uri.PathAndQuery.Replace("/raw", "")}");
-                        }
-
-                        // Reissue the request
-                        request = new HttpRequestMessage(HttpMethod.Get, uri);
-                        request.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(creds.Password)));
-                        if (etag != null && File.Exists(file.Path))
-                        {
-                            request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("\"" + etag + "\"", weak.GetValueOrDefault()));
-                        }
-
-                        response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
-                    }
 
                     // TODO: we might want to check more info about the file, such as length, MD5 (if the header is present 
                     // in the response), etc. In those cases we might still want ot fetch the new file if it doesn't 

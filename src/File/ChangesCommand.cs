@@ -12,7 +12,7 @@ namespace Microsoft.DotNet
 
         public override async Task<int> ExecuteAsync()
         {
-            var http = new HttpClient();
+            var http = HttpClientFactory.Create();
 
             var configured = Files;
             if (Files.Count == 0)
@@ -50,18 +50,18 @@ namespace Microsoft.DotNet
                         if (response.Headers.ETag?.Tag?.Trim('"') != file.ETag)
                             Console.Write('^');
                         else
-                            Console.Write('✓');
+                            Console.Write('=');
                     }
                     else
                     {
                         Console.Write('?');
                     }
 
-                    Console.WriteLine($" <= {file.Uri?.OriginalString}");
+                    Console.WriteLine($" <- {file.Uri?.OriginalString}");
                 }
                 else
                 {
-                    Console.WriteLine($"x <= {file.Uri?.OriginalString}");
+                    Console.WriteLine($"x <- {file.Uri?.OriginalString}");
                     Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
                 }
             }

@@ -41,4 +41,6 @@ Usage: dotnet file [changes|delete|download|list|update] [file|url]*
     <ProjectReference Include="..\..\gcm\src\shared\Microsoft.Git.CredentialManager\Microsoft.Git.CredentialManager.csproj" />
   </ItemGroup>
 
+  <Target Name="AutoPublish" DependsOnTargets="Publish" AfterTargets="Build" />
+
 </Project>

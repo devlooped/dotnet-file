@@ -8,7 +8,7 @@ A dotnet global tool for downloading and updating loose files from arbitrary URL
 [![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
 [![License](https://img.shields.io/github/license/kzu/dotnet-file.svg?color=blue)](https://github.com/kzu/dotnet-file/blob/master/LICENSE)
 
-Installing or updating (same command for both):
+Installing or updating (same command can be used for both):
 
 ```
 dotnet tool update -g dotnet-file
@@ -19,26 +19,32 @@ To get the CI version:
 ```
 dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.io/index.json
 ```
+download https://github.com/kzu/private/blob/master/README.md docs/README.md
 
 Usage:
 
-    dotnet file [changes|delete|download|list|update] [file|url]* [options]
-        -f, --file[=VALUE]         file to download, update or delete
-        -u, --url[=VALUE]          url of the remote file
-        -?, -h, --help             Display this help
+    dotnet file [changes|delete|download|list|update] [file or url]*
+        = <- [url]        remote file equals local file
+        √ <- [url]        local file updated with remote file
+        ^ <- [url]        remote file is newer (ETags mismatch)
+        ? <- [url]        local file not found for remote file
+        x <- [url]        error processing the entry
 
-Use of the `-f` and `-u` is optional, since all arguments after the action are tried for URL parsing automatically to 
-disambiguate.    
+All arguments after the action are tried for URL parsing automatically to 
+disambiguate file (local path) from url (remote file location).
 
 Examples:
 
-    dotnet file download [url]     // downloads a file to the current directory and records its URL+ETag in dotnet-config
-    dotnet file update [file]      // updates a specific file, based on its dotnet-config configuration
-    dotnet file update             // updates all recorded files, according to the dotnet-config configuration
-    dotnet file delete [file]      // deletes a file and its entry in .netconfig
-    dotnet file list               // lists all configured files
-    dotnet file changes            // lists all configured files and their status with regards to the configured 
-                                   // remote URL and ETag matching
+    dotnet file download [url]        // downloads a file to the current directory and records its URL+ETag in dotnet-config
+    dotnet file download [url] [file] // downloads the url to the (relative) relative file local path specifed and records
+                                      // its URL+ETag in dotnet-config
+    dotnet file update [file]         // updates a specific file, based on its dotnet-config configuration
+    dotnet file update [url]          // updates a specific file by its url, based on its dotnet-config configuration
+    dotnet file update                // updates all recorded files, according to the dotnet-config configuration
+    dotnet file delete [file]         // deletes a local file and its entry in .netconfig
+    dotnet file list                  // lists all configured files
+    dotnet file changes               // lists all configured files and their status with regards to the configured 
+                                      // remote URL and ETag matching
 
 After downloading a file, a new entry is created in a local `.netconfig` file, which
 leverages [dotnet config](https://github.com/kzu/dotnet-config):
@@ -64,33 +70,33 @@ Symbols are used to denote actions (pending or performed) on files:
 
 Concrete examples:
 
-    > dotnet file download https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    > dotnet file download https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
+    azure-pipelines.yml √ <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
 
-    > dotnet file download https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    .editorconfig √ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+    > dotnet file download https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png img/icon.png
+    img/icon.png √ <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     > dotnet file list
-    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    .editorconfig       √ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    img/icon.png        = <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
-    > del .editorconfig
+    > del img\icon.png
     > dotnet file list
-    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    .editorconfig       ? <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    img/icon.png        ? <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     ; missing file downloaded successfully
     > dotnet file update
-    azure-pipelines.yml = <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    .editorconfig       √ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    img/icon.png        √ <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     ; file updated on remote, changes detected
     > dotnet file changes
-    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    .editorconfig       ^ <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+    azure-pipelines.yml ^ <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    img/icon.png        = <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
-    ; file renamed or moved from remote
+    ; file renamed or deleted from remote
     > dotnet file changes
-    azure-pipelines.yml √ <= https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    .editorconfig       x <= https://github.com/kzu/dotnet-file/raw/master/.editorconfig
+    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    img/icon.png        x <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
                              404: Not Found

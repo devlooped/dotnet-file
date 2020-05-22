@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using Mono.Options;
 
@@ -12,20 +10,14 @@ namespace Microsoft.DotNet
         static async Task<int> Main(string[] args)
         {
             var help = false;
-            var files = new List<FileSpec>();
-
             var options = new OptionSet
             {
-                { "f|file:", "file to download, update or delete", p => files.Add(new FileSpec(p)) },
-                { "u|url:", "url of the remote file", u => files.Add(new FileSpec(new Uri(u))) },
-
                 { "?|h|help", "Display this help", h => help = h != null },
             };
 
             var extraArgs = options.Parse(args);
-
             if (args.Length == 1 && help)
-                return ShowHelp(options);
+                return ShowHelp();
 
             // we never do inherited configs updating since that would be 
             // potentially touching all over the machine. 
@@ -40,26 +32,55 @@ namespace Microsoft.DotNet
                 _ => Command.NullCommand,
             };
 
-            command.Files.AddRange(files);
+            if (command == Command.NullCommand)
+                return ShowHelp();
+
+            // Remove first arg which is the command to use.
+            extraArgs.RemoveAt(0);
+
             // Add remainder arguments as if they were just files or urls provided 
             // to the command. Allows skipping the -f|-u switches.
-            command.Files.AddRange(extraArgs.Skip(1).Select(x =>
-                Uri.TryCreate(extraArgs[1], UriKind.Absolute, out var uri) ?
-                new FileSpec(uri) : new FileSpec(x)));
+            var skip = false;
+            var files = new List<FileSpec>();
+            for (int i = 0; i < extraArgs.Count; i++)
+            {
+                if (skip)
+                {
+                    skip = false;
+                    continue;
+                }
+
+                // Try to pair Uri+File to allow intuitive download>path mapping, such as 
+                // https://gitub.com/org/repo/docs/file.md docs/file.md
+                if (Uri.TryCreate(extraArgs[i], UriKind.Absolute, out var uri))
+                {
+                    var next = i + 1;
+                    // If the next arg is not a URI, use that as the file path for the uri
+                    if (next < extraArgs.Count && !Uri.TryCreate(extraArgs[next], UriKind.Absolute, out _))
+                    {
+                        files.Add(new FileSpec(extraArgs[next], uri));
+                        skip = true;
+                    }
+                    else
+                    {
+                        files.Add(new FileSpec(uri));
+                    }
+                }
+            }
+
+            command.Files.AddRange(files);
 
             return await command.ExecuteAsync();
         }
 
-        static int ShowHelp(OptionSet options)
+        static int ShowHelp()
         {
-            Console.WriteLine($"Usage: dotnet {ThisAssembly.Metadata.AssemblyName} [changes|delete|download|list|update] [file|url]* [options]");
-            options.WriteOptionDescriptions(Console.Out);
-            Console.WriteLine();
-            Console.WriteLine($"Statuses:");
-
+            Console.WriteLine($"Usage: dotnet {ThisAssembly.Metadata.AssemblyName} [changes|delete|download|list|update] [file or url]*");
             Console.WriteLine($"  = <- [url]        remote file equals local file");
-            Console.WriteLine($"  x <- [url]        there was an error processing the entry");
-            Console.WriteLine($"  ✓ <- [url]        remote file is newer than local copy");
+            Console.WriteLine($"  ✓ <- [url]        local file updated with remote file");
+            Console.WriteLine($"  ^ <- [url]        remote file is newer (ETags mismatch)");
+            Console.WriteLine($"  ? <- [url]        local file not found for remote file");
+            Console.WriteLine($"  x <- [url]        error processing the entry");
 
             return 0;
         }
