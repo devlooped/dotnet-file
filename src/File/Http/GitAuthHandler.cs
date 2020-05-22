@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -17,20 +18,26 @@ namespace Microsoft.DotNet
 
         public GitAuthHandler(HttpMessageHandler inner) : base(inner)
         {
+            // Authentication handlers use a new client handler that does 
+            // allow redirection post-auth.
+            var handler = new HttpClientHandler();
             authHandlers = new Dictionary<string, IAuthHandler>(StringComparer.OrdinalIgnoreCase)
             {
-                { "github.com", new GitHubAuthHandler(InnerHandler) },
-                { "raw.githubusercontent.com", new GitHubAuthHandler(InnerHandler) },
+                { "github.com", new GitHubAuthHandler(handler) },
+                { "raw.githubusercontent.com", new GitHubAuthHandler(handler) },
             };
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var response = await base.SendAsync(request, cancellationToken);
-            if ((response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.Forbidden) && 
-                authHandlers.TryGetValue(request.RequestUri.Host, out var handler))
+            if (!response.IsSuccessStatusCode)
             {
-                return await handler.SendAsync(request, cancellationToken);
+                if (!authHandlers.TryGetValue(request.RequestUri.Host, out var handler))
+                    handler = authHandlers.Where(x => request.RequestUri.Host.EndsWith(x.Key)).Select(x => x.Value).FirstOrDefault();
+
+                if (handler != null)
+                    return await handler.SendAsync(request, cancellationToken);
             }
 
             return response;
