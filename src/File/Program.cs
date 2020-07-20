@@ -16,7 +16,7 @@ namespace Microsoft.DotNet
             };
 
             var extraArgs = options.Parse(args);
-            if (args.Length == 1 && help)
+            if (args.Length == 0 || help)
                 return ShowHelp();
 
             // we never do inherited configs updating since that would be 
