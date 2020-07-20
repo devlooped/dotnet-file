@@ -139,10 +139,18 @@ namespace Microsoft.DotNet
                     if (Path.GetDirectoryName(path)?.Length > 0)
                         Directory.CreateDirectory(Path.GetDirectoryName(path));
 
-                    using (var stream = File.Open(path, FileMode.Create))
+                    var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                    try
                     {
+                        using var stream = File.Open(tempPath, FileMode.Create);
                         await response.Content.CopyToAsync(stream);
                     }
+                    catch (Exception) // Delete temp file on error
+                    {
+                        File.Delete(tempPath);
+                        throw;
+                    }
+                    File.Move(tempPath, path, overwrite: true);
 
                     Configuration.SetString("file", file.Path, "url", originalUri.ToString());
 
