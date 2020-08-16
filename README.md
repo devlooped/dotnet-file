@@ -22,7 +22,7 @@ dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.io/ind
 
 Usage:
 
-    dotnet file [-?] [add|changes|delete|list|update] [file or url]*
+    dotnet file [add|changes|delete|list|update] [file or url]*
         = <- [url]        remote file equals local file
         √ <- [url]        local file updated with remote file
         ^ <- [url]        remote file is newer (ETags mismatch)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Mono.Options;
 
@@ -16,14 +17,13 @@ namespace Microsoft.DotNet
             };
 
             var extraArgs = options.Parse(args);
-            if (args.Length == 1 && help)
+            if ((args.Length == 1 && help) || extraArgs.Count == 0)
                 return ShowHelp();
 
             // We never do inherited configs updating since that would be 
             // potentially touching files from all over the machine. 
             var config = Config.FromFile(Config.FileName);
-            // Update is the default command.
-            var command = extraArgs.Count == 0 ? new UpdateCommand(config) : extraArgs[0].ToLowerInvariant() switch
+            var command = extraArgs[0].ToLowerInvariant() switch
             {
                 "add" => new AddCommand(config),
                 "changes" => new ChangesCommand(config),
@@ -76,7 +76,7 @@ namespace Microsoft.DotNet
 
         static int ShowHelp()
         {
-            Console.WriteLine($"Usage: dotnet {ThisAssembly.Metadata.AssemblyName} [-?|h|help] [add|changes|delete|list|update] [file or url]*");
+            Console.WriteLine($"Usage: dotnet {ThisAssembly.Metadata.AssemblyName} [add|changes|delete|list|update] [file or url]*");
             Console.WriteLine($"  = <- [url]        remote file equals local file");
             Console.WriteLine($"  ✓ <- [url]        local file updated with remote file");
             Console.WriteLine($"  ^ <- [url]        remote file is newer (ETags mismatch)");
