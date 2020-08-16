@@ -7,6 +7,7 @@ namespace Microsoft.DotNet
         public FileSpec(Uri uri)
             : this(System.IO.Path.GetFileName(uri.LocalPath), uri)
         {
+            IsDefaultPath = true;
         }
 
         public FileSpec(string path, Uri? uri = null, string? etag = null)
@@ -21,5 +22,7 @@ namespace Microsoft.DotNet
         public Uri? Uri { get; }
 
         public string? ETag { get; }
+
+        internal bool IsDefaultPath { get; }
     }
 }

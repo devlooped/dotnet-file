@@ -91,6 +91,8 @@ namespace Microsoft.DotNet
                                 Console.Write(" => fetching via gh cli");
                                 // GH CLI is installed, try fetching via API.
                                 var parts = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped).Split('/');
+                                var baseDir = file.IsDefaultPath ? "" : file.Path;
+
                                 if (parts.Length >= 2)
                                 {
                                     var owner = parts[0];
@@ -119,9 +121,16 @@ namespace Microsoft.DotNet
                                             {
                                                 Console.Write(".");
                                                 if ("file".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
-                                                    files.Add(new FileSpec(item["path"]!.ToString(), new Uri(item["download_url"]!.ToString())));
+                                                {
+                                                    files.Add(new FileSpec(
+                                                        Path.Combine(baseDir, item["path"]!.ToString())
+                                                            .Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                                                        new Uri(item["download_url"]!.ToString())));
+                                                }
                                                 else if ("dir".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
+                                                {
                                                     getFiles!(item["path"]!.ToString());
+                                                }
                                             }
                                         };
                                         getFiles = path =>
