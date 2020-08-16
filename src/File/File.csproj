@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.
     
-Usage: dotnet file [changes|delete|download|list|update] [file|url]*
+Usage: dotnet file [add|changes|delete|list|update] [file|url]*
 </Description>
 
     <OutputType>Exe</OutputType>
