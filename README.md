@@ -3,6 +3,7 @@
 
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
+[![Discord Chat](https://img.shields.io/badge/chat-on%20discord-7289DA.svg)](https://discord.gg/3sEqMMB)
 [![Build Status](https://dev.azure.com/kzu/oss/_apis/build/status/dotnet-file?branchName=master)](https://dev.azure.com/kzu/oss/_build/latest?definitionId=35&branchName=master)
 [![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
 [![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
