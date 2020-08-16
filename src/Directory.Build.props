@@ -40,7 +40,7 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/kzu/dotnet-file</PackageProjectUrl>
     <PackageIcon>icon-128.png</PackageIcon>
-    <PackageTags>dotnet config</PackageTags>
+    <PackageTags>dotnet file sync git github</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup>
