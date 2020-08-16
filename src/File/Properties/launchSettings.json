@@ -2,7 +2,7 @@
   "profiles": {
     "Config.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "download https://bitbucket.org/kzu/private/raw/master/README.md"
+      "commandLineArgs": "add https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines"
     }
   }
 }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.DotNet
 {
-    class UpdateCommand : DownloadCommand
+    class UpdateCommand : AddCommand
     {
         public UpdateCommand(Config configuration) : base(configuration) { }
 

@@ -19,11 +19,10 @@ To get the CI version:
 ```
 dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.io/index.json
 ```
-download https://github.com/kzu/private/blob/master/README.md docs/README.md
 
 Usage:
 
-    dotnet file [changes|delete|download|list|update] [file or url]*
+    dotnet file [-?] [add|changes|delete|list|update] [file or url]*
         = <- [url]        remote file equals local file
         √ <- [url]        local file updated with remote file
         ^ <- [url]        remote file is newer (ETags mismatch)
@@ -35,16 +34,16 @@ disambiguate file (local path) from url (remote file location).
 
 Examples:
 
-    dotnet file download [url]        // downloads a file to the current directory and records its URL+ETag in dotnet-config
-    dotnet file download [url] [file] // downloads the url to the (relative) relative file local path specifed and records
-                                      // its URL+ETag in dotnet-config
-    dotnet file update [file]         // updates a specific file, based on its dotnet-config configuration
-    dotnet file update [url]          // updates a specific file by its url, based on its dotnet-config configuration
-    dotnet file update                // updates all recorded files, according to the dotnet-config configuration
-    dotnet file delete [file]         // deletes a local file and its entry in .netconfig
-    dotnet file list                  // lists all configured files
-    dotnet file changes               // lists all configured files and their status with regards to the configured 
-                                      // remote URL and ETag matching
+    dotnet file add [url]           // downloads a file to the current directory and adds its URL+ETag in dotnet-config
+    dotnet file add [url] [file]    // downloads the url to the (relative) relative file local path specifed and adds
+                                    // its URL+ETag in dotnet-config
+    dotnet file update [file]       // updates a specific file, based on its dotnet-config configuration
+    dotnet file update [url]        // updates a specific file by its url, based on its dotnet-config configuration
+    dotnet file update              // updates all recorded files, according to the dotnet-config configuration
+    dotnet file delete [file]       // deletes a local file and its entry in .netconfig
+    dotnet file list                // lists all configured files
+    dotnet file changes             // lists all configured files and their status with regards to the configured 
+                                    // remote URL and ETag matching
 
 After downloading a file, a new entry is created in a local `.netconfig` file, which
 leverages [dotnet config](https://github.com/kzu/dotnet-config):
@@ -68,12 +67,15 @@ Symbols are used to denote actions (pending or performed) on files:
 * `?`: file not found locally. A new version can be downloaded from the remote.
 * `x`: could not update file or refresh ETag status, with reason noted in subsequent line.
 
+Downloading entire repositories or specific directories within them is supported through the 
+[GitHub CLI](https://cli.github.com/manual/installation).
+
 Concrete examples:
 
-    > dotnet file download https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
+    > dotnet file add https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
     azure-pipelines.yml √ <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
 
-    > dotnet file download https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png img/icon.png
+    > dotnet file add https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png img/icon.png
     img/icon.png √ <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     > dotnet file list
@@ -100,3 +102,9 @@ Concrete examples:
     azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
     img/icon.png        x <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
                              404: Not Found
+
+    > dotnet file add https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines/api-guidelines
+    api-guidelines  => fetching via gh cli...
+    docs/coding-guidelines/api-guidelines/README.md        √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/README.md
+    docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/System.Memory.md
+    docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/nullability.md

@@ -20,10 +20,10 @@ namespace Microsoft.DotNet
         {
             foreach (var file in Configuration.Where(x => x.Section == "file" && x.Subsection != null).GroupBy(x => x.Subsection))
             {
-                var url = Configuration.Get<string>("file", file.Key, "url");
+                var url = Configuration.Get<string?>("file", file.Key, "url", null);
                 yield return new FileSpec(file.Key!,
                     url == null ? null : new Uri(url),
-                    Configuration.Get<string>("file", file.Key, "etag"));
+                    Configuration.Get<string?>("file", file.Key, "etag", null));
             }
         }
 
