@@ -29,6 +29,12 @@ stages:
         configuration: $(Configuration)
         msbuildArguments: -r
 
+    - task: MSBuild@1
+      displayName: Version
+      inputs:
+        solution: $(Pipeline.Workspace)/s/src/File/File.csproj
+        msbuildArguments: -t:version
+
     - task: PublishBuildArtifacts@1
       displayName: Upload
       condition: succeeded()
