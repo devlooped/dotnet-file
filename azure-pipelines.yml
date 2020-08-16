@@ -8,8 +8,6 @@ variables:
   value: 3.1.x
 - name: SleetVersion
   value: 2.3.33
-- name: PowerShellVersion
-  value: 7.0.0
 
 stages:
 
@@ -49,9 +47,6 @@ stages:
         packageType: runtime
         version: $(DotNetVersion)
         performMultiLevelLookup: true
-
-    - script: dotnet tool update -g --version $(PowerShellVersion) PowerShell >nul || dotnet tool list -g
-      displayName: 'Use PowerShell $(PowerShellVersion)'
 
     - pwsh: |
         if ((dotnet tool list -g | select-string sleet) -ne $null) {
