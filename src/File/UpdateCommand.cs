@@ -25,7 +25,8 @@ namespace Microsoft.DotNet
             // Add the new ones that are just passed in as URLs
             configured = Files
                 .Except(configured, new FileSpecComparer())
-                .Concat(configured).ToList();
+                .Concat(configured)
+                .ToList();
 
             Files.Clear();
             Files.AddRange(configured);

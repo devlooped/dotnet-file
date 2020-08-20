@@ -18,12 +18,21 @@ namespace Microsoft.DotNet
 
         protected IEnumerable<FileSpec> GetConfiguredFiles()
         {
+            // Treat the github-based repo urls as filespecs too.
+            foreach (var file in Configuration.Where(x => x.Section == "file.github" && x.Name == "url" && !string.IsNullOrEmpty(x.Value)))
+            {
+                if (file.Subsection == null)
+                    yield return new FileSpec(new Uri(file.Value!));
+                else
+                    new FileSpec(file.Subsection, new Uri(file.Value!));
+            }
+
             foreach (var file in Configuration.Where(x => x.Section == "file" && x.Subsection != null).GroupBy(x => x.Subsection))
             {
-                var url = Configuration.Get<string?>("file", file.Key, "url", null);
+                var url = Configuration.GetString("file", file.Key, "url");
                 yield return new FileSpec(file.Key!,
                     url == null ? null : new Uri(url),
-                    Configuration.Get<string?>("file", file.Key, "etag", null));
+                    Configuration.GetString("file", file.Key, "etag"));
             }
         }
 

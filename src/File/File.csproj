@@ -22,7 +22,7 @@ Usage: dotnet file [add|changes|delete|list|update] [file|url]*
     <PackageReference Include="GitInfo" Version="2.0.20" PrivateAssets="all" />
     <PackageReference Include="MSBuilder.ThisAssembly.Metadata" Version="0.1.4" PrivateAssets="all" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
-    <PackageReference Include="dotnet-config-lib" Version="0.5.15" />
+    <PackageReference Include="dotnet-config-lib" Version="0.6.2" />
   </ItemGroup>
 
   <ItemGroup>

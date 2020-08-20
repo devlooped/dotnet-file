@@ -23,7 +23,7 @@ namespace Microsoft.DotNet
                     if (File.Exists(file.Path))
                         File.Delete(file.Path);
 
-                    var url = Configuration.Get<string>("file", file.Path, "url");
+                    var url = Configuration.GetString("file", file.Path, "url");
                     if (url != null)
                         Configuration.RemoveSection("file", file.Path);
 

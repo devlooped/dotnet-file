@@ -5,10 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace Microsoft.DotNet
 {
@@ -27,6 +24,8 @@ namespace Microsoft.DotNet
             var length = Files.Select(x => x.Path).Max(x => x.Length) + 1;
             Action<string> write = s => Console.Write(s + new string(' ', length - s.Length));
 
+            var processed = new HashSet<string>();
+
             // TODO: allow configuration to provide HTTP headers, i.e. auth?
             foreach (var file in Files)
             {
@@ -40,7 +39,7 @@ namespace Microsoft.DotNet
                 var uri = file.Uri;
                 if (uri == null)
                 {
-                    var url = Configuration.Get<string?>("file", file.Path, "url");
+                    var url = Configuration.GetString("file", file.Path, "url");
                     if (url != null)
                     {
                         uri = new Uri(url);
@@ -53,14 +52,18 @@ namespace Microsoft.DotNet
                     }
                 }
 
-                var etag = file.ETag ?? Configuration.Get<string?>("file", file.Path, "etag");
-                var weak = Configuration.Get<bool?>("file", file.Path, "weak");
+                if (processed.Contains(uri.ToString()))
+                    continue;
+
+                var etag = file.ETag ?? Configuration.GetString("file", file.Path, "etag");
+                var weak = Configuration.GetBoolean("file", file.Path, "weak");
                 var originalUri = uri;
 
                 write(file.Path);
 
                 try
                 {
+                    processed.Add(uri.ToString());
                     var request = new HttpRequestMessage(HttpMethod.Get, uri);
                     if (etag != null && File.Exists(file.Path))
                     {
@@ -86,81 +89,30 @@ namespace Microsoft.DotNet
                             response.StatusCode == HttpStatusCode.NotFound &&
                             !Path.HasExtension(uri.AbsolutePath))
                         {
-                            if (Process.TryExecute("gh", "--version", out var version) && version.StartsWith("gh version"))
+                            if (GitHub.IsInstalled())
                             {
-                                Console.Write(" => fetching via gh cli");
-                                // GH CLI is installed, try fetching via API.
-                                var parts = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped).Split('/');
-                                var baseDir = file.IsDefaultPath ? "" : file.Path;
-
-                                if (parts.Length >= 2)
+                                Console.Write("=> fetching via gh cli");
+                                if (GitHub.TryGetFiles(file, out var repoFiles))
                                 {
-                                    var owner = parts[0];
-                                    var repo = parts[1];
-                                    string? branch = default;
-                                    string? repoDir = default;
-                                    if (parts.Length > 3 && parts[2] == "tree")
+                                    var targetDir = file.IsDefaultPath ? null : file.Path;
+                                    // Store the URL for later updates
+                                    if (!Configuration.GetAll("file.github", targetDir, "url").Any(entry => uri.ToString().Equals(entry.Value, StringComparison.OrdinalIgnoreCase)))
+                                        Configuration.AddString("file.github", targetDir, "url", uri.ToString());
+
+                                    // Run again with the fetched files.
+                                    var command = new AddCommand(Configuration);
+                                    command.Files.AddRange(repoFiles);
+                                    Console.WriteLine();
+
+                                    // Track all files as already processed to skip duplicate processing from 
+                                    // existing expanded list.
+                                    foreach (var repoFile in repoFiles)
                                     {
-                                        branch = parts[3];
-                                        if (parts.Length >= 4)
-                                            repoDir = string.Join('/', parts[4..]);
+                                        processed.Add(repoFile.Uri!.ToString());
                                     }
 
-                                    var apiUrl = $"https://api.github.com/repos/{owner}/{repo}/contents";
-                                    var apiPath = repoDir == null ? "" : ("/" + repoDir);
-                                    var apiQuery = branch == null ? "" : "?ref=" + branch;
-
-                                    if (Process.TryExecute("gh", "api " + apiUrl + apiPath + apiQuery, out var data) &&
-                                        JsonConvert.DeserializeObject<JToken>(data) is JArray array)
-                                    {
-                                        var files = new List<FileSpec>();
-                                        Action<string>? getFiles = default;
-                                        Action<JArray> addFiles = array =>
-                                        {
-                                            foreach (var item in array)
-                                            {
-                                                Console.Write(".");
-                                                if ("file".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
-                                                {
-                                                    var itemPath = item["path"]!.ToString();
-                                                    // In case the target path was specified as '.', don't recreate the full 
-                                                    // repo directory structure and just start from the base repoDir instead
-                                                    if (baseDir == "." && repoDir != null && itemPath.StartsWith(repoDir))
-                                                        itemPath = itemPath.Substring(repoDir.Length);
-
-                                                    files.Add(new FileSpec(
-                                                        Path.Combine(baseDir, itemPath.TrimStart('/'))
-                                                            .Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
-                                                        new Uri(item["html_url"]!.ToString())));
-                                                }
-                                                else if ("dir".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
-                                                {
-                                                    getFiles!(item["path"]!.ToString());
-                                                }
-                                            }
-                                        };
-                                        getFiles = path =>
-                                        {
-                                            if (Process.TryExecute("gh", "api " + apiUrl + path + apiQuery, out var data) &&
-                                                JsonConvert.DeserializeObject<JToken>(data) is JArray array)
-                                            {
-                                                addFiles(array);
-                                            }
-                                        };
-
-                                        addFiles(array);
-
-                                        // Run again with the fetched files.
-                                        var command = new AddCommand(Configuration);
-                                        command.Files.AddRange(files);
-                                        Console.WriteLine();
-                                        return await command.ExecuteAsync();
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine(data);
-                                        return -1;
-                                    }
+                                    result = await command.ExecuteAsync();
+                                    continue;
                                 }
                             }
                             else
@@ -190,15 +142,15 @@ namespace Microsoft.DotNet
                         await response.Content.CopyToAsync(stream);
                     }
 
-                    Configuration.Set("file", file.Path, "url", originalUri);
+                    Configuration.SetString("file", file.Path, "url", originalUri.ToString());
 
                     if (etag == null)
                         Configuration.Unset("file", file.Path, "etag");
                     else
-                        Configuration.Set("file", file.Path, "etag", etag);
+                        Configuration.SetString("file", file.Path, "etag", etag);
 
                     if (response.Headers.ETag?.IsWeak == true)
-                        Configuration.Set("file", file.Path, "weak", true);
+                        Configuration.SetBoolean("file", file.Path, "weak", true);
                     else
                         Configuration.Unset("file", file.Path, "weak");
 
