@@ -98,16 +98,16 @@ namespace Microsoft.DotNet
                                     var owner = parts[0];
                                     var repo = parts[1];
                                     string? branch = default;
-                                    string? dir = default;
+                                    string? repoDir = default;
                                     if (parts.Length > 3 && parts[2] == "tree")
                                     {
                                         branch = parts[3];
                                         if (parts.Length >= 4)
-                                            dir = string.Join('/', parts[4..]);
+                                            repoDir = string.Join('/', parts[4..]);
                                     }
 
                                     var apiUrl = $"https://api.github.com/repos/{owner}/{repo}/contents";
-                                    var apiPath = dir == null ? "" : "/" + dir;
+                                    var apiPath = repoDir == null ? "" : ("/" + repoDir);
                                     var apiQuery = branch == null ? "" : "?ref=" + branch;
 
                                     if (Process.TryExecute("gh", "api " + apiUrl + apiPath + apiQuery, out var data) &&
@@ -122,10 +122,16 @@ namespace Microsoft.DotNet
                                                 Console.Write(".");
                                                 if ("file".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
                                                 {
+                                                    var itemPath = item["path"]!.ToString();
+                                                    // In case the target path was specified as '.', don't recreate the full 
+                                                    // repo directory structure and just start from the base repoDir instead
+                                                    if (baseDir == "." && repoDir != null && itemPath.StartsWith(repoDir))
+                                                        itemPath = itemPath.Substring(repoDir.Length);
+
                                                     files.Add(new FileSpec(
-                                                        Path.Combine(baseDir, item["path"]!.ToString())
+                                                        Path.Combine(baseDir, itemPath.TrimStart('/'))
                                                             .Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
-                                                        new Uri(item["download_url"]!.ToString())));
+                                                        new Uri(item["html_url"]!.ToString())));
                                                 }
                                                 else if ("dir".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
                                                 {

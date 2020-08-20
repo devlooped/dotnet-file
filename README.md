@@ -57,7 +57,7 @@ This information is used to later update the file contents if necessary, by issu
 conditional http get to retrieve updates. It’s generally advisable to commit the .netconfig file 
 to source control, so that updating is simply a matter of running `dotnet file update`. 
 
-> Note: `dotnet file update [url]` behaves just like `dotnet file download [url]` when a matching 
+> Note: `dotnet file update [url]` behaves just like `dotnet file add [url]` when a matching 
 > entry for the file isn't found in the `.netconfig` file.
 
 Symbols are used to denote actions (pending or performed) on files:
@@ -109,3 +109,4 @@ Concrete examples:
     docs/coding-guidelines/api-guidelines/README.md        √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/README.md
     docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/System.Memory.md
     docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/nullability.md
+    ...
