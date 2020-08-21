@@ -24,7 +24,7 @@ namespace Microsoft.DotNet
                 if (file.Subsection == null)
                     yield return new FileSpec(new Uri(file.Value!));
                 else
-                    new FileSpec(file.Subsection, new Uri(file.Value!));
+                    yield return new FileSpec(file.Subsection, new Uri(file.Value!));
             }
 
             foreach (var file in Configuration.Where(x => x.Section == "file" && x.Subsection != null).GroupBy(x => x.Subsection))
