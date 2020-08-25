@@ -61,3 +61,4 @@ stages:
 
     - script: 'sleet push --config none $(Build.ArtifactStagingDirectory) -f --verbose -p "SLEET_FEED_CONNECTIONSTRING=$(SLEET_FEED_CONNECTIONSTRING)"'
       displayName: 'Push Package'
+      condition: ne(variables['System.PullRequest.IsFork'], 'true')
