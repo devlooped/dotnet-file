@@ -95,8 +95,8 @@ namespace Microsoft.DotNet
                                 {
                                     var targetDir = file.IsDefaultPath ? null : file.Path;
                                     // Store the URL for later updates
-                                    if (!Configuration.GetAll("file.github", targetDir, "url").Any(entry => uri.ToString().Equals(entry.Value, StringComparison.OrdinalIgnoreCase)))
-                                        Configuration.AddString("file.github", targetDir, "url", uri.ToString());
+                                    if (!Configuration.GetAll("file", targetDir, "url").Any(entry => uri.ToString().Equals(entry.RawValue, StringComparison.OrdinalIgnoreCase)))
+                                        Configuration.AddString("file", targetDir, "url", uri.ToString());
 
                                     // Run again with the fetched files.
                                     var command = new AddCommand(Configuration);

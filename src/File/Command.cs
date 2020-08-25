@@ -18,26 +18,48 @@ namespace Microsoft.DotNet
 
         protected IEnumerable<FileSpec> GetConfiguredFiles()
         {
-            // Treat the github-based repo urls as filespecs too.
-            foreach (var file in Configuration.Where(x => x.Section == "file.github" && x.Name == "url" && !string.IsNullOrEmpty(x.Value)))
+            foreach (var file in Configuration.Where(x => x.Section == "file").GroupBy(x => x.Subsection))
             {
-                if (file.Subsection == null)
-                    yield return new FileSpec(new Uri(file.Value!));
+                // If no subsection exists, this is a glob-like URL (like a repo root or dir from GH)
+                // In this case, there can be many URLs, but there will never be an etag
+                if (file.Key == null)
+                {
+                    foreach (var entry in Configuration.GetAll("file", "url").Where(x => x.RawValue != null))
+                    {
+                        yield return new FileSpec(new Uri(entry.GetString()));
+                    }
+                }
                 else
-                    yield return new FileSpec(file.Subsection, new Uri(file.Value!));
-            }
+                {
+                    // If there is a subsection, we might still get multiple URLs for the case where 
+                    // the subsection is actually a target folder where multiple glob URLs are to be 
+                    // downloaded (i.e. "docs" with multiple GH URLs for docs subdirs)
+                    var urls = Configuration
+                        .GetAll("file", file.Key, "url")
+                        .Where(x => x.RawValue != null)
+                        .Select(x => x.GetString())
+                        .ToArray();
 
-            foreach (var file in Configuration.Where(x => x.Section == "file" && x.Subsection != null).GroupBy(x => x.Subsection))
-            {
-                var url = Configuration.GetString("file", file.Key, "url");
-                yield return new FileSpec(file.Key!,
-                    url == null ? null : new Uri(url),
-                    Configuration.GetString("file", file.Key, "etag"));
+                    if (urls.Length > 1)
+                    {
+                        foreach (var url in urls)
+                        {
+                            yield return new FileSpec(file.Key, new Uri(url));
+                        }
+                    }
+                    else if (urls.Length == 1)
+                    {
+                        // Default case is there's a single URL, so we might have an etag in that case.
+                        yield return new FileSpec(file.Key,
+                            new Uri(urls[0]),
+                            Configuration.GetString("file", file.Key, "etag"));
+                    }
+                }
             }
         }
 
         public static Command NullCommand { get; } =
-            new NoOpCommand(Config.FromFile(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())));
+            new NoOpCommand(Config.Build(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())));
 
         class NoOpCommand : Command
         {

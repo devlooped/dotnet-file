@@ -20,9 +20,7 @@ namespace Microsoft.DotNet
             if ((args.Length == 1 && help) || extraArgs.Count == 0)
                 return ShowHelp();
 
-            // We never do inherited configs updating since that would be 
-            // potentially touching files from all over the machine. 
-            var config = Config.FromFile(Config.FileName);
+            var config = Config.Build();
             var command = extraArgs[0].ToLowerInvariant() switch
             {
                 "add" => new AddCommand(config),
