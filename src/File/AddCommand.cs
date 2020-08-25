@@ -86,8 +86,7 @@ namespace Microsoft.DotNet
                     {
                         // The URL might be a directory or repo branch top-level path. If so, we can use the GitHub cli to fetch all files.
                         if (uri.Host.Equals("github.com") &&
-                            response.StatusCode == HttpStatusCode.NotFound &&
-                            !Path.HasExtension(uri.AbsolutePath))
+                            response.StatusCode == HttpStatusCode.NotFound)
                         {
                             if (GitHub.IsInstalled())
                             {
@@ -115,8 +114,11 @@ namespace Microsoft.DotNet
                                     continue;
                                 }
                             }
-                            else
+                            else if  (!Path.HasExtension(uri.AbsolutePath))
                             {
+                                // We won't always detect directories this way. A directory with dots in it will 
+                                // look like a file URL, but in that case it could be a genuine 404, so we won't 
+                                // know for sure.
                                 Console.WriteLine($"x <- {originalUri}");
                                 Console.WriteLine($"{new string(' ', length + 5)}NotSupported: Install the GitHub CLI to add directories");
                                 continue;
