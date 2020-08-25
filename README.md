@@ -80,22 +80,22 @@ Concrete examples:
     img/icon.png √ <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     > dotnet file list
-    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
     img/icon.png        = <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     > del img\icon.png
     > dotnet file list
-    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
     img/icon.png        ? <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     ; missing file downloaded successfully
     > dotnet file update
-    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
     img/icon.png        √ <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     ; file updated on remote, changes detected
     > dotnet file changes
-    azure-pipelines.yml ^ <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
+    azure-pipelines.yml ^ <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
     img/icon.png        = <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
 
     ; file renamed or deleted from remote
@@ -106,7 +106,7 @@ Concrete examples:
 
     > dotnet file add https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines/api-guidelines
     api-guidelines  => fetching via gh cli...
-    docs/coding-guidelines/api-guidelines/README.md        √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/README.md
-    docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/System.Memory.md
-    docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://raw.githubusercontent.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/nullability.md
+    docs/coding-guidelines/api-guidelines/README.md        √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/README.md
+    docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/System.Memory.md
+    docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/nullability.md
     ...
