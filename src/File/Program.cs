@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using Mono.Options;
 
@@ -27,6 +28,7 @@ namespace Microsoft.DotNet
                 "changes" => new ChangesCommand(config),
                 "delete" => new DeleteCommand(config),
                 "list" => new ListCommand(config),
+                "sync" => new SyncCommand(config),
                 "update" => new UpdateCommand(config),
                 _ => Command.NullCommand,
             };
@@ -74,12 +76,8 @@ namespace Microsoft.DotNet
 
         static int ShowHelp()
         {
-            Console.WriteLine($"Usage: dotnet {ThisAssembly.Metadata.AssemblyName} [add|changes|delete|list|update] [file or url]*");
-            Console.WriteLine($"  = <- [url]        remote file equals local file");
-            Console.WriteLine($"  ✓ <- [url]        local file updated with remote file");
-            Console.WriteLine($"  ^ <- [url]        remote file is newer (ETags mismatch)");
-            Console.WriteLine($"  ? <- [url]        local file not found for remote file");
-            Console.WriteLine($"  x <- [url]        error processing the entry");
+            Console.WriteLine(File.ReadAllText(
+                Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, "Help.txt")));
 
             return 0;
         }

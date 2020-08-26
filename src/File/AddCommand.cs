@@ -72,9 +72,6 @@ namespace Microsoft.DotNet
 
                     var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
-                    // TODO: we might want to check more info about the file, such as length, MD5 (if the header is present 
-                    // in the response), etc. In those cases we might still want ot fetch the new file if it doesn't 
-                    // match with what's locally.
                     if (response.StatusCode == HttpStatusCode.NotModified)
                     {
                         // No need to download
@@ -126,10 +123,14 @@ namespace Microsoft.DotNet
                         }
 
                         Console.WriteLine($"x <- {originalUri}");
-                        Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
 
-                        if (response.StatusCode == HttpStatusCode.NotFound)
-                            OnNotFound(file);
+                        if (response.StatusCode != HttpStatusCode.NotFound ||
+                            !OnDeleteNotFound(file))
+                        {
+                            // Only show as error if we haven't deleted the file as part of a 
+                            // sync operation, or if the error is not 404.
+                            Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
+                        }
 
                         continue;
                     }
@@ -182,6 +183,6 @@ namespace Microsoft.DotNet
             return result;
         }
 
-        protected virtual void OnNotFound(FileSpec spec) { }
+        protected virtual bool OnDeleteNotFound(FileSpec spec) => false;
     }
 }
