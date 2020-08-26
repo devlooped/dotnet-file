@@ -31,17 +31,28 @@ namespace Microsoft.DotNet
             var repo = parts[1];
             string? branch = default;
             string? repoDir = default;
-            if (parts.Length > 3 && parts[2] == "tree")
+            if (parts.Length > 3)
             {
-                // tree urls contain branch and optionally 
-                branch = parts[3];
-                if (parts.Length >= 4)
-                    repoDir = string.Join('/', parts[4..]);
+                if (parts[2] == "tree")
+                {
+                    // tree urls contain branch and optionally 
+                    branch = parts[3];
+                    if (parts.Length >= 4)
+                        repoDir = string.Join('/', parts[4..]);
+                }
+                else if (parts[2] == "blob")
+                {
+                    // Blob urls point to actual files, so we 
+                    // don't do any GH CLI processing for them.
+                    return false;
+                }
             }
 
             var apiUrl = $"https://api.github.com/repos/{owner}/{repo}/contents";
             var apiPath = repoDir == null ? "" : ("/" + repoDir);
             var apiQuery = branch == null ? "" : "?ref=" + branch;
+
+            Console.Write("=> fetching via gh cli");
 
             if (Process.TryExecute("gh", "api " + apiUrl + apiPath + apiQuery, out var data) &&
                 JsonConvert.DeserializeObject<JToken>(data) is JArray array)
