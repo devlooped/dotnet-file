@@ -30,7 +30,7 @@ Usage:
         changes    checks remote URLs for changes and lists the status of local files
         delete     deletes a file and its corresponding config entry from the local directory
         list       lists the config entries and the status of their corresponding files
-        sync       synchronizes with remote URLs, deleting files and directories as needed
+        sync       synchronizes with remote URLs, deleting local files and directories as needed
         update     updates local files from remote URLs, does not prune deleted remote files
 
     Status
@@ -52,6 +52,7 @@ Examples:
     dotnet file update [file]       // updates a specific file, based on its dotnet-config configuration
     dotnet file update [url]        // updates a specific file by its url, based on its dotnet-config configuration
     dotnet file update              // updates all recorded files, according to the dotnet-config configuration
+    dotnet file sync                // just like update, but also prunes files/folders removed from their remote urls
     dotnet file delete [file]       // deletes a local file and its entry in .netconfig
     dotnet file list                // lists all configured files
     dotnet file changes             // lists all configured files and their status with regards to the configured 
