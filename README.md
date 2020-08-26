@@ -80,7 +80,19 @@ Symbols are used to denote actions (pending or performed) on files:
 * `x`: could not update file or refresh ETag status, with reason noted in subsequent line.
 
 Downloading entire repositories or specific directories within them is supported through the 
-[GitHub CLI](https://cli.github.com/manual/installation).
+[GitHub CLI](https://cli.github.com/manual/installation), which must be installed previously. 
+You can verify you have the property authentication and access in place by running the following 
+GH CLI command:
+
+    gh repo view org/repo
+
+If you can view the output (would be the README from the repo), you can download files from it
+with `dotnet-file`.
+
+Private repositories are supported from GitHub and BitBucket through the 
+[Git Credentials Manager Core](https://github.blog/2020-07-02-git-credential-manager-core-building-a-universal-authentication-experience/) 
+project.
+
 
 Concrete examples:
 
