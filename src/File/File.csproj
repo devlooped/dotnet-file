@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="GitInfo" Version="2.0.20" PrivateAssets="all" />
     <PackageReference Include="MSBuilder.ThisAssembly.Metadata" Version="0.1.4" PrivateAssets="all" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using ColoredConsole;
 
 namespace Microsoft.DotNet
 {
@@ -81,55 +83,56 @@ namespace Microsoft.DotNet
 
                     if (!response.IsSuccessStatusCode)
                     {
+                        if (uri.Host.Equals("github.com") && !GitHub.IsInstalled())
+                        {
+                            ColorConsole.WriteLine("=> ", "the GitHub CLI is required for this URL".Red());
+                            ColorConsole.WriteLine("See https://cli.github.com/manual/installation".Yellow());
+                            System.Diagnostics.Process.Start(new ProcessStartInfo("https://cli.github.com/manual/installation") { UseShellExecute = true });
+                            return -1;
+                        }
+
                         // The URL might be a directory or repo branch top-level path. If so, we can use the GitHub cli to fetch all files.
                         if (uri.Host.Equals("github.com") &&
-                            (response.StatusCode == HttpStatusCode.NotFound || 
+                            (response.StatusCode == HttpStatusCode.NotFound ||
+                            // BadRequest from our conversion to raw URLs in the HttpClient handler
                             response.StatusCode == HttpStatusCode.BadRequest))
                         {
-                            if (GitHub.IsInstalled())
+                            if (GitHub.TryGetFiles(file, out var repoFiles))
                             {
-                                if (GitHub.TryGetFiles(file, out var repoFiles))
+                                var targetDir = file.IsDefaultPath ? null : file.Path;
+                                // Store the URL for later updates
+                                if (!Configuration.GetAll("file", targetDir, "url").Any(entry => uri.ToString().Equals(entry.RawValue, StringComparison.OrdinalIgnoreCase)))
+                                    Configuration.AddString("file", targetDir, "url", uri.ToString());
+
+                                // Run again with the fetched files.
+                                var command = new AddCommand(Configuration);
+                                command.Files.AddRange(repoFiles);
+                                Console.WriteLine();
+
+                                // Track all files as already processed to skip duplicate processing from 
+                                // existing expanded list.
+                                foreach (var repoFile in repoFiles)
                                 {
-                                    var targetDir = file.IsDefaultPath ? null : file.Path;
-                                    // Store the URL for later updates
-                                    if (!Configuration.GetAll("file", targetDir, "url").Any(entry => uri.ToString().Equals(entry.RawValue, StringComparison.OrdinalIgnoreCase)))
-                                        Configuration.AddString("file", targetDir, "url", uri.ToString());
-
-                                    // Run again with the fetched files.
-                                    var command = new AddCommand(Configuration);
-                                    command.Files.AddRange(repoFiles);
-                                    Console.WriteLine();
-
-                                    // Track all files as already processed to skip duplicate processing from 
-                                    // existing expanded list.
-                                    foreach (var repoFile in repoFiles)
-                                    {
-                                        processed.Add(repoFile.Uri!.ToString());
-                                    }
-
-                                    result = await command.ExecuteAsync();
-                                    continue;
+                                    processed.Add(repoFile.Uri!.ToString());
                                 }
-                            }
-                            else if  (!Path.HasExtension(uri.AbsolutePath))
-                            {
-                                // We won't always detect directories this way. A directory with dots in it will 
-                                // look like a file URL, but in that case it could be a genuine 404, so we won't 
-                                // know for sure.
-                                Console.WriteLine($"x <- {originalUri}");
-                                Console.WriteLine($"{new string(' ', length + 5)}NotSupported: Install the GitHub CLI to add directories");
+
+                                result = await command.ExecuteAsync();
                                 continue;
+                            }
+                            else
+                            {
+                                return -1;
                             }
                         }
 
-                        Console.WriteLine($"x <- {originalUri}");
+                        ColorConsole.WriteLine($"x <- {originalUri}".Yellow());
 
                         if (response.StatusCode != HttpStatusCode.NotFound ||
                             !OnDeleteNotFound(file))
                         {
                             // Only show as error if we haven't deleted the file as part of a 
                             // sync operation, or if the error is not 404.
-                            Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
+                            ColorConsole.WriteLine(new string(' ', length + 5), $"{(int)response.StatusCode}: {response.ReasonPhrase}".Red());
                         }
 
                         continue;
@@ -173,9 +176,9 @@ namespace Microsoft.DotNet
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"x <- {originalUri}");
+                    ColorConsole.WriteLine($"x <- {originalUri}".Yellow());
                     Console.Write(new string(' ', length + 5));
-                    Console.WriteLine(e.Message);
+                    ColorConsole.WriteLine(e.Message.Red());
                     result = 1;
                 }
             }

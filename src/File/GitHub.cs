@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using ColoredConsole;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -102,7 +103,14 @@ namespace Microsoft.DotNet
             }
             else
             {
-                Console.Error.WriteLine(data);
+                var message = JsonConvert.DeserializeObject<JObject>(data)?.Property("message")?.Value.ToString();
+                if (message != null)
+                    ColorConsole.WriteLine(" => ", message.Red());
+                else
+                    ColorConsole.WriteLine(Environment.NewLine + "\t => " + data.Red());
+
+                Console.WriteLine("Ensure you can access the given repo by running:");
+                ColorConsole.WriteLine($"  gh repo view {owner}/{repo}".Yellow());
                 return false;
             }
         }

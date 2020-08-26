@@ -9,17 +9,27 @@ namespace Microsoft.DotNet
     {
         public static bool TryExecute(string program, string arguments, out string output)
         {
-            var info = new ProcessStartInfo(program, arguments);
-            info.RedirectStandardOutput = true;
-            info.RedirectStandardError = true;
+            var info = new ProcessStartInfo(program, arguments)
+            {
+                RedirectStandardOutput = true,
+                RedirectStandardError = true
+            };
 
-            var proc = System.Diagnostics.Process.Start(info);
-            var gotError = false;
-            proc.ErrorDataReceived += (_, __) => gotError = true;
+            try
+            {
+                var proc = System.Diagnostics.Process.Start(info);
+                var gotError = false;
+                proc.ErrorDataReceived += (_, __) => gotError = true;
 
-            output = proc.StandardOutput.ReadToEnd();
-            
-            return !gotError && proc.ExitCode == 0;
+                output = proc.StandardOutput.ReadToEnd();
+
+                return !gotError && proc.ExitCode == 0;
+            }
+            catch (Exception)
+            {
+                output = default!;
+                return false;
+            }
         }
     }
 }
