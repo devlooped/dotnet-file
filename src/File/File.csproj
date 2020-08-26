@@ -1,10 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.
-    
-Usage: dotnet file [add|changes|delete|list|update] [file|url]*
-</Description>
+    <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.</Description>
 
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -19,6 +16,10 @@ Usage: dotnet file [add|changes|delete|list|update] [file|url]*
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Help.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="GitInfo" Version="2.0.20" PrivateAssets="all" />
     <PackageReference Include="MSBuilder.ThisAssembly.Metadata" Version="0.1.4" PrivateAssets="all" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
@@ -27,6 +28,9 @@ Usage: dotnet file [add|changes|delete|list|update] [file|url]*
 
   <ItemGroup>
     <Content Include="..\..\docs\img\icon-128.png" Link="icon-128.png" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="%(Filename)%(Extension)" />
+    <Content Include="Help.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -44,5 +48,14 @@ Usage: dotnet file [add|changes|delete|list|update] [file|url]*
   </ItemGroup>
 
   <Target Name="AutoPublish" DependsOnTargets="Publish" AfterTargets="Build" />
+
+  <Target Name="SetDescription" BeforeTargets="GenerateNuspec">
+    <PropertyGroup>
+      <HelpFile>$([System.IO.File]::ReadAllText(Help.txt))</HelpFile>
+      <PackageDescription>$(Description)
+
+$(HelpFile)</PackageDescription>
+    </PropertyGroup>
+  </Target>
 
 </Project>

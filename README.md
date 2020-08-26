@@ -23,12 +23,23 @@ dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.io/ind
 
 Usage:
 
-    dotnet file [add|changes|delete|list|update] [file or url]*
-        = <- [url]        remote file equals local file
-        √ <- [url]        local file updated with remote file
-        ^ <- [url]        remote file is newer (ETags mismatch)
-        ? <- [url]        local file not found for remote file
-        x <- [url]        error processing the entry
+    dotnet file [add|changes|delete|list|sync|update] [file or url]*
+
+    Actions
+        add        downloads a file or GitHub repository or directory from a URL
+        changes    checks remote URLs for changes and lists the status of local files
+        delete     deletes a file and its corresponding config entry from the local directory
+        list       lists the config entries and the status of their corresponding files
+        sync       synchronizes with remote URLs, deleting files and directories as needed
+        update     updates local files from remote URLs, does not prune deleted remote files
+
+    Status
+      = <- [url]   remote file equals local file
+      ✓ <- [url]   local file updated with remote file
+      ^ <- [url]   remote file is newer (ETags mismatch)
+      ? <- [url]   local file not found for remote file
+      x <- [url]   error processing the entry
+
 
 All arguments after the action are tried for URL parsing automatically to 
 disambiguate file (local path) from url (remote file location).
