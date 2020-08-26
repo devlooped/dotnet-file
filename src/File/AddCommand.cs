@@ -86,11 +86,11 @@ namespace Microsoft.DotNet
                     {
                         // The URL might be a directory or repo branch top-level path. If so, we can use the GitHub cli to fetch all files.
                         if (uri.Host.Equals("github.com") &&
-                            response.StatusCode == HttpStatusCode.NotFound)
+                            (response.StatusCode == HttpStatusCode.NotFound || 
+                            response.StatusCode == HttpStatusCode.BadRequest))
                         {
                             if (GitHub.IsInstalled())
                             {
-                                Console.Write("=> fetching via gh cli");
                                 if (GitHub.TryGetFiles(file, out var repoFiles))
                                 {
                                     var targetDir = file.IsDefaultPath ? null : file.Path;
@@ -127,6 +127,10 @@ namespace Microsoft.DotNet
 
                         Console.WriteLine($"x <- {originalUri}");
                         Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
+
+                        if (response.StatusCode == HttpStatusCode.NotFound)
+                            OnNotFound(file);
+
                         continue;
                     }
 
@@ -177,5 +181,7 @@ namespace Microsoft.DotNet
 
             return result;
         }
+
+        protected virtual void OnNotFound(FileSpec spec) { }
     }
 }
