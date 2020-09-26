@@ -83,9 +83,10 @@ namespace Microsoft.DotNet
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        if (uri.Host.Equals("github.com") && !GitHub.IsInstalled())
+                        if (uri.Host.Equals("github.com") && !GitHub.IsInstalled(out var output))
                         {
                             ColorConsole.WriteLine("=> ", "the GitHub CLI is required for this URL".Red());
+                            ColorConsole.WriteLine(output.Yellow());
                             ColorConsole.WriteLine("See https://cli.github.com/manual/installation".Yellow());
                             System.Diagnostics.Process.Start(new ProcessStartInfo("https://cli.github.com/manual/installation") { UseShellExecute = true });
                             return -1;
