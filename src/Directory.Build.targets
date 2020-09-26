@@ -70,14 +70,6 @@
       </AssemblyAttribute>
     </ItemGroup>
 
-    <PropertyGroup Condition="$(CI)">
-      <!-- Update package description so it contains metadata too. -->
-      <Description>$(Description)
-
-Built by https://build.azdo.io/kzu/oss/$(BUILD_BUILDID) from $(PackageProjectUrl)/tree/$(GitCommit)
-</Description>
-    </PropertyGroup>
-
   </Target>
 
   <Target Name="AddVersionMetadata" DependsOnTargets="GetAssemblyVersion" BeforeTargets="GenerateThisAssemblyMetadata">

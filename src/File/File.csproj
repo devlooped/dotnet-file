@@ -56,6 +56,10 @@
       <PackageDescription>$(Description)
 
 $(HelpFile)</PackageDescription>
+      <PackageDescription Condition="$(CI)">$(PackageDescription)
+
+Built by https://build.azdo.io/kzu/oss/$(BUILD_BUILDID) from $(PackageProjectUrl)/tree/$(GitCommit)
+</PackageDescription>      
     </PropertyGroup>
   </Target>
 
