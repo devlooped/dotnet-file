@@ -23,9 +23,9 @@ namespace Microsoft.DotNet
 
                 return !gotError && proc.ExitCode == 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                output = default!;
+                output = ex.Message;
                 return false;
             }
         }
