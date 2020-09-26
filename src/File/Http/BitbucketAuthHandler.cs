@@ -45,8 +45,6 @@ namespace Microsoft.DotNet
 
             var provider = new BitbucketHostProvider(new CommandContext());
 
-            // Currently failing with:
-            // Error converting value {null} to type 'System.Boolean'. Path 'has_2fa_enabled', line 1, position 79. :/
             credential = await provider.GetCredentialAsync(input);
             return credential;
         }
