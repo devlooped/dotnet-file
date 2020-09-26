@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Atlassian.Bitbucket;
@@ -13,9 +12,7 @@ namespace Microsoft.DotNet
     {
         ICredential? credential;
 
-        public BitbucketAuthHandler(HttpMessageHandler inner) : base(inner)
-        {
-        }
+        public BitbucketAuthHandler(HttpMessageHandler inner) : base(inner) { }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {

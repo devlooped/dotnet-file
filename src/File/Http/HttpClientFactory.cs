@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using Microsoft.DotNet.Http;
 
 namespace Microsoft.DotNet
 {
@@ -10,8 +11,12 @@ namespace Microsoft.DotNet
                 new GitAuthHandler(
                     new GitHubRawHandler(
                         new BitbucketRawHandler(
-                            new HttpClientHandler { AllowAutoRedirect = false,
-                                                    AutomaticDecompression = DecompressionMethods.Brotli
-                                                                           | DecompressionMethods.GZip }))));
+                            new AzureRepoRawHandler(
+                                new HttpClientHandler 
+                                {
+                                    AllowAutoRedirect = false,
+                                    AutomaticDecompression = 
+                                        DecompressionMethods.Brotli | DecompressionMethods.GZip 
+                                })))));
     }
 }

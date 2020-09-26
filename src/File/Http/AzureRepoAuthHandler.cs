@@ -4,26 +4,24 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using GitHub;
+using Microsoft.AzureRepos;
 using Microsoft.Git.CredentialManager;
 
 namespace Microsoft.DotNet
 {
-    class GitHubAuthHandler : AuthHandler
+    class AzureRepoAuthHandler : AuthHandler
     {
         ICredential? credential;
 
-        public GitHubAuthHandler(HttpMessageHandler inner) : base(inner) { }
+        public AzureRepoAuthHandler(HttpMessageHandler inner) : base(inner) { }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var creds = await GetCredentialAsync();
-            var builder = new UriBuilder(request.RequestUri);
-            builder.UserName = creds.Password;
-            builder.Password = "x-auth-basic";
+            var creds = await GetCredentialAsync(request.RequestUri);
+            if (creds == null)
+                return await base.SendAsync(request, cancellationToken);
 
-            // retry the request
-            var retry = new HttpRequestMessage(HttpMethod.Get, builder.Uri);
+            var retry = new HttpRequestMessage(HttpMethod.Get, request.RequestUri);
             retry.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(creds.Password)));
             foreach (var etag in request.Headers.IfNoneMatch)
             {
@@ -33,7 +31,7 @@ namespace Microsoft.DotNet
             return await base.SendAsync(retry, cancellationToken);
         }
 
-        async Task<ICredential> GetCredentialAsync()
+        async Task<ICredential?> GetCredentialAsync(Uri uri)
         {
             if (credential != null)
                 return credential;
@@ -41,12 +39,13 @@ namespace Microsoft.DotNet
             var input = new InputArguments(new Dictionary<string, string>
             {
                 ["protocol"] = "https",
-                ["host"] = "github.com",
+                ["host"] = "dev.azure.com",
+                ["path"] = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped),
             });
 
-            var provider = new GitHubHostProvider(new CommandContext());
-
+            var provider = new AzureReposHostProvider(new CommandContext());
             credential = await provider.GetCredentialAsync(input);
+
             return credential;
         }
     }

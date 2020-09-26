@@ -11,9 +11,7 @@ namespace Microsoft.DotNet
     /// </summary>
     class GitHubRawHandler : DelegatingHandler
     {
-        public GitHubRawHandler(HttpMessageHandler inner) : base(inner)
-        {
-        }
+        public GitHubRawHandler(HttpMessageHandler inner) : base(inner) { }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {

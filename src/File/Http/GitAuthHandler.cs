@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,6 +25,7 @@ namespace Microsoft.DotNet
                 { "github.com", new GitHubAuthHandler(handler) },
                 { "raw.githubusercontent.com", new GitHubAuthHandler(handler) },
                 { "bitbucket.org", new BitbucketAuthHandler(handler) },
+                { "dev.azure.com", new AzureRepoAuthHandler(handler) },
             };
         }
 

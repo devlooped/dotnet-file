@@ -10,9 +10,7 @@ namespace Microsoft.DotNet
     /// </summary>
     class BitbucketRawHandler : DelegatingHandler
     {
-        public BitbucketRawHandler(HttpMessageHandler inner) : base(inner)
-        {
-        }
+        public BitbucketRawHandler(HttpMessageHandler inner) : base(inner) { }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
