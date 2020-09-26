@@ -20,6 +20,11 @@ namespace Microsoft.DotNet
                 proc.ErrorDataReceived += (_, __) => gotError = true;
 
                 output = proc.StandardOutput.ReadToEnd();
+                if (!proc.WaitForExit(5000))
+                {
+                    proc.Kill();
+                    return false;
+                }
 
                 return !gotError && proc.ExitCode == 0;
             }
