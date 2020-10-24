@@ -7,7 +7,7 @@ variables:
 - name: DotNetVersion
   value: 3.1.x
 - name: SleetVersion
-  value: 2.3.33
+  value: 3.2.0
 
 stages:
 

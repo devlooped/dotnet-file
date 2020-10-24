@@ -2,7 +2,8 @@
   "profiles": {
     "Config.Tool": {
       "commandName": "Project",
-      "commandLineArgs": "add https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines"
+      "commandLineArgs": "add https://dev.azure.com/clarius/_git/NuDoc?path=%2FLICENSE",
+      "workingDirectory": "C:\\Code\\files"
     }
   }
 }
