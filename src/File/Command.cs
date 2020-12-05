@@ -20,6 +20,9 @@ namespace Microsoft.DotNet
         {
             foreach (var file in Configuration.Where(x => x.Section == "file").GroupBy(x => x.Subsection))
             {
+                if (Configuration.GetBoolean("file", file.Key, "skip") == true)
+                    continue;
+
                 // If no subsection exists, this is a glob-like URL (like a repo root or dir from GH)
                 // In this case, there can be many URLs, but there will never be an etag
                 if (file.Key == null)

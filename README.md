@@ -3,10 +3,9 @@
 
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
-[![Discord Chat](https://img.shields.io/badge/chat-on%20discord-7289DA.svg)](https://discord.gg/3sEqMMB)
-[![License](https://img.shields.io/github/license/kzu/dotnet-file.svg?color=blue)](https://github.com/kzu/dotnet-file/blob/master/LICENSE)
-[![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
 [![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
+[![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
+[![License](https://img.shields.io/github/license/kzu/dotnet-file.svg?color=blue)](https://github.com/kzu/dotnet-file/blob/master/LICENSE)
 [![Build Status](https://dev.azure.com/kzu/oss/_apis/build/status/dotnet-file?branchName=master)](https://build.azdo.io/kzu/oss/1796)
 
 Installing or updating (same command can be used for both):
@@ -89,6 +88,9 @@ GH CLI command:
 
 If you can view the output (would be the README from the repo), you can download files from it
 with `dotnet-file`.
+
+> Note: you can add `skip` to particular file entry (i.e. the `readme.md`) to avoid 
+> updating it in a repo/folder update. 
 
 Private repositories are supported from GitHub and BitBucket through the 
 [Git Credentials Manager Core](https://github.blog/2020-07-02-git-credential-manager-core-building-a-universal-authentication-experience/) 
