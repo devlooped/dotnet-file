@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ColoredConsole;
 
 namespace Microsoft.DotNet
 {
@@ -35,9 +36,8 @@ namespace Microsoft.DotNet
 
                 if (!File.Exists(file.Path))
                 {
-                    Console.Write('?');
-                    Console.Write(" <= ");
-                    Console.WriteLine(file.Uri?.OriginalString);
+                    ColorConsole.Write("?".Yellow());
+                    Console.WriteLine($" <- {file.Uri?.OriginalString}");
                     continue;
                 }
 
@@ -48,28 +48,28 @@ namespace Microsoft.DotNet
                     if (File.Exists(file.Path))
                     {
                         if (response.Headers.ETag?.Tag?.Trim('"') != file.ETag)
-                            Console.Write('^');
+                            ColorConsole.Write("^".Green());
                         else
-                            Console.Write('=');
+                            ColorConsole.Write("=".DarkGray());
                     }
                     else
                     {
-                        Console.Write('?');
+                        ColorConsole.Write("?".Yellow());
                     }
 
                     Console.WriteLine($" <- {file.Uri?.OriginalString}");
                 }
                 else
                 {
-                    Console.WriteLine($"x <- {file.Uri?.OriginalString}");
-                    Console.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}");
+                    ColorConsole.WriteLine("x".Red(), $" <- {file.Uri?.OriginalString}");
+                    ColorConsole.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}".Red());
                 }
             }
 
             foreach (var unknown in Files.Except(configured, new FileSpecComparer()))
             {
                 writefixed(unknown.Path);
-                Console.WriteLine("x Unconfigured");
+                ColorConsole.WriteLine("x Unconfigured".Yellow());
             }
 
             return 0;
