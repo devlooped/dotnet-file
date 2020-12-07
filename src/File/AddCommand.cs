@@ -69,6 +69,20 @@ namespace Microsoft.DotNet
                     var request = new HttpRequestMessage(HttpMethod.Get, uri);
                     if (etag != null && File.Exists(file.Path))
                     {
+                        // Try HEAD and skip file if same etag
+                        var head = await http.SendAsync(new HttpRequestMessage(HttpMethod.Head, uri));
+                        if (head.IsSuccessStatusCode &&
+                            head.Headers.ETag?.Tag?.Trim('"') == etag)
+                        {
+                            // No need to download
+                            ColorConsole.Write("=".DarkGray());
+                            Console.WriteLine($" <- {originalUri}");
+                            continue;
+                        }
+
+                        // NOTE: this code alone didn't work consistently:
+                        // For some reason, GH would still give us the full response, 
+                        // even with a different etag from the previous request.
                         request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("\"" + etag + "\"", weak.GetValueOrDefault()));
                     }
 
@@ -77,7 +91,8 @@ namespace Microsoft.DotNet
                     if (response.StatusCode == HttpStatusCode.NotModified)
                     {
                         // No need to download
-                        Console.WriteLine($"= <- {originalUri}");
+                        ColorConsole.Write("=".DarkGray());
+                        Console.WriteLine($" <- {originalUri}");
                         continue;
                     }
 
@@ -173,7 +188,8 @@ namespace Microsoft.DotNet
                     else
                         Configuration.Unset("file", file.Path, "weak");
 
-                    Console.WriteLine($"✓ <- {originalUri}");
+                    ColorConsole.Write("✓".Green());
+                    Console.WriteLine($" <- {originalUri}");
                 }
                 catch (Exception e)
                 {
