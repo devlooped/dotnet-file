@@ -32,10 +32,9 @@ namespace Microsoft.DotNet
 
             foreach (var file in configured)
             {
-                writefixed(file.Path);
-
                 if (!File.Exists(file.Path))
                 {
+                    writefixed(file.Path);
                     ColorConsole.Write("?".Yellow());
                     Console.WriteLine($" <- {file.Uri?.OriginalString}");
                     continue;
@@ -47,13 +46,15 @@ namespace Microsoft.DotNet
                 {
                     if (File.Exists(file.Path))
                     {
-                        if (response.Headers.ETag?.Tag?.Trim('"') != file.ETag)
-                            ColorConsole.Write("^".Green());
-                        else
-                            ColorConsole.Write("=".DarkGray());
+                        if (response.Headers.ETag?.Tag?.Trim('"') == file.ETag)
+                            continue;
+
+                        writefixed(file.Path);
+                        ColorConsole.Write("^".Green());
                     }
                     else
                     {
+                        writefixed(file.Path);
                         ColorConsole.Write("?".Yellow());
                     }
 
@@ -61,6 +62,7 @@ namespace Microsoft.DotNet
                 }
                 else
                 {
+                    writefixed(file.Path);
                     ColorConsole.WriteLine("x".Red(), $" <- {file.Uri?.OriginalString}");
                     ColorConsole.WriteLine($"{new string(' ', length + 5)}{(int)response.StatusCode}: {response.ReasonPhrase}".Red());
                 }
