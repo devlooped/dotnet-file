@@ -1,0 +1,45 @@
+﻿# Builds a final release version and pushes to nuget.org 
+# whenever a release is published.
+# Requires: secrets.NUGET_API_KEY
+
+name: release
+on:
+  release:
+    types: [published]
+
+env:
+  DOTNET_NOLOGO: true
+  Configuration: Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🤘 checkout
+        uses: actions/checkout@v2
+        with: 
+          submodules: recursive
+          fetch-depth: 0
+          
+      - name: ⚙ dotnet 5.0.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.x
+
+      - name: 🙏 build
+        run: dotnet build -bl:build.binlog -p:version=${GITHUB_REF#refs/*/v}
+
+      - name: 🧪 test
+        run: dotnet test --no-build -m:1
+
+      - name: 📦 pack
+        run: dotnet pack -bl:pack.binlog -p:version=${GITHUB_REF#refs/*/v}
+
+      - name: 🔼 logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          path: '*.binlog'
+
+      - name: 🚀 nuget
+        run: dotnet nuget push ./bin/**/*.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --skip-duplicate

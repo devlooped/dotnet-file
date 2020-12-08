@@ -1,0 +1,15 @@
+<Project>
+  <!-- Customizes the Directory.Build.props -->
+
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+
+    <!-- Because PackOnBuild is sooo much better than GeneratePackageOnBuild! -->
+    <GeneratePackageOnBuild>$(PackOnBuild)</GeneratePackageOnBuild>
+    <PackageOutputPath Condition="'$(PackOnBuild)' == 'true' And '$(PackageOutputPath)' == ''">$(MSBuildThisFileDirectory)..\bin</PackageOutputPath>
+  </PropertyGroup>
+
+</Project>

@@ -6,17 +6,17 @@ namespace Microsoft.DotNet
 {
     static class HttpClientFactory
     {
-        public static HttpClient Create() 
+        public static HttpClient Create()
             => new HttpClient(
                 new GitAuthHandler(
                     new GitHubRawHandler(
                         new BitbucketRawHandler(
                             new AzureRepoRawHandler(
-                                new HttpClientHandler 
+                                new HttpClientHandler
                                 {
                                     AllowAutoRedirect = false,
-                                    AutomaticDecompression = 
-                                        DecompressionMethods.Brotli | DecompressionMethods.GZip 
+                                    AutomaticDecompression =
+                                        DecompressionMethods.Brotli | DecompressionMethods.GZip
                                 })))));
     }
 }
