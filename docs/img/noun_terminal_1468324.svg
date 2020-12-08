@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
-     version="1.0" x="0px" y="0px" viewBox="0 0 100 100" 
-     enable-background="new 0 0 100 100" xml:space="preserve">
-    <polygon points="63.333,30 83.333,30 63.333,10 "/>
-    <path d="M63.333,36.667c-3.682,0-6.666-2.988-6.666-6.667V10H23.333c-3.682,0-6.666,2.981-6.666,6.667v66.666  c0,3.679,2.984,6.667,6.666,6.667h53.334c3.678,0,6.666-2.981,6.666-6.667V36.667H63.333z M47.155,71.465L43.62,75L30.977,62.356  c-1.302-1.299-1.302-3.411,0-4.713L43.62,45l3.535,3.535L35.69,60L47.155,71.465z M70,71.667H53.333v-5H70V71.667z"/>
-    <text x="2" y="96" fill="#000000" font-size="5px" font-weight="bold" font-family="'Helvetica Neue', Helvetica, Arial-Unicode, Arial, Sans-serif">by Danil Polshin from the Noun Project</text>
+<svg height='100px' width='100px' fill="#68217a" xmlns="http://www.w3.org/2000/svg" version="1.0" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 100 100">
+    <polygon points="63.333,30 83.333,30 63.333,10 " />
+    <path d="M63.333 36.667C59.651 36.667 56.667 33.679 56.667 30V10H23.333C19.651 10 16.667 12.981 16.667 16.667V83.333C16.667 87.012 19.651 90 23.333 90H76.667C80.345 90 83.333 87.019 83.333 83.333V36.667H63.333Z" />
+    <path fill="white" d="M70 71.667H53.333V66.667H70V71.667Z" />
+    <path fill="white" d="M47.155 71.465L43.62 75L30.977 62.356C29.675 61.057 29.675 58.945 30.977 57.643L43.62 45L47.155 48.535L35.69 60L47.155 71.465Z" 
+          transform="rotate(180, 39, 59)" />
 </svg>
