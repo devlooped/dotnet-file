@@ -32,5 +32,7 @@ namespace Microsoft.DotNet
 
             return base.ExecuteAsync();
         }
+
+        protected override AddCommand Clone() => new UpdateCommand(Configuration);
     }
 }

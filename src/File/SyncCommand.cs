@@ -7,7 +7,7 @@ namespace Microsoft.DotNet
     {
         public SyncCommand(Config configuration) : base(configuration) { }
 
-        protected override bool OnDeleteNotFound(FileSpec spec)
+        protected override bool OnRemoteUrlMissing(FileSpec spec)
         {
             // If the file exists locally, delete it. Remove the config entry.
             if (File.Exists(spec.Path))

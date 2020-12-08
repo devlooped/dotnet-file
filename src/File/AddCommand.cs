@@ -61,12 +61,10 @@ namespace Microsoft.DotNet
                 var weak = Configuration.GetBoolean("file", file.Path, "weak");
                 var originalUri = uri;
 
-                write(file.Path);
-
                 try
                 {
                     processed.Add(uri.ToString());
-                    var request = new HttpRequestMessage(HttpMethod.Get, uri);
+                    var request = new HttpRequestMessage(DryRun ? HttpMethod.Head : HttpMethod.Get, uri);
                     if (etag != null && File.Exists(file.Path))
                     {
                         // Try HEAD and skip file if same etag
@@ -74,9 +72,16 @@ namespace Microsoft.DotNet
                         if (head.IsSuccessStatusCode &&
                             head.Headers.ETag?.Tag?.Trim('"') == etag)
                         {
-                            // No need to download
-                            ColorConsole.Write("=".DarkGray());
-                            Console.WriteLine($" <- {originalUri}");
+                            // To keep "noise" from unchanged files to a minium, when 
+                            // doing a dry run we only list actual changes.
+                            if (!DryRun)
+                            {
+                                // No need to download
+                                write(file.Path);
+                                ColorConsole.Write("=".DarkGray());
+                                Console.WriteLine($" <- {originalUri}");
+                            }
+
                             continue;
                         }
 
@@ -85,6 +90,8 @@ namespace Microsoft.DotNet
                         // even with a different etag from the previous request.
                         request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("\"" + etag + "\"", weak.GetValueOrDefault()));
                     }
+
+                    write(file.Path);
 
                     var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
@@ -121,16 +128,14 @@ namespace Microsoft.DotNet
                                     Configuration.AddString("file", targetDir, "url", uri.ToString());
 
                                 // Run again with the fetched files.
-                                var command = new AddCommand(Configuration);
+                                var command = Clone();
                                 command.Files.AddRange(repoFiles);
                                 Console.WriteLine();
 
                                 // Track all files as already processed to skip duplicate processing from 
                                 // existing expanded list.
                                 foreach (var repoFile in repoFiles)
-                                {
                                     processed.Add(repoFile.Uri!.ToString());
-                                }
 
                                 result = await command.ExecuteAsync();
                                 continue;
@@ -144,7 +149,7 @@ namespace Microsoft.DotNet
                         ColorConsole.WriteLine($"x <- {originalUri}".Yellow());
 
                         if (response.StatusCode != HttpStatusCode.NotFound ||
-                            !OnDeleteNotFound(file))
+                            !OnRemoteUrlMissing(file))
                         {
                             // Only show as error if we haven't deleted the file as part of a 
                             // sync operation, or if the error is not 404.
@@ -154,39 +159,42 @@ namespace Microsoft.DotNet
                         continue;
                     }
 
-                    etag = response.Headers.ETag?.Tag?.Trim('"');
-
-                    var path = file.Path.IndexOf(Path.AltDirectorySeparatorChar) != -1
-                        ? file.Path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
-                        : file.Path;
-                    // Ensure target directory exists.
-                    if (Path.GetDirectoryName(path)?.Length > 0)
-                        Directory.CreateDirectory(Path.GetDirectoryName(path));
-
-                    var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-                    try
+                    if (!DryRun)
                     {
-                        using var stream = File.Open(tempPath, FileMode.Create);
-                        await response.Content.CopyToAsync(stream);
+                        etag = response.Headers.ETag?.Tag?.Trim('"');
+
+                        var path = file.Path.IndexOf(Path.AltDirectorySeparatorChar) != -1
+                            ? file.Path.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar)
+                            : file.Path;
+                        // Ensure target directory exists.
+                        if (Path.GetDirectoryName(path)?.Length > 0)
+                            Directory.CreateDirectory(Path.GetDirectoryName(path));
+
+                        var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                        try
+                        {
+                            using var stream = File.Open(tempPath, FileMode.Create);
+                            await response.Content.CopyToAsync(stream);
+                        }
+                        catch (Exception) // Delete temp file on error
+                        {
+                            File.Delete(tempPath);
+                            throw;
+                        }
+                        File.Move(tempPath, path, overwrite: true);
+
+                        Configuration.SetString("file", file.Path, "url", originalUri.ToString());
+
+                        if (etag == null)
+                            Configuration.Unset("file", file.Path, "etag");
+                        else
+                            Configuration.SetString("file", file.Path, "etag", etag);
+
+                        if (response.Headers.ETag?.IsWeak == true)
+                            Configuration.SetBoolean("file", file.Path, "weak", true);
+                        else
+                            Configuration.Unset("file", file.Path, "weak");
                     }
-                    catch (Exception) // Delete temp file on error
-                    {
-                        File.Delete(tempPath);
-                        throw;
-                    }
-                    File.Move(tempPath, path, overwrite: true);
-
-                    Configuration.SetString("file", file.Path, "url", originalUri.ToString());
-
-                    if (etag == null)
-                        Configuration.Unset("file", file.Path, "etag");
-                    else
-                        Configuration.SetString("file", file.Path, "etag", etag);
-
-                    if (response.Headers.ETag?.IsWeak == true)
-                        Configuration.SetBoolean("file", file.Path, "weak", true);
-                    else
-                        Configuration.Unset("file", file.Path, "weak");
 
                     ColorConsole.Write("✓".Green());
                     Console.WriteLine($" <- {originalUri}");
@@ -203,6 +211,24 @@ namespace Microsoft.DotNet
             return result;
         }
 
-        protected virtual bool OnDeleteNotFound(FileSpec spec) => false;
+        /// <summary>
+        /// Whether to just print what would have been done, but not actually 
+        /// downloading anything.
+        /// </summary>
+        protected virtual bool DryRun => false;
+
+        /// <summary>
+        /// Invoked when the URL for a file returns a 404.
+        /// </summary>
+        /// <returns>
+        /// <see langword="true" /> if the entry is removed automatically in 
+        /// this case.
+        /// </returns>
+        protected virtual bool OnRemoteUrlMissing(FileSpec spec) => false;
+
+        /// <summary>
+        /// Creates a clone of the current instance.
+        /// </summary>
+        protected virtual AddCommand Clone() => new AddCommand(Configuration);
     }
 }
