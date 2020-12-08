@@ -9,7 +9,7 @@ namespace Microsoft.DotNet
 {
     public static class GitHub
     {
-        public static bool IsInstalled(out string output) 
+        public static bool IsInstalled(out string output)
             => Process.TryExecute("gh", "--version", out output) && output.StartsWith("gh version");
 
         public static bool TryGetFiles(FileSpec spec, out List<FileSpec> result)

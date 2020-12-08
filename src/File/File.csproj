@@ -12,7 +12,6 @@
     <PackageId>dotnet-file</PackageId>
     <ToolCommandName>dotnet-file</ToolCommandName>
     <PackAsTool>true</PackAsTool>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,25 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ThisAssembly" Version="1.0.0" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
-    <PackageReference Include="GitInfo" Version="2.0.20" PrivateAssets="all" />
-    <PackageReference Include="MSBuilder.ThisAssembly.Metadata" Version="0.1.4" PrivateAssets="all" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="dotnet-config-lib" Version="1.0.0-alpha.11" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\..\docs\img\icon.png" Link="icon.png" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="%(Filename)%(Extension)" />
-    <Content Include="Help.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
-      <_Parameter1>AssemblyName</_Parameter1>
-      <_Parameter2>$(AssemblyName)</_Parameter2>
-    </AssemblyAttribute>
+    <Content Include="Help.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,20 +35,5 @@
     <ProjectReference Include="..\..\gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj" />
     <ProjectReference Include="..\..\gcm\src\shared\Microsoft.Git.CredentialManager\Microsoft.Git.CredentialManager.csproj" />
   </ItemGroup>
-
-  <Target Name="AutoPublish" DependsOnTargets="Publish" AfterTargets="Build" />
-
-  <Target Name="SetDescription" BeforeTargets="GenerateNuspec">
-    <PropertyGroup>
-      <HelpFile>$([System.IO.File]::ReadAllText(Help.txt))</HelpFile>
-      <PackageDescription>$(Description)
-
-$(HelpFile)</PackageDescription>
-      <PackageDescription Condition="$(CI)">$(PackageDescription)
-
-Built by https://build.azdo.io/kzu/oss/$(BUILD_BUILDID) from $(PackageProjectUrl)/tree/$(GitCommit)
-</PackageDescription>      
-    </PropertyGroup>
-  </Target>
 
 </Project>
