@@ -43,7 +43,7 @@
 	weak
 [file ".github/workflows/tag.yml"]
 	url = https://github.com/kzu/oss/blob/main/.github/workflows/tag.yml
-	etag = 40aa42451c466d19fbdeed52cdbb876d1439f1a5f530cf10883a9cff6f8c2072
+	etag = 26e271cf76e00c6922552af104b1e496103bdfa75ebef253447594207b10153e
 	weak
 [file ".github_changelog_generator"]
 	url = https://github.com/kzu/oss/blob/main/.github_changelog_generator

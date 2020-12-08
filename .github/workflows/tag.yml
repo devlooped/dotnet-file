@@ -26,8 +26,15 @@ jobs:
 
       - name: ⚙ changelog
         uses: faberNovel/github-changelog-generator-action@master
+        if: env.SINCE_TAG != ''
         with:
           options: --token ${{ secrets.GITHUB_TOKEN }} --since-tag ${{ env.SINCE_TAG }}
+
+      - name: ⚙ changelog
+        uses: faberNovel/github-changelog-generator-action@master
+        if: env.SINCE_TAG == ''
+        with:
+          options: --token ${{ secrets.GITHUB_TOKEN }}
 
       - name: 😺 changelog
         run: cat CHANGELOG.md
