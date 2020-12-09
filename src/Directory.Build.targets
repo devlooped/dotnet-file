@@ -1,7 +1,7 @@
 <Project>
   <!-- To extend/change the defaults, create a Directory.targets alongside this file -->
 
-  <PropertyGroup>
+  <PropertyGroup Condition="'$(IsPackable)' == ''">
     <!-- The Sdks\NuGet.Build.Tasks.Pack\build\NuGet.Build.Tasks.Pack.targets unconditionally sets 
         PackageId=AssemblyName if no PackageId is provided, and then defaults IsPackable=true if 
         a PackageId is set (?!), meaning that by default everything is packable in Sdk-style 
@@ -13,6 +13,7 @@
         IsPackable a more sensible default, making it false if no PackageId was provided at this 
         point. -->
     <IsPackable Condition="'$(PackageId)' == ''">false</IsPackable>
+    <IsPackable Condition="'$(PackageId)' != ''">true</IsPackable>
   </PropertyGroup>
 
   <!-- Microsoft.NET.Sdk\targets\Microsoft.NET.DefaultAssemblyInfo.targets does this and is imported 
@@ -57,19 +58,35 @@
     <ProjectProperty Include="RepositoryCommit" />
   </ItemGroup>
 
+  <!-- Make sure the source control info is available before calling source generators -->
+  <Target Name="EnsureProjectInformation" BeforeTargets="GenerateMSBuildEditorConfigFileShouldRun" DependsOnTargets="InitializeSourceControlInformation" />
+
+  <Target Name="_InitializeRepositoryProperties" 
+          DependsOnTargets="InitializeSourceControlInformation" 
+          Condition="'$(SourceControlInformationFeatureSupported)' == 'true'">
+    <PropertyGroup>
+    </PropertyGroup>    
+  </Target>
+
   <!-- Always append the link to the direct source tree for the current build -->
   <Target Name="UpdatePackageMetadata"
-          BeforeTargets="PrepareForBuild;GetAssemblyVersion;GetPackageMetadata;GenerateNuspec;Pack"
+          BeforeTargets="PrepareForBuild;GenerateMSBuildEditorConfigFileShouldRun;GetAssemblyVersion;GetPackageMetadata;GenerateNuspec;Pack"
           DependsOnTargets="InitializeSourceControlInformation"
-          Condition="'$(SourceControlInformationFeatureSupported)' And
-                     '$(IsPackable)' == 'true' And 
-                     '$(RepositoryUrl)' != '' And 
-                     '$(SourceRevisionId)' != ''">
+          Condition="'$(SourceControlInformationFeatureSupported)' == 'true' And
+                     '$(IsPackable)' == 'true'">
     <PropertyGroup>
-      <Description>$(Description)
+      <Description Condition="'$(SourceRevisionId)' != ''">$(Description)
 
-Built from $(RepositoryUrl)/tree/$(SourceRevisionId.Substring(0, 9))</Description>
+Built from $(RepositoryUrl)/tree/$(SourceRevisionId.Substring(0, 9))
+      </Description>
       <PackageDescription>$(Description)</PackageDescription>
+
+      <!-- The project must specify PublishRepositoryUrl=true in order to publish the URL, in order to prevent inadvertent leak of internal URL. -->
+      <RepositoryUrl Condition="'$(RepositoryUrl)' == '' and '$(PublishRepositoryUrl)' == 'true'">$(PrivateRepositoryUrl)</RepositoryUrl>
+      <PackageProjectUrl Condition="'$(PackageProjectUrl)' == '' and '$(PublishRepositoryUrl)' == 'true'">$(RepositoryUrl)</PackageProjectUrl>
+
+      <RepositoryCommit Condition="'$(RepositoryCommit)' == ''">$(SourceRevisionId)</RepositoryCommit>
+      <RepositorySha Condition="'$(SourceRevisionId)' != ''">$(SourceRevisionId.Substring(0, 9))</RepositorySha>
     </PropertyGroup>
   </Target>
 

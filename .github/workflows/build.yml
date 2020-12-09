@@ -33,6 +33,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
+      - name: ⚙ dotnet 3.1.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
       - name: ⚙ dotnet 2.1.x
         uses: actions/setup-dotnet@v1
         with:
@@ -44,13 +48,13 @@ jobs:
           dotnet format -f src --check -v:diag
 
       - name: 🙏 build
-        run: dotnet build -bl:build.binlog -p:VersionLabel="$GITHUB_REF.$GITHUB_RUN_NUMBER"
+        run: dotnet build -m:1 -bl:build.binlog -p:VersionLabel="$GITHUB_REF.$GITHUB_RUN_NUMBER"
 
       - name: 🧪 test
         run: dotnet test --no-build -m:1 --blame-hang --blame-hang-timeout 5m -d $GITHUB_WORKSPACE/logs/${{ matrix.os }}.txt -r $GITHUB_WORKSPACE/logs
 
       - name: 📦 pack
-        run: dotnet pack -bl:pack.binlog -p:VersionLabel="$GITHUB_REF.$GITHUB_RUN_NUMBER"
+        run: dotnet pack -m:1 -bl:pack.binlog -p:VersionLabel="$GITHUB_REF.$GITHUB_RUN_NUMBER"
 
       - name: 🔼 logs
         if: always()

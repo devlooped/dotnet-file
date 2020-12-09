@@ -35,11 +35,11 @@
 	weak
 [file ".github/workflows/build.yml"]
 	url = https://github.com/kzu/oss/blob/main/.github/workflows/build.yml
-	etag = 21eac838e60b074164ee21b489a224fbc06c2a511372416c771e7d5dae5b1c6e
+	etag = c56db40b37f8dbcff13aea20eefc263caf825d17d86b0dc055ce504d8cb8ae9d
 	weak
 [file ".github/workflows/release.yml"]
 	url = https://github.com/kzu/oss/blob/main/.github/workflows/release.yml
-	etag = 29e4299f0ad509399882ec5027f1e3f6140fa82239deaffc4e61b604766a6065
+	etag = fe4eae2bf3738645bca3b8f9f90ace482802fdd818c6d6651dccbb311ebeb231
 	weak
 [file ".github/workflows/tag.yml"]
 	url = https://github.com/kzu/oss/blob/main/.github/workflows/tag.yml
@@ -67,11 +67,11 @@
 	weak
 [file "src/Directory.Build.props"]
 	url = https://github.com/kzu/oss/blob/main/src/Directory.Build.props
-	etag = 5b0cf9c055f179dc0b0f15a7e6dfbc6b8ea4b949eec61c0f3000afa2198970a6
+	etag = d0b93d7533832a4d62cff69c71540bad3284bf92a7d2096b1a91607d72099d2b
 	weak
 [file "src/Directory.Build.targets"]
 	url = https://github.com/kzu/oss/blob/main/src/Directory.Build.targets
-	etag = dce6710e7a64d30fe57cdd145a33aed28f099521c7475b8a58a20a16d5e2454d
+	etag = 87357cb36379ac589c3981bddec4c5f7f89c55356573bd203acbea4b66fe3427
 	weak
 [file "src/kzu.snk"]
 	url = https://github.com/kzu/oss/blob/main/src/kzu.snk

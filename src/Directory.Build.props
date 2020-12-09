@@ -65,6 +65,9 @@
 
     <!-- Generate satellite assemblies using csc.exe to avoid some al.exe issues. See https://github.com/dotnet/msbuild/pull/2726 -->
     <GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
+
+    <!-- See: https://www.cazzulino.com/project-dependencies-as-project-references.html -->
+    <AddSyntheticProjectReferencesForSolutionDependencies>false</AddSyntheticProjectReferencesForSolutionDependencies>
   </PropertyGroup>
 
   <PropertyGroup Label="Version">

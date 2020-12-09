@@ -25,15 +25,23 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
+      - name: ⚙ dotnet 3.1.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+      - name: ⚙ dotnet 2.1.x
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 2.1.x
 
       - name: 🙏 build
-        run: dotnet build -bl:build.binlog -p:version=${GITHUB_REF#refs/*/v}
+        run: dotnet build -m:1 -bl:build.binlog -p:version=${GITHUB_REF#refs/*/v}
 
       - name: 🧪 test
         run: dotnet test --no-build -m:1
 
       - name: 📦 pack
-        run: dotnet pack -bl:pack.binlog -p:version=${GITHUB_REF#refs/*/v}
+        run: dotnet pack -m:1 -bl:pack.binlog -p:version=${GITHUB_REF#refs/*/v}
 
       - name: 🔼 logs
         if: ${{ always() }}
