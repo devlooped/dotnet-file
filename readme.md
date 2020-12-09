@@ -1,5 +1,4 @@
-![Icon](https://raw.github.com/kzu/dotnet-file/master/docs/img/icon-32.png) dotnet-file
-============
+<h1 id="dotnet-file"><img src="https://raw.githubusercontent.com/kzu/dotnet-file/main/docs/img/icon.svg" alt="icon" height="32" width="32" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">  dotnet-file</h1>
 
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
