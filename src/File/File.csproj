@@ -4,7 +4,7 @@
     <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.</Description>
 
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
 
     <AssemblyName>file</AssemblyName>
     <RootNamespace>Microsoft.DotNet</RootNamespace>
@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <None Remove="Help.txt" />
+    <Content Include="Help.txt" CopyToOutputDirectory="PreserveNewest" Condition="'$(TargetFramework)' != ''" />
+    <Compile Remove="Range.cs" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,10 +26,7 @@
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="dotnet-config-lib" Version="1.0.0-alpha.11" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Help.txt" CopyToOutputDirectory="PreserveNewest" />
+    <PackageReference Include="Nullable" Version="1.3.0" PrivateAssets="all" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
   </ItemGroup>
 
   <ItemGroup>

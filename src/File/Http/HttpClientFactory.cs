@@ -16,7 +16,12 @@ namespace Microsoft.DotNet
                                 {
                                     AllowAutoRedirect = false,
                                     AutomaticDecompression =
+#if NETCOREAPP21
+                                        DecompressionMethods.GZip
+#else
                                         DecompressionMethods.Brotli | DecompressionMethods.GZip
+#endif
+
                                 })))));
     }
 }

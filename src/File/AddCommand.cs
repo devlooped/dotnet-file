@@ -184,7 +184,11 @@ namespace Microsoft.DotNet
                             File.Delete(tempPath);
                             throw;
                         }
+#if NETCOREAPP21
+                        File.Move(tempPath, path);
+#else
                         File.Move(tempPath, path, overwrite: true);
+#endif
 
                         Configuration.SetString("file", file.Path, "url", originalUri.ToString());
 
