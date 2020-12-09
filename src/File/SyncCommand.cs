@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using DotNetConfig;
 
 namespace Microsoft.DotNet
 {

@@ -1,4 +1,6 @@
-﻿namespace Microsoft.DotNet
+﻿using DotNetConfig;
+
+namespace Microsoft.DotNet
 {
     class ChangesCommand : UpdateCommand
     {

@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 using Mono.Options;
+using DotNetConfig;
 
 namespace Microsoft.DotNet
 {
