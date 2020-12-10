@@ -186,6 +186,9 @@ namespace Microsoft.DotNet
                             throw;
                         }
 #if NETCOREAPP21
+                        if (File.Exists(path))
+                            File.Delete(path);
+
                         File.Move(tempPath, path);
 #else
                         File.Move(tempPath, path, overwrite: true);
