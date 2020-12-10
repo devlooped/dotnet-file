@@ -124,29 +124,33 @@ namespace Microsoft.DotNet
                             // BadRequest from our conversion to raw URLs in the HttpClient handler
                             response.StatusCode == HttpStatusCode.BadRequest))
                         {
-                            if (GitHub.TryGetFiles(file, out var repoFiles))
+                            var gh = GitHub.TryGetFiles(file, out var repoFiles);
+                            switch (gh)
                             {
-                                var targetDir = file.IsDefaultPath ? null : file.Path;
-                                // Store the URL for later updates
-                                if (!Configuration.GetAll("file", targetDir, "url").Any(entry => uri.ToString().Equals(entry.RawValue, StringComparison.OrdinalIgnoreCase)))
-                                    Configuration.AddString("file", targetDir, "url", uri.ToString());
+                                case GitHubResult.Success:
+                                    var targetDir = file.IsDefaultPath ? null : file.Path;
+                                    // Store the URL for later updates
+                                    if (!Configuration.GetAll("file", targetDir, "url").Any(entry => uri.ToString().Equals(entry.RawValue, StringComparison.OrdinalIgnoreCase)))
+                                        Configuration.AddString("file", targetDir, "url", uri.ToString());
 
-                                // Run again with the fetched files.
-                                var command = Clone();
-                                command.Files.AddRange(repoFiles);
-                                Console.WriteLine();
+                                    // Run again with the fetched files.
+                                    var command = Clone();
+                                    command.Files.AddRange(repoFiles);
+                                    Console.WriteLine();
 
-                                // Track all files as already processed to skip duplicate processing from 
-                                // existing expanded list.
-                                foreach (var repoFile in repoFiles)
-                                    processed.Add(repoFile.Uri!.ToString());
+                                    // Track all files as already processed to skip duplicate processing from 
+                                    // existing expanded list.
+                                    foreach (var repoFile in repoFiles)
+                                        processed.Add(repoFile.Uri!.ToString());
 
-                                result = await command.ExecuteAsync();
-                                continue;
-                            }
-                            else
-                            {
-                                return -1;
+                                    result = await command.ExecuteAsync();
+                                    continue;
+                                case GitHubResult.Failure:
+                                    return -1;
+                                case GitHubResult.Skip:
+                                    break;
+                                default:
+                                    break;
                             }
                         }
 

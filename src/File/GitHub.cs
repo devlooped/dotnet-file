@@ -7,16 +7,32 @@ using Newtonsoft.Json.Linq;
 
 namespace Microsoft.DotNet
 {
+    public enum GitHubResult
+    {
+        /// <summary>
+        /// We successfully retrieved files from GH CLI.
+        /// </summary>
+        Success,
+        /// <summary>
+        /// There was a failure retrieving files from GH CLI.
+        /// </summary>
+        Failure,
+        /// <summary>
+        /// The specified file/url was skipped (i.e. a blog URL, does not apply to GH CLI fetching).
+        /// </summary>
+        Skip,
+    }
+
     public static class GitHub
     {
         public static bool IsInstalled(out string output)
             => Process.TryExecute("gh", "--version", out output) && output.StartsWith("gh version");
 
-        public static bool TryGetFiles(FileSpec spec, out List<FileSpec> result)
+        public static GitHubResult TryGetFiles(FileSpec spec, out List<FileSpec> result)
         {
             var files = result = new List<FileSpec>();
             if (spec.Uri == null)
-                return false;
+                return GitHubResult.Skip;
 
             // GH CLI is installed, try fetching via API.
             var parts = spec.Uri.GetComponents(UriComponents.Path, UriFormat.Unescaped).Split('/');
@@ -26,7 +42,7 @@ namespace Microsoft.DotNet
             if (parts.Length < 2)
             {
                 Console.Error.WriteLine("GitHub URL must be of the form: 'github.com/{org}/{repo}' (with an optional '/{path}').");
-                return false;
+                return GitHubResult.Failure;
             }
 
             var owner = parts[0];
@@ -46,7 +62,7 @@ namespace Microsoft.DotNet
                 {
                     // Blob urls point to actual files, so we 
                     // don't do any GH CLI processing for them.
-                    return false;
+                    return GitHubResult.Skip;
                 }
             }
 
@@ -100,7 +116,7 @@ namespace Microsoft.DotNet
                     }
                 };
                 addFiles(array);
-                return true;
+                return GitHubResult.Success;
             }
             else
             {
@@ -112,7 +128,7 @@ namespace Microsoft.DotNet
 
                 Console.WriteLine("Ensure you can access the given repo by running:");
                 ColorConsole.WriteLine($"  gh repo view {owner}/{repo}".Yellow());
-                return false;
+                return GitHubResult.Failure;
             }
         }
     }
