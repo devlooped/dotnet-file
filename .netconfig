@@ -31,7 +31,7 @@
 	weak
 [file ".github/workflows/build.yml"]
 	url = https://github.com/kzu/oss/blob/main/.github/workflows/build.yml
-	etag = c56db40b37f8dbcff13aea20eefc263caf825d17d86b0dc055ce504d8cb8ae9d
+	etag = 4d598303ec512578cff4b6d539929490ec844dd9c0605251bd769adbe120b50d
 	weak
 [file ".github/workflows/release.yml"]
 	url = https://github.com/kzu/oss/blob/main/.github/workflows/release.yml
@@ -63,7 +63,7 @@
 	weak
 [file "src/Directory.Build.props"]
 	url = https://github.com/kzu/oss/blob/main/src/Directory.Build.props
-	etag = d0b93d7533832a4d62cff69c71540bad3284bf92a7d2096b1a91607d72099d2b
+	etag = 7caf4fe003d1966348dd989ef56786b04101a1e3d37e17e1d3466376ddf419c5
 	weak
 [file "src/Directory.Build.targets"]
 	url = https://github.com/kzu/oss/blob/main/src/Directory.Build.targets
