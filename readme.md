@@ -27,6 +27,7 @@ Usage:
         add        downloads a file or GitHub repository or directory from a URL
         changes    checks remote URLs for changes and lists the status of local files
         delete     deletes a file and its corresponding config entry from the local directory
+        init       initializes the local directory from one or more remote .netconfig files
         list       lists the config entries and the status of their corresponding files
         sync       synchronizes with remote URLs, deleting local files and directories as needed
         update     updates local files from remote URLs, does not prune deleted remote files
@@ -44,8 +45,9 @@ disambiguate file (local path) from url (remote file location).
 
 Examples:
 
+    dotnet file init [url]          // seeds the current directory with all files/URLs listed in a remote URL
     dotnet file add [url]           // downloads a file to the current directory and adds its URL+ETag in dotnet-config
-    dotnet file add [url] [file]    // downloads the url to the (relative) relative file local path specifed and adds
+    dotnet file add [url] [file]    // downloads the url to the (relative) file local path specifed and adds
                                     // its URL+ETag in dotnet-config
     dotnet file update [file]       // updates a specific file, based on its dotnet-config configuration
     dotnet file update [url]        // updates a specific file by its url, based on its dotnet-config configuration

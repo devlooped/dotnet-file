@@ -28,6 +28,7 @@ namespace Microsoft.DotNet
                 "add" => new AddCommand(config),
                 "changes" => new ChangesCommand(config),
                 "delete" => new DeleteCommand(config),
+                "init" => new InitCommand(config),
                 "list" => new ListCommand(config),
                 "sync" => new SyncCommand(config),
                 "update" => new UpdateCommand(config),
