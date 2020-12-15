@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-    <PackageReference Include="ThisAssembly" Version="1.0.0" />
+    <PackageReference Include="ThisAssembly" Version="1.0.2" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="DotNetConfig" Version="1.0.0-rc.1" />

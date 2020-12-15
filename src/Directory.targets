@@ -2,7 +2,11 @@
   <!-- Extend the Directory.Build.targets -->
 
   <ItemGroup>
-    <PackageReference Update="ThisAssembly" Version="42.42.42" Condition="Exists('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin\')" />
+    <PackageReference Update="ThisAssembly" Version="1.0.2" Condition="Exists('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin
+    <PackageReference Update="DotNetConfig" Version="42.42.42" Condition="Exists('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin\')" />
+  </ItemGroup>
+
+</Project>)" />
     <PackageReference Update="DotNetConfig" Version="42.42.42" Condition="Exists('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin\')" />
   </ItemGroup>
 
