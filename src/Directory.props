@@ -10,6 +10,8 @@
 
     <RestoreSources Condition="Exists('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin\')">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin'));$(RestoreSources)</RestoreSources>
     <RestoreSources Condition="Exists('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin\')">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin'));$(RestoreSources)</RestoreSources>
+
+    <PackageProjectUrl>https://clarius.org/dotnet-file</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
