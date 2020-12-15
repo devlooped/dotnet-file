@@ -17,10 +17,15 @@ namespace Microsoft.DotNet
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            if (request.RequestUri == null)
+                return await base.SendAsync(request, cancellationToken);
+
             var creds = await GetCredentialAsync();
-            var builder = new UriBuilder(request.RequestUri);
-            builder.UserName = creds.Password;
-            builder.Password = "x-auth-basic";
+            var builder = new UriBuilder(request.RequestUri)
+            {
+                UserName = creds.Password,
+                Password = "x-auth-basic"
+            };
 
             // retry the request
             var retry = new HttpRequestMessage(HttpMethod.Get, builder.Uri);

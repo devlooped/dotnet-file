@@ -17,7 +17,7 @@ namespace Microsoft.DotNet.Http
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             // For raw downloads, we need to use raw.githubusercontent.com instead. For example:
-            if (request.RequestUri.Host.Equals("dev.azure.com"))
+            if (request.RequestUri?.Host.Equals("dev.azure.com") == true)
             {
                 // https://dev.azure.com/kzu/spikes/_git/private?path=%2FREADME.md&version=GBmaster&_a=preview
                 // => 

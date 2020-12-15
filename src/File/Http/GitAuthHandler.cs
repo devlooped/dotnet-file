@@ -32,7 +32,7 @@ namespace Microsoft.DotNet
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             var response = await base.SendAsync(request, cancellationToken);
-            if (!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode && request.RequestUri != null)
             {
                 if (!authHandlers.TryGetValue(request.RequestUri.Host, out var handler))
                     handler = authHandlers.Where(x => request.RequestUri.Host.EndsWith(x.Key)).Select(x => x.Value).FirstOrDefault();

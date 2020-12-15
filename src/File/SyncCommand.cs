@@ -15,8 +15,9 @@ namespace Microsoft.DotNet
                 File.Delete(spec.Path);
 
             // Clear empty directories
-            if (!Directory.EnumerateFiles(new FileInfo(spec.Path).DirectoryName).Any())
-                Directory.Delete(Path.GetDirectoryName(spec.Path));
+            var dir = new FileInfo(spec.Path).DirectoryName;
+            if (dir != null && !Directory.EnumerateFiles(dir).Any())
+                Directory.Delete(dir);
 
             Configuration.RemoveSection("file", spec.Path);
 

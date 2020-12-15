@@ -17,6 +17,9 @@ namespace Microsoft.DotNet
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
+            if (request.RequestUri == null)
+                return await base.SendAsync(request, cancellationToken);
+
             var creds = await GetCredentialAsync(request.RequestUri);
             if (creds == null)
                 return await base.SendAsync(request, cancellationToken);

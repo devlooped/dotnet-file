@@ -25,7 +25,7 @@ namespace Microsoft.DotNet
                 return 0;
 
             var length = Files.Select(x => x.Path).Max(x => x.Length) + 1;
-            Action<string> write = s => Console.Write(s + new string(' ', length - s.Length));
+            void Write(string s) => Console.Write(s + new string(' ', length - s.Length));
 
             var processed = new HashSet<string>();
 
@@ -37,7 +37,7 @@ namespace Microsoft.DotNet
 
                 if (File.Exists(file.Path) && File.GetAttributes(file.Path).HasFlag(FileAttributes.ReadOnly))
                 {
-                    write(file.Path);
+                    Write(file.Path);
                     Console.WriteLine("? Readonly, skipping");
                     continue;
                 }
@@ -52,7 +52,7 @@ namespace Microsoft.DotNet
                     }
                     else
                     {
-                        write(file.Path);
+                        Write(file.Path);
                         Console.WriteLine("x Unconfigured");
                         continue;
                     }
@@ -81,7 +81,7 @@ namespace Microsoft.DotNet
                             if (!DryRun)
                             {
                                 // No need to download
-                                write(file.Path);
+                                Write(file.Path);
                                 ColorConsole.Write("=".DarkGray());
                                 Console.WriteLine($" <- {originalUri}");
                             }
@@ -95,7 +95,7 @@ namespace Microsoft.DotNet
                         request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue("\"" + etag + "\"", weak.GetValueOrDefault()));
                     }
 
-                    write(file.Path);
+                    Write(file.Path);
 
                     var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
@@ -176,7 +176,7 @@ namespace Microsoft.DotNet
                             : file.Path;
                         // Ensure target directory exists.
                         if (Path.GetDirectoryName(path)?.Length > 0)
-                            Directory.CreateDirectory(Path.GetDirectoryName(path));
+                            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 
                         var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
                         try

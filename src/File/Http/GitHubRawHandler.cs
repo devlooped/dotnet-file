@@ -16,7 +16,7 @@ namespace Microsoft.DotNet
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             // For raw downloads, we need to use raw.githubusercontent.com instead. For example:
-            if (request.RequestUri.Host.Equals("github.com"))
+            if (request.RequestUri?.Host.Equals("github.com") == true)
             {
                 // https://github.com/kzu/dotnet-file/raw/master/README.md
                 // https://github.com/kzu/dotnet-file/blob/master/README.md

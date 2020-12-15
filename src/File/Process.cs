@@ -16,6 +16,12 @@ namespace Microsoft.DotNet
             try
             {
                 var proc = System.Diagnostics.Process.Start(info);
+                if (proc == null)
+                {
+                    output = "";
+                    return false;
+                }
+
                 var gotError = false;
                 proc.ErrorDataReceived += (_, __) => gotError = true;
 

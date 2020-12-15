@@ -15,7 +15,7 @@ namespace Microsoft.DotNet
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
             // For raw downloads, we need to use raw.githubusercontent.com instead. For example:
-            if (request.RequestUri.Host.Equals("bitbucket.com"))
+            if (request.RequestUri?.Host.Equals("bitbucket.com") == true)
             {
                 // https://bitbucket.org/kzu/public/src/master/README.md
                 // => 
@@ -28,8 +28,10 @@ namespace Microsoft.DotNet
                 if (parts.Length > 3 && parts[2].Equals("src", StringComparison.OrdinalIgnoreCase))
                 {
                     parts[2] = "raw";
-                    var builder = new UriBuilder(request.RequestUri);
-                    builder.Path = string.Join('/', parts);
+                    var builder = new UriBuilder(request.RequestUri)
+                    {
+                        Path = string.Join('/', parts)
+                    };
                     request.RequestUri = builder.Uri;
                 }
             }
