@@ -63,11 +63,11 @@
 	weak
 [file "src/Directory.Build.props"]
 	url = https://github.com/kzu/oss/blob/main/src/Directory.Build.props
-	etag = 7caf4fe003d1966348dd989ef56786b04101a1e3d37e17e1d3466376ddf419c5
+	etag = a74681138b2e306cce2cbfc4b73148bb5a060a040abf1d86d9116fa36601a376
 	weak
 [file "src/Directory.Build.targets"]
 	url = https://github.com/kzu/oss/blob/main/src/Directory.Build.targets
-	etag = a8ae94f091decde21c9f9b2d851647c1cb573746956c29448346d0ccb1478652
+	etag = 5493a6e0a33cf0efe11b49d71f30bbd2555c4f94924f07a3f39fa47e466b705d
 	weak
 [file "src/kzu.snk"]
 	url = https://github.com/kzu/oss/blob/main/src/kzu.snk

@@ -38,11 +38,10 @@
 
   <ItemGroup Label="NuGet">
     <!-- This is compatible with nugetizer and SDK pack -->
-    <Content Include="$(MSBuildThisFileDirectory)icon.png" Link="icon.png" 
-             CopyToOutputDirectory="PreserveNewest" 
-             Pack="true" 
-             Visible="false"
-             PackagePath="%(Filename)%(Extension)" />
+    <None Include="$(MSBuildThisFileDirectory)icon.png" Link="icon.png" 
+          Pack="true" 
+          Visible="false"
+          PackagePath="%(Filename)%(Extension)" />
   </ItemGroup>
 
   <PropertyGroup Label="Build">
