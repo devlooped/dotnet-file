@@ -17,7 +17,7 @@ namespace Microsoft.DotNet
 
         public abstract Task<int> ExecuteAsync();
 
-        protected IEnumerable<FileSpec> GetConfiguredFiles()
+        protected internal IEnumerable<FileSpec> GetConfiguredFiles()
         {
             foreach (var file in Configuration.Where(x => x.Section == "file").GroupBy(x => x.Subsection))
             {
