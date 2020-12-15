@@ -1,9 +1,13 @@
 <Project>
   <!-- Extend the Directory.Build.targets -->
 
+  <PropertyGroup>
+    <DevelopmentVersion>42.42.42</DevelopmentVersion>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Update="ThisAssembly" Version="42.42.42" Condition="Exists('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin\')" />
-    <PackageReference Update="DotNetConfig" Version="42.42.42" Condition="Exists('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin\')" />
+    <PackageReference Update="ThisAssembly" Version="$(DevelopmentVersion)" Condition="Exists('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin\')" />
+    <PackageReference Update="DotNetConfig" Version="$(DevelopmentVersion)" Condition="Exists('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin\')" />
   </ItemGroup>
 
 </Project>
