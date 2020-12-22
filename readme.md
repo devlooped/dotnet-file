@@ -1,11 +1,11 @@
-<h1 id="dotnet-file"><img src="https://raw.githubusercontent.com/kzu/dotnet-file/main/docs/img/icon.svg" alt="icon" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">  dotnet-file</h1>
+<h1 id="dotnet-file"><img src="https://raw.githubusercontent.com/devlooped/dotnet-file/main/docs/img/icon.svg" alt="icon" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">  dotnet-file</h1>
 
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
 [![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
 [![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
-[![License](https://img.shields.io/github/license/kzu/dotnet-file.svg?color=blue)](https://github.com/kzu/dotnet-file/blob/master/LICENSE)
-[![CI Status](https://github.com/kzu/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/kzu/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+)
+[![License](https://img.shields.io/github/license/kzu/dotnet-file.svg?color=blue)](https://github.com/devlooped/dotnet-file/blob/master/LICENSE)
+[![CI Status](https://github.com/devlooped/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+)
 [![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
 
 Installing or updating (same command can be used for both):
@@ -101,35 +101,35 @@ project.
 
 Concrete examples:
 
-    > dotnet file add https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
-    azure-pipelines.yml √ <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
+    > dotnet file add https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
+    azure-pipelines.yml √ <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
 
-    > dotnet file add https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png img/icon.png
-    img/icon.png √ <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
+    > dotnet file add https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png img/icon.png
+    img/icon.png √ <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
 
     > dotnet file list
-    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        = <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
+    img/icon.png        = <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
 
     > del img\icon.png
     > dotnet file list
-    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        ? <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
+    img/icon.png        ? <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
 
     ; missing file downloaded successfully
     > dotnet file update
-    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        √ <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
+    img/icon.png        √ <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
 
     ; file updated on remote, changes detected
     > dotnet file changes
-    azure-pipelines.yml ^ <- https://github.com/kzu/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        = <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml ^ <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
+    img/icon.png        = <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
 
     ; file renamed or deleted from remote
     > dotnet file changes
-    azure-pipelines.yml = <- https://github.com/kzu/dotnet-file/raw/master/azure-pipelines.yml
-    img/icon.png        x <- https://github.com/kzu/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/raw/master/azure-pipelines.yml
+    img/icon.png        x <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
                              404: Not Found
 
     > dotnet file add https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines/api-guidelines
