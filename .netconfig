@@ -1,5 +1,5 @@
 [file]
-	url = https://github.com/kzu/oss
+	url = https://github.com/devlooped/oss
 [file ".netconfig"]
 	url = https://github.com/devlooped/oss/blob/main/.netconfig
 	skip
