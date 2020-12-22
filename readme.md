@@ -138,3 +138,10 @@ Concrete examples:
     docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/System.Memory.md
     docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/nullability.md
     ...
+
+
+----
+
+<h3 style="vertical-align: text-top">
+<img src="https://raw.githubusercontent.com/devlooped/oss/main/assets/images/sponsors.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px"> Sponsored by <img src="https://raw.githubusercontent.com/clarius/branding/main/logo/logo.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px"> @clarius
+</h3>
