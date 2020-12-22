@@ -146,4 +146,4 @@ Concrete examples:
 <img src="https://raw.githubusercontent.com/devlooped/oss/main/assets/images/sponsors.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">&nbsp;&nbsp;by&nbsp;<a href="https://github.com/clarius">@clarius</a>&nbsp;<img src="https://raw.githubusercontent.com/clarius/branding/main/logo/logo.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">
 </h3>
 
-*[get your company mentioned](https://github.com/sponsors/devlooped) here too!*
+*[get mentioned here too](https://github.com/sponsors/devlooped)*
