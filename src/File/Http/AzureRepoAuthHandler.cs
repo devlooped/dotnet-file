@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AzureRepos;
 using Microsoft.Git.CredentialManager;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class AzureRepoAuthHandler : AuthHandler
     {

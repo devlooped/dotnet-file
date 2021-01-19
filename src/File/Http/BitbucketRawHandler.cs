@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     /// <summary>
     /// Converts URLs for github.com files into raw.githubusercontent.com.

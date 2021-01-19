@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     public class FileSpec
     {

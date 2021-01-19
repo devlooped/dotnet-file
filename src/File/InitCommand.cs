@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ColoredConsole;
 using DotNetConfig;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class InitCommand : Command
     {

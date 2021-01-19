@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using DotNetConfig;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class UpdateCommand : AddCommand
     {

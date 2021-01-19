@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class FileSpecComparer : IEqualityComparer<FileSpec>
     {

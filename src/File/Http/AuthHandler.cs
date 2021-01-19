@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     interface IAuthHandler
     {
