@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     /// <summary>
     /// Middleware to handle authentication to requested URLs using GCM 

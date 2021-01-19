@@ -2,7 +2,7 @@
 using System.Linq;
 using DotNetConfig;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class SyncCommand : UpdateCommand
     {

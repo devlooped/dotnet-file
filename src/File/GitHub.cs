@@ -5,7 +5,7 @@ using ColoredConsole;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     public enum GitHubResult
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using GitHub;
 using Microsoft.Git.CredentialManager;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class GitHubAuthHandler : AuthHandler
     {

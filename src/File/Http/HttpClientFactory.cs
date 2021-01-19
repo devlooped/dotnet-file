@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using System.Net.Http;
-using Microsoft.DotNet.Http;
+using Devlooped.Http;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     static class HttpClientFactory
     {

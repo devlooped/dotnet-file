@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class Process
     {

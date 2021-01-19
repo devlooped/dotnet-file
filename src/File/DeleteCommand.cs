@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DotNetConfig;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class DeleteCommand : Command
     {

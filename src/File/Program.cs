@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using DotNetConfig;
 using Mono.Options;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class Program
     {

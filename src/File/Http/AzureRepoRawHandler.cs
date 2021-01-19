@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Microsoft.DotNet.Http
+namespace Devlooped.Http
 {
     /// <summary>
     /// Converts URLs for dev.azure.com files into the corresponding API call.

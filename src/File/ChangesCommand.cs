@@ -1,6 +1,6 @@
 ﻿using DotNetConfig;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class ChangesCommand : UpdateCommand
     {

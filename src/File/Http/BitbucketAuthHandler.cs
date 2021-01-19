@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Atlassian.Bitbucket;
 using Microsoft.Git.CredentialManager;
 
-namespace Microsoft.DotNet
+namespace Devlooped
 {
     class BitbucketAuthHandler : AuthHandler
     {
