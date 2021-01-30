@@ -1,5 +1,6 @@
 [file]
 	url = https://github.com/devlooped/oss
+	url = https://github.com/devlooped/.github
 [file ".netconfig"]
 	url = https://github.com/devlooped/oss/blob/main/.netconfig
 	skip
@@ -18,8 +19,8 @@
 	etag = 7acb32f5fa6d4ccd9c824605a7c2b8538497f0068c165567807d393dcf4d6bb7
 	weak
 [file ".github/FUNDING.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/FUNDING.yml
-	etag = f4d02805592d1f86c29acc9da3a40e817fb3611d6ff0f6409f547137f38f65df
+	url = https://github.com/devlooped/.github/blob/main/.github/FUNDING.yml
+	etag = a944c728facd033bbdfb4ff8d0ef10d0b3a457c277dc499458df0ffc7e6409da
 	weak
 [file ".github/ISSUE_TEMPLATE/bug.md"]
 	url = https://github.com/devlooped/oss/blob/main/.github/ISSUE_TEMPLATE/bug.md
@@ -31,15 +32,7 @@
 	weak
 [file ".github/workflows/build.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/build.yml
-	etag = 868172e62b2cac855039731fd1ea929f0a569f675586903450d24bc232c43ea9
-	weak
-[file ".github/workflows/release.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/release.yml
-	etag = 9035cfc96bc6340476e196699695b49a19066039e8774497659413f8a8cb8e2a
-	weak
-[file ".github/workflows/tag.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/tag.yml
-	etag = 26e271cf76e00c6922552af104b1e496103bdfa75ebef253447594207b10153e
+	etag = 337666cc9f17f0cf395df950370967381f6de5134cc215f61035d36f38fed3a3
 	weak
 [file ".github_changelog_generator"]
 	url = https://github.com/devlooped/oss/blob/main/.github_changelog_generator
@@ -63,11 +56,11 @@
 	weak
 [file "src/Directory.Build.props"]
 	url = https://github.com/devlooped/oss/blob/main/src/Directory.Build.props
-	etag = 1ea71942b9ff7830612ceb3a2927c0d011c54891a7653b07ef01b914347e306f
+	etag = 16762b7a7fbdc00c1912c469962131c912856115826db7628167517eea918324
 	weak
 [file "src/Directory.Build.targets"]
 	url = https://github.com/devlooped/oss/blob/main/src/Directory.Build.targets
-	etag = 236390b1c5b2576d6d013656e24f6d74a0042a0e4071a19e8c626cf6b7005b54
+	etag = f90be354c63f82bcfac68246648aee9a5a2842f1e4b66421b850939635610532
 	weak
 [file "src/kzu.snk"]
 	url = https://github.com/devlooped/oss/blob/main/src/kzu.snk
@@ -85,14 +78,6 @@
 	url = https://github.com/devlooped/oss/blob/main/.github/ISSUE_TEMPLATE/config.yml
 	etag = b5ce64e6967276086eb89f86f57364da9c4deac988c7e0e04810a4f8caaa1400
 	weak
-[file ".github/workflows/pages.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/pages.yml
-	etag = 3f1fb2481dcb41987d775eb6ed61c10adc00995f287636e7adda3ade5efc94b7
-	weak
-[file "Gemfile"]
-	url = https://github.com/devlooped/oss/blob/main/Gemfile
-	etag = d45832acd078778ffebf260000f6d25172a131f51684744d7e982da2a47170ce
-	weak
 [file "assets/css/style.scss"]
 	url = https://github.com/devlooped/oss/blob/main/assets/css/style.scss
 	etag = 2c86a074a6c8c2f6af806908a57215439fad563830b4af8fbed1a3aabaede0cf
@@ -100,4 +85,42 @@
 [file "support.md"]
 	url = https://github.com/devlooped/oss/blob/main/support.md
 	etag = 2d47e2fc4fdfa3515203d452674566e3df507461f9938f451a06d79deb687d24
+	weak
+[file ".github/workflows/changelog.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/changelog.yml
+	etag = 7f5bb52dff2908e4a4b60e06b4f8f1d497864554076f916aa6e5e8c9b2c6b2d2
+	weak
+[file ".github/workflows/publish.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/publish.yml
+	etag = 8067230717247263ad661c69780fdfdf4b6f140287517fee9c5d4e64d4b737af
+	weak
+[file ".github/workflows/release-artifacts.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/release-artifacts.yml
+	etag = 8be10a2fbeb9e6924d8b08e58a61a0f69138352c6f5477b53dcd34c26d8d35ef
+	weak
+[file ".github/workflows/release-notes.yml"]
+	url = https://github.com/devlooped/oss/blob/main/.github/workflows/release-notes.yml
+	etag = e997e6e7bfd4d850a3554d4232562075a89cf7713a8cec4aef483f2bd6f3c10a
+	weak
+[file "assets/images/sponsors.png"]
+	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.png
+	skip
+[file "assets/images/sponsors.svg"]
+	url = https://github.com/devlooped/oss/blob/main/assets/images/sponsors.svg
+	skip
+[file ".github/workflows/pages.yml"]
+	url = https://github.com/devlooped/.github/blob/main/.github/workflows/pages.yml
+	etag = f2bc91354dc634de00aa9f502eb69e34368c315bcdbe422cde95ddd850d31669
+	weak
+[file ".github/workflows/sponsors.ps1"]
+	url = https://github.com/devlooped/.github/blob/main/.github/workflows/sponsors.ps1
+	etag = 5e29155d35ab142150e900df391363e03e5a15a8be46e4adeeb4c6fd34013289
+	weak
+[file ".github/workflows/sponsors.yml"]
+	url = https://github.com/devlooped/.github/blob/main/.github/workflows/sponsors.yml
+	etag = 0142be767cd24215b54631593cfab08d711001b71ba4fc358e412f27c434a227
+	weak
+[file "Gemfile"]
+	url = https://github.com/devlooped/.github/blob/main/Gemfile
+	etag = d45832acd078778ffebf260000f6d25172a131f51684744d7e982da2a47170ce
 	weak
