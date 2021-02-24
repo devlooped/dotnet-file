@@ -36,7 +36,7 @@
 	weak
 [file ".github_changelog_generator"]
 	url = https://github.com/devlooped/oss/blob/main/.github_changelog_generator
-	etag = a724e0cbbad99a04e6cd3738a5f3ec5416dd5f29ae7073e7afe5471e73107e42
+	etag = 967fdf5028d376efd732ae3cb5b4e0c8ecf7839a09e144e3ae333ac297304181
 	weak
 [file ".gitignore"]
 	url = https://github.com/devlooped/oss/blob/main/.gitignore

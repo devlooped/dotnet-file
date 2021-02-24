@@ -3,6 +3,10 @@
 # top-most EditorConfig file
 root = true
 
+# ignore submodule
+[gcm/**]
+generated_code = true
+
 # Don't use tabs for indentation.
 [*]
 indent_style = space
