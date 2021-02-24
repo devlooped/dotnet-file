@@ -28,6 +28,14 @@ namespace Devlooped
         public static bool IsInstalled(out string output)
             => Process.TryExecute("gh", "--version", out output) && output.StartsWith("gh version");
 
+        public static bool TryApi(string endpoint, out JObject? json)
+        {
+            json = null;
+
+            return Process.TryExecute("gh", "api " + endpoint, out var data) &&
+                (json = JsonConvert.DeserializeObject<JToken>(data) as JObject) != null;
+        }
+
         public static GitHubResult TryGetFiles(FileSpec spec, out List<FileSpec> result)
         {
             var files = result = new List<FileSpec>();

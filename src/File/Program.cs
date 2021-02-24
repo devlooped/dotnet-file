@@ -45,7 +45,7 @@ namespace Devlooped
             // to the command. Allows skipping the -f|-u switches.
             var skip = false;
             var files = new List<FileSpec>();
-            for (int i = 0; i < extraArgs.Count; i++)
+            for (var i = 0; i < extraArgs.Count; i++)
             {
                 if (skip)
                 {

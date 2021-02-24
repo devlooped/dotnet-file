@@ -32,7 +32,9 @@ namespace Devlooped
             // TODO: allow configuration to provide HTTP headers, i.e. auth?
             foreach (var file in Files)
             {
-                if (Configuration.GetBoolean("file", file.Path, "skip") == true)
+                var section = Configuration.GetSection("file", file.Path);
+
+                if (section.GetBoolean("skip") == true)
                     continue;
 
                 if (File.Exists(file.Path) && File.GetAttributes(file.Path).HasFlag(FileAttributes.ReadOnly))
@@ -45,7 +47,7 @@ namespace Devlooped
                 var uri = file.Uri;
                 if (uri == null)
                 {
-                    var url = Configuration.GetString("file", file.Path, "url");
+                    var url = section.GetString("url");
                     if (url != null)
                     {
                         uri = new Uri(url);
@@ -61,8 +63,8 @@ namespace Devlooped
                 if (processed.Contains(uri.ToString()))
                     continue;
 
-                var etag = file.ETag ?? Configuration.GetString("file", file.Path, "etag");
-                var weak = Configuration.GetBoolean("file", file.Path, "weak");
+                var etag = file.ETag ?? section.GetString("etag");
+                var weak = section.GetBoolean("weak");
                 var originalUri = uri;
 
                 try
@@ -84,6 +86,13 @@ namespace Devlooped
                                 Write(file.Path);
                                 ColorConsole.Write("=".DarkGray());
                                 Console.WriteLine($" <- {originalUri}");
+
+                                // For backs compat, set the sha if found and not already present.
+                                if (section.GetString("sha") == null &&
+                                    head.Headers.TryGetValues("X-Sha", out var values) &&
+                                    values.FirstOrDefault() is string sha &&
+                                    !string.IsNullOrEmpty(sha))
+                                    section.SetString("sha", sha);
                             }
 
                             continue;
@@ -104,6 +113,14 @@ namespace Devlooped
                         // No need to download
                         ColorConsole.Write("=".DarkGray());
                         Console.WriteLine($" <- {originalUri}");
+
+                        // For backs compat, set the sha if found and not already present.
+                        if (section.GetString("sha") == null &&
+                            response.Headers.TryGetValues("X-Sha", out var values) &&
+                            values.FirstOrDefault() is string sha &&
+                            !string.IsNullOrEmpty(sha))
+                            section.SetString("sha", sha);
+
                         continue;
                     }
 
@@ -198,17 +215,24 @@ namespace Devlooped
                         File.Move(tempPath, path, overwrite: true);
 #endif
 
-                        Configuration.SetString("file", file.Path, "url", originalUri.ToString());
+                        section.SetString("url", originalUri.ToString());
+
+                        if (response.Headers.TryGetValues("X-Sha", out var values) &&
+                            values.FirstOrDefault() is string sha &&
+                            !string.IsNullOrEmpty(sha))
+                            section.SetString("sha", sha);
+                        else
+                            section.Unset("sha");
 
                         if (etag == null)
-                            Configuration.Unset("file", file.Path, "etag");
+                            section.Unset("etag");
                         else
-                            Configuration.SetString("file", file.Path, "etag", etag);
+                            section.SetString("etag", etag);
 
                         if (response.Headers.ETag?.IsWeak == true)
-                            Configuration.SetBoolean("file", file.Path, "weak", true);
+                            section.SetBoolean("weak", true);
                         else
-                            Configuration.Unset("file", file.Path, "weak");
+                            section.Unset("weak");
                     }
 
                     ColorConsole.Write("✓".Green());
