@@ -53,10 +53,12 @@ namespace Devlooped
                     }
                     else if (urls.Length == 1)
                     {
-                        // Default case is there's a single URL, so we might have an etag in that case.
+                        // Default case is there's a single URL, so we might have an etag in that case, 
+                        // and optionally a SHA too.
                         yield return new FileSpec(file.Key,
                             new Uri(urls[0]),
-                            Configuration.GetString("file", file.Key, "etag"));
+                            Configuration.GetString("file", file.Key, "etag"),
+                            Configuration.GetString("file", file.Key, "sha"));
                     }
                 }
             }
