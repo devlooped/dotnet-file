@@ -16,6 +16,8 @@ namespace Devlooped
     {
         public AddCommand(Config configuration) : base(configuration) { }
 
+        public ISet<FileSpec> Changes { get; } = new HashSet<FileSpec>(FileSpecComparer.Default);
+
         public override async Task<int> ExecuteAsync()
         {
             var http = HttpClientFactory.Create();
@@ -78,7 +80,7 @@ namespace Devlooped
                         if (head.IsSuccessStatusCode &&
                             head.Headers.ETag?.Tag?.Trim('"') == etag)
                         {
-                            // To keep "noise" from unchanged files to a minium, when 
+                            // To keep "noise" from unchanged files to a minimum, when 
                             // doing a dry run we only list actual changes.
                             if (!DryRun)
                             {
@@ -89,10 +91,10 @@ namespace Devlooped
 
                                 // For backs compat, set the sha if found and not already present.
                                 if (section.GetString("sha") == null &&
-                                    head.Headers.TryGetValues("X-Sha", out var values) &&
-                                    values.FirstOrDefault() is string sha &&
-                                    !string.IsNullOrEmpty(sha))
-                                    section.SetString("sha", sha);
+                                    head.Headers.TryGetValues("X-Sha", out var headShas) &&
+                                    headShas.FirstOrDefault() is string headSha &&
+                                    !string.IsNullOrEmpty(headSha))
+                                    section.SetString("sha", headSha);
                             }
 
                             continue;
@@ -108,6 +110,13 @@ namespace Devlooped
 
                     var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
+                    if (response.Headers.TryGetValues("X-Sha", out var values) &&
+                        values.FirstOrDefault() is string sha &&
+                        !string.IsNullOrEmpty(sha))
+                        file.NewSha = sha;
+                    else
+                        file.NewSha = null;
+
                     if (response.StatusCode == HttpStatusCode.NotModified)
                     {
                         // No need to download
@@ -116,17 +125,15 @@ namespace Devlooped
 
                         // For backs compat, set the sha if found and not already present.
                         if (section.GetString("sha") == null &&
-                            response.Headers.TryGetValues("X-Sha", out var values) &&
-                            values.FirstOrDefault() is string sha &&
-                            !string.IsNullOrEmpty(sha))
-                            section.SetString("sha", sha);
+                            file.NewSha != null)
+                            section.SetString("sha", file.NewSha);
 
                         continue;
                     }
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        if (uri.Host.Equals("github.com") && !GitHub.IsInstalled(out var output))
+                        if (uri.Host.Equals("github.com") && !GitHub.TryIsInstalled(out var output))
                         {
                             ColorConsole.WriteLine("=> ", "the GitHub CLI is required for this URL".Red());
                             ColorConsole.WriteLine(output.Yellow());
@@ -138,7 +145,7 @@ namespace Devlooped
                         // The URL might be a directory or repo branch top-level path. If so, we can use the GitHub cli to fetch all files.
                         if (uri.Host.Equals("github.com") &&
                             (response.StatusCode == HttpStatusCode.NotFound ||
-                            // BadRequest from our conversion to raw URLs in the HttpClient handler
+                            // BadRequest from our conversion to raw URLs in GitHubRawHandler
                             response.StatusCode == HttpStatusCode.BadRequest))
                         {
                             var gh = GitHub.TryGetFiles(file, out var repoFiles);
@@ -161,6 +168,10 @@ namespace Devlooped
                                         processed.Add(repoFile.Uri!.ToString());
 
                                     result = await command.ExecuteAsync();
+
+                                    foreach (var change in command.Changes)
+                                        Changes.Add(change);
+
                                     continue;
                                 case GitHubResult.Failure:
                                     return -1;
@@ -217,10 +228,8 @@ namespace Devlooped
 
                         section.SetString("url", originalUri.ToString());
 
-                        if (response.Headers.TryGetValues("X-Sha", out var values) &&
-                            values.FirstOrDefault() is string sha &&
-                            !string.IsNullOrEmpty(sha))
-                            section.SetString("sha", sha);
+                        if (file.NewSha != null)
+                            section.SetString("sha", file.NewSha);
                         else
                             section.Unset("sha");
 
@@ -234,6 +243,8 @@ namespace Devlooped
                         else
                             section.Unset("weak");
                     }
+
+                    Changes.Add(file);
 
                     ColorConsole.Write("✓".Green());
                     Console.WriteLine($" <- {originalUri}");

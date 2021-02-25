@@ -15,3 +15,6 @@ Status
   ^ <- [url]   remote file is newer (ETags mismatch)
   ? <- [url]   local file not found for remote file
   x <- [url]   error processing the entry
+
+For sync/update commands, an optional `c|changelog` parameter can be passed to generate 
+a markdown file with links to commits for updated files.

@@ -11,8 +11,8 @@ namespace Devlooped
         }
 
         public FileSpec(string path, Uri? uri = null, string? etag = null, string? sha = null)
-            => (Path, Uri, ETag, Sha)
-            = (path, uri, etag, sha);
+            => (Path, Uri, ETag, Sha, NewSha)
+            = (path, uri, etag, sha, sha);
 
         public string Path { get; }
 
@@ -22,6 +22,12 @@ namespace Devlooped
 
         public string? Sha { get; }
 
+        public string? NewSha { get; set; }
+
         internal bool IsDefaultPath { get; }
+
+        public override int GetHashCode() => Path.GetHashCode();
+
+        public override bool Equals(object? obj) => obj is FileSpec other && other.Path.Equals(Path);
     }
 }
