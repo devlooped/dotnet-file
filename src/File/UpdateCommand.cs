@@ -19,12 +19,12 @@ namespace Devlooped
             else
             {
                 // Switch to the configured versions to get url and etag
-                configured = GetConfiguredFiles().Intersect(Files, new FileSpecComparer()).ToList();
+                configured = GetConfiguredFiles().Intersect(Files, FileSpecComparer.Default).ToList();
             }
 
             // Add the new ones that are just passed in as URLs
             configured = Files
-                .Except(configured, new FileSpecComparer())
+                .Except(configured, FileSpecComparer.Default)
                 .Concat(configured)
                 .ToList();
 
