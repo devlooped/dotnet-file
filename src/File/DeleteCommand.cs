@@ -15,7 +15,7 @@ namespace Devlooped
             var result = 0;
 
             var length = Files.Select(x => x.Path).Max(x => x.Length) + 1;
-            Action<string> writefixed = s => Console.Write(s + new string(' ', length - s.Length));
+            void writefixed(string s) => Console.Write(s + new string(' ', length - s.Length));
 
             foreach (var file in Files)
             {
