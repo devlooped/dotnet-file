@@ -13,9 +13,11 @@ namespace Devlooped
         static async Task<int> Main(string[] args)
         {
             var help = false;
+            string? changelog = null;
             var options = new OptionSet
             {
                 { "?|h|help", "Display this help", h => help = h != null },
+                { "c|changelog:", "Write a changelog", c => changelog = string.IsNullOrEmpty(c) ? "dotnet-file.md" : c },
             };
 
             var extraArgs = options.Parse(args);
@@ -73,7 +75,19 @@ namespace Devlooped
 
             command.Files.AddRange(files);
 
-            return await command.ExecuteAsync();
+            var result = await command.ExecuteAsync();
+
+            // If there were changes and a changelog was requested, emit it 
+            // to a file.
+            if (changelog != null &&
+                command is AddCommand add &&
+                add.Changes.Count > 0 &&
+                GitHub.IsInstalled)
+            {
+                await GitHub.WriteChangesAsync(changelog!, add.Changes);
+            }
+
+            return result;
         }
 
         static int ShowHelp()

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using ColoredConsole;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Spectre.Console;
 
 namespace Devlooped
 {
@@ -25,15 +29,17 @@ namespace Devlooped
 
     public static class GitHub
     {
-        public static bool IsInstalled(out string output)
+        public static bool IsInstalled { get; } = TryIsInstalled(out var _);
+
+        public static bool TryIsInstalled(out string output)
             => Process.TryExecute("gh", "--version", out output) && output.StartsWith("gh version");
 
-        public static bool TryApi(string endpoint, out JObject? json)
+        public static bool TryApi(string endpoint, out JToken? json)
         {
             json = null;
 
             return Process.TryExecute("gh", "api " + endpoint, out var data) &&
-                (json = JsonConvert.DeserializeObject<JToken>(data) as JObject) != null;
+                (json = JsonConvert.DeserializeObject<JToken>(data)) != null;
         }
 
         public static GitHubResult TryGetFiles(FileSpec spec, out List<FileSpec> result)
@@ -138,6 +144,130 @@ namespace Devlooped
                 ColorConsole.WriteLine($"  gh repo view {owner}/{repo}".Yellow());
                 return GitHubResult.Failure;
             }
+        }
+
+        public static async Task WriteChangesAsync(string changelog, ISet<FileSpec> changes)
+        {
+            var github = changes
+                .Where(x => x.Uri != null && x.Uri.Host.EndsWith("github.com") && x.Sha != null && x.NewSha != null)
+                .GroupBy(x => string.Join('/', x.Uri!.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries).Take(2)));
+
+            var output = new StringBuilder();
+
+            Console.WriteLine();
+            ColorConsole.WriteLine("Building changelog...".Green());
+
+            foreach (var group in github)
+            {
+                var commits = new HashSet<(string sha, DateTime date, string message)>();
+                var compared = new HashSet<(string? from, string? to)>();
+
+                ColorConsole.WriteLine($"[{group.Key}]".Yellow());
+
+                await AnsiConsole.Progress()
+                    .Columns(new ProgressColumn[]
+                    {
+                        new TaskDescriptionColumn(),
+                        new ProgressBarColumn(),
+                        new PercentageColumn(),
+                        new RemainingTimeColumn(),
+                        new SpinnerColumn(),
+                    })
+                    .StartAsync(async ctx =>
+                    {
+                        var tasks = new Dictionary<FileSpec, ProgressTask>();
+                        foreach (var change in group)
+                        {
+                            var filename = string.Join('/', change.Uri!.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries).Skip(4));
+                            tasks[change] = ctx.AddTask($"[blue]{filename}[/]");
+                        }
+
+                        group.AsParallel().ForAll(change =>
+                        {
+                            var task = tasks[change];
+                            if (compared.Contains((change.Sha, change.NewSha)))
+                            {
+                                task.Increment(100);
+                                return;
+                            }
+
+                            var filename = string.Join('/', change.Uri!.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries).Skip(4));
+
+                            if (TryApi($"repos/{group.Key}/compare/{change.Sha}...{change.NewSha}", out var json) &&
+                                json is JObject jobj &&
+                                jobj.Property("commits")?.Value is JArray array)
+                            {
+                                var increment = 100d / array.Count;
+                                foreach (dynamic commit in array)
+                                {
+                                    (string sha, DateTime date, string message) entry = ((string)commit.sha, DateTime.Parse((string)commit.commit.author.date),
+                                        // Grab only first line of message
+                                        ((string)commit.commit.message).Split('\n', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault().Trim());
+
+                                    if (!commits.Contains(entry) &&
+                                        TryApi($"repos/{group.Key}/commits/{entry.sha}", out var commitJson) &&
+                                        commitJson is JObject commitObj &&
+                                        commitObj.Property("files")?.Value is JArray files)
+                                    {
+                                        if (files.OfType<JObject>().Any(file =>
+                                            file.Property("filename")?.Value.ToString() == filename))
+                                        {
+                                            // Retrieve the full commit so we can only filter the ones that have
+                                            // the current changed file.
+                                            commits.Add(entry);
+                                        }
+                                    }
+
+                                    task.Increment(increment);
+                                }
+                            }
+
+                            task.Increment(100);
+                            lock (compared)
+                                compared.Add((change.Sha, change.NewSha));
+                        });
+                    });
+
+                output.AppendLine($"# {group.Key}").AppendLine();
+
+                // GitHub REST API does not seem to handle unicode the same way the website 
+                // does. Unicode emoji shows up perfectly fine on the web (see https://github.com/devlooped/oss/commits/main/.github/workflows/build.yml)
+                // yet each emoji shows up as multiple separate chars in the responses. We 
+                // implement a simple cleanup that works in our tests with devlooped/oss repo. 
+                string removeUnicodeEmoji(string message)
+                {
+                    var result = new StringBuilder(message.Length);
+                    var index = 0;
+                    while (index < message.Length)
+                    {
+                        // Consider up to U+036F / 879 char as "regular" text.
+                        // This would allow some formatting chars still.
+                        // Anything higher, consider as the start of an unicode emoji
+                        // symbol comprising more chars until the next high one.
+                        if (message[index] > 879)
+                        {
+                            while (++index <= message.Length && message[index] <= 879 && !char.IsWhiteSpace(message[index]))
+                                ;
+
+                            index++;
+                        }
+                        else
+                        {
+                            result.Append(message[index]);
+                            index++;
+                        }
+                    }
+
+                    return result.ToString();
+                };
+
+                foreach (var commit in commits)
+                    output.AppendLine($"- {removeUnicodeEmoji(commit.message).Trim()} [{group.Key}@{commit.sha.Substring(0, 7)}](https://github.com/{group.Key}/commit/{commit.sha})");
+
+                output.AppendLine();
+            }
+
+            File.WriteAllText(changelog, output.ToString(), Encoding.UTF8);
         }
     }
 }
