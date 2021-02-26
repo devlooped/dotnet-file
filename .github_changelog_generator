@@ -3,3 +3,7 @@ header-label=
 issues_wo_labels=true
 pr_wo_labels=true
 exclude-labels=dependencies,duplicate,question,invalid,wontfix
+enhancement-label=:sparkles: Implemented enhancements:
+bugs-label=:bug: Fixed bugs:
+issues-label=:hammer: Other:
+pr-label=:twisted_rightwards_arrows: Merged:
