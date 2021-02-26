@@ -278,7 +278,7 @@ namespace Devlooped
                 };
 
                 foreach (var commit in commits)
-                    output.AppendLine($"- {removeUnicodeEmoji(commit.message).Trim()} [{group.Key}@{commit.sha.Substring(0, 7)}](https://github.com/{group.Key}/commit/{commit.sha})");
+                    output.AppendLine($"- {removeUnicodeEmoji(commit.message).Trim()} https://github.com/{group.Key}/commit/{commit.sha.Substring(0, 7)}");
 
                 output.AppendLine();
             }
