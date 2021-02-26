@@ -84,7 +84,7 @@ namespace Devlooped
                 add.Changes.Count > 0 &&
                 GitHub.IsInstalled)
             {
-                await GitHub.WriteChangesAsync(changelog!, add.Changes);
+                GitHub.WriteChanges(changelog!, add.Changes);
             }
 
             return result;

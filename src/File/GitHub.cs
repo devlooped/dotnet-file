@@ -146,10 +146,10 @@ namespace Devlooped
             }
         }
 
-        public static async Task WriteChangesAsync(string changelog, ISet<FileSpec> changes)
+        public static void WriteChanges(string changelog, ISet<FileSpec> changes)
         {
             var github = changes
-                .Where(x => x.Uri != null && x.Uri.Host.EndsWith("github.com") && x.Sha != null && x.NewSha != null)
+                .Where(x => x.Uri != null && x.Uri.Host.EndsWith("github.com") && x.Sha != x.NewSha)
                 .GroupBy(x => string.Join('/', x.Uri!.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries).Take(2)));
 
             var output = new StringBuilder();
@@ -164,7 +164,7 @@ namespace Devlooped
 
                 ColorConsole.WriteLine($"[{group.Key}]".Yellow());
 
-                await AnsiConsole.Progress()
+                AnsiConsole.Progress()
                     .Columns(new ProgressColumn[]
                     {
                         new TaskDescriptionColumn(),
@@ -173,7 +173,7 @@ namespace Devlooped
                         new RemainingTimeColumn(),
                         new SpinnerColumn(),
                     })
-                    .StartAsync(async ctx =>
+                    .Start(ctx =>
                     {
                         var tasks = new Dictionary<FileSpec, ProgressTask>();
                         foreach (var change in group)
@@ -193,7 +193,23 @@ namespace Devlooped
 
                             var filename = string.Join('/', change.Uri!.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries).Skip(4));
 
-                            if (TryApi($"repos/{group.Key}/compare/{change.Sha}...{change.NewSha}", out var json) &&
+                            if (change.Sha == null)
+                            {
+                                // Just process the new sha for changelog.
+                                if (TryApi($"repos/{group.Key}/commits/{change.NewSha}", out var commitJson) &&
+                                    commitJson != null)
+                                {
+                                    dynamic commit = commitJson;
+                                    (string sha, DateTime date, string message) entry = ((string)commit.sha, DateTime.Parse((string)commit.commit.author.date),
+                                        // Grab only first line of message
+                                        ((string)commit.commit.message).Split('\n', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault().Trim());
+
+                                    // Retrieve the full commit so we can only filter the ones that have
+                                    // the current changed file.
+                                    commits.Add(entry);
+                                }
+                            }
+                            else if (TryApi($"repos/{group.Key}/compare/{change.Sha}...{change.NewSha}", out var json) &&
                                 json is JObject jobj &&
                                 jobj.Property("commits")?.Value is JArray array)
                             {
