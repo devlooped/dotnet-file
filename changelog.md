@@ -1,5 +1,13 @@
 
 
+## [v1.0.1](https://github.com/devlooped/dotnet-file/tree/v1.0.1) (2021-03-01)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.0.0...v1.0.1)
+
+:sparkles: Implemented enhancements:
+
+- Checking changes now takes too long because of sha retrieval [\#32](https://github.com/devlooped/dotnet-file/issues/32)
+
 ## [v1.0.0](https://github.com/devlooped/dotnet-file/tree/v1.0.0) (2021-02-26)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v0.9.4...v1.0.0)
@@ -39,10 +47,6 @@
 
 - Allow seeding from remote .netconfig URL\(s\) [\#18](https://github.com/devlooped/dotnet-file/issues/18)
 
-:twisted_rightwards_arrows: Merged:
-
-- 🌱 Create init command to seed directory from remote config  [\#19](https://github.com/devlooped/dotnet-file/pull/19) (@kzu)
-
 ## [v0.9.2](https://github.com/devlooped/dotnet-file/tree/v0.9.2) (2020-12-10)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v0.9.1...v0.9.2)
@@ -77,6 +81,7 @@
 
 :twisted_rightwards_arrows: Merged:
 
+- 🌱 Create init command to seed directory from remote config  [\#19](https://github.com/devlooped/dotnet-file/pull/19) (@kzu)
 - 🖆 Apply kzu/oss template via dotnet file [\#11](https://github.com/devlooped/dotnet-file/pull/11) (@kzu)
 - Add Sync operation [\#9](https://github.com/devlooped/dotnet-file/pull/9) (@kzu)
 - Download to temp then move to local file [\#5](https://github.com/devlooped/dotnet-file/pull/5) (@atifaziz)
