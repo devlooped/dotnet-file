@@ -67,18 +67,33 @@ namespace Devlooped
 
                 var etag = file.ETag ?? section.GetString("etag");
                 var weak = section.GetBoolean("weak");
+                var sha = section.GetString("sha");
                 var originalUri = uri;
 
                 try
                 {
                     processed.Add(uri.ToString());
                     var request = new HttpRequestMessage(DryRun ? HttpMethod.Head : HttpMethod.Get, uri);
+                    // Propagate previous values, used in GitHubRawHandler to optimize SHA retrieval
+                    if (etag != null)
+                        request.Headers.TryAddWithoutValidation("X-ETag", etag);
+                    if (sha != null)
+                        request.Headers.TryAddWithoutValidation("X-Sha", sha);
+
                     if (etag != null && File.Exists(file.Path))
                     {
                         // Try HEAD and skip file if same etag
-                        var head = await http.SendAsync(new HttpRequestMessage(HttpMethod.Head, uri));
-                        if (head.IsSuccessStatusCode &&
-                            head.Headers.ETag?.Tag?.Trim('"') == etag)
+                        var headReq = new HttpRequestMessage(HttpMethod.Head, uri);
+                        // Propagate previous values, used in GitHubRawHandler to optimize SHA retrieval
+                        if (etag != null)
+                            headReq.Headers.TryAddWithoutValidation("X-ETag", etag);
+                        if (sha != null)
+                            headReq.Headers.TryAddWithoutValidation("X-Sha", sha);
+
+                        var headResp = await http.SendAsync(headReq);
+
+                        if (headResp.IsSuccessStatusCode &&
+                            headResp.Headers.ETag?.Tag?.Trim('"') == etag)
                         {
                             // To keep "noise" from unchanged files to a minimum, when 
                             // doing a dry run we only list actual changes.
@@ -90,8 +105,8 @@ namespace Devlooped
                                 Console.WriteLine($" <- {originalUri}");
 
                                 // For backs compat, set the sha if found and not already present.
-                                if (section.GetString("sha") == null &&
-                                    head.Headers.TryGetValues("X-Sha", out var headShas) &&
+                                if (sha == null &&
+                                    headResp.Headers.TryGetValues("X-Sha", out var headShas) &&
                                     headShas.FirstOrDefault() is string headSha &&
                                     !string.IsNullOrEmpty(headSha))
                                     section.SetString("sha", headSha);
@@ -111,9 +126,9 @@ namespace Devlooped
                     var response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                     if (response.Headers.TryGetValues("X-Sha", out var values) &&
-                        values.FirstOrDefault() is string sha &&
-                        !string.IsNullOrEmpty(sha))
-                        file.NewSha = sha;
+                        values.FirstOrDefault() is string newSha &&
+                        !string.IsNullOrEmpty(newSha))
+                        file.NewSha = newSha;
                     else
                         file.NewSha = null;
 

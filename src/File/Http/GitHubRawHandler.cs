@@ -38,10 +38,21 @@ namespace Devlooped
                 parts.Take(2).Concat(parts.Skip(3))));
 
             var response = await base.SendAsync(request, cancellationToken);
+            var originalEtag = request.Headers.TryGetValues("X-ETag", out var etags) ? etags.FirstOrDefault() : null;
+            var originalSha = request.Headers.TryGetValues("X-Sha", out var shas) ? shas.FirstOrDefault() : null;
+
+            var newEtag = response.Headers.ETag?.Tag?.Trim('"');
+            // Some day we may get the X-Sha directly from the response, see https://support.github.com/ticket/personal/0/1035411
+            var newSha = response.Headers.TryGetValues("X-Sha", out shas) ? shas.FirstOrDefault() : null;
 
             // Try to retrieve the commit for the entry
-            // Some day it may be available in the response headers directly: https://support.github.com/ticket/personal/0/1035411
-            if (response.IsSuccessStatusCode &&
+            if (newSha == null &&
+                response.IsSuccessStatusCode &&
+                // original ETag might be null, for example
+                // but if they are the same (same content therefore), we only request the new
+                // sha if there wasn't one already, as an optimization to avoid retrieving it 
+                // when we already have it persisted from a previous request
+                (originalEtag != newEtag || originalSha == null) &&
                 parts.Length > 2 &&
                 GitHub.IsInstalled &&
                 GitHub.TryApi($"repos/{parts[0]}/{parts[1]}/commits?per_page=1&path={string.Join('/', parts.Skip(4))}", out var json) &&
@@ -51,8 +62,16 @@ namespace Devlooped
                 prop != null &&
                 prop.Value.Type == JTokenType.String)
             {
-                response.Headers.TryAddWithoutValidation("X-Sha", prop.Value.ToObject<string>());
+                newSha = prop.Value.ToObject<string>();
             }
+
+            // Just propagate back what we had initially, as an optimization for HEAD and cases 
+            // where etags match.
+            if (newSha == null)
+                newSha = originalSha;
+
+            if (newSha != null)
+                response.Headers.TryAddWithoutValidation("X-Sha", newSha);
 
             return response;
         }
