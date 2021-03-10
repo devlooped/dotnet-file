@@ -16,7 +16,7 @@ namespace Devlooped
                                 {
                                     AllowAutoRedirect = false,
                                     AutomaticDecompression =
-#if NETCOREAPP21
+#if NETCOREAPP2_1
                                         DecompressionMethods.GZip
 #else
                                         DecompressionMethods.Brotli | DecompressionMethods.GZip
