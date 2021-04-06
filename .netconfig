@@ -37,9 +37,9 @@
 	sha = 0683ee777d7d878d4bf013d7deea352685135a05
 [file ".github/workflows/build.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/build.yml
-	etag = 3ece28919da5fd43d3e264c775cb64b9f2f4a40dd8a02ec5a60617e203ecf97f
+	etag = 16edbc0d7121c2527f0e62d441bbb4ac2b1ffc7e25ccd4b3d0611c0c86716520
 	weak
-	sha = 15f020b7764fca65d6b9311576f6e7b942542a3d
+	sha = 4bc9de2ce63f083c2805752a25c5997ebc102aeb
 [file ".github_changelog_generator"]
 	url = https://github.com/devlooped/oss/blob/main/.github_changelog_generator
 	etag = 115efcd056eaca2f1d2df510eb7632ac3558ace2734a4139b77536b8211dfe41
@@ -107,9 +107,9 @@
 	sha = a0f58a6d63e48ae6e55944c556d0bc94476dc8df
 [file ".github/workflows/changelog.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/changelog.yml
-	etag = 7f5bb52dff2908e4a4b60e06b4f8f1d497864554076f916aa6e5e8c9b2c6b2d2
+	etag = 2478e00a02849f0a65287d44028eb3c9f99ee0c0529cddaa88088765abc5da0b
 	weak
-	sha = 3594806a4722406af5c943f258abfd8e79b79f77
+	sha = 169dfb51e7fa3f05cbfe01ca0342c0729f69b481
 [file ".github/workflows/publish.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/publish.yml
 	etag = 8067230717247263ad661c69780fdfdf4b6f140287517fee9c5d4e64d4b737af
@@ -138,14 +138,14 @@
 	sha = f2dc1370469bec1b2d32d82faf659b050cdc7e2a
 [file ".github/workflows/sponsors.ps1"]
 	url = https://github.com/devlooped/.github/blob/main/.github/workflows/sponsors.ps1
-	etag = 5e29155d35ab142150e900df391363e03e5a15a8be46e4adeeb4c6fd34013289
+	etag = 57a303125f3367b68ad0700d89ff4ba57cb29b33b303903488c9c8638d0bf735
 	weak
-	sha = ffde0b030405ef9925309cf69467570c75b6edea
+	sha = 11f5c27cfdb304436ef0b7ee27ff333cda31ef65
 [file ".github/workflows/sponsors.yml"]
 	url = https://github.com/devlooped/.github/blob/main/.github/workflows/sponsors.yml
-	etag = 0142be767cd24215b54631593cfab08d711001b71ba4fc358e412f27c434a227
+	etag = 0236ed96c1d11f69b26ac0e039e74107df5731574236e2de2a83152fee5df0a6
 	weak
-	sha = 1114b567a2ab2939b8569340ae20423edf66a12f
+	sha = 514760df24bd906b9e5d3a56deac0d18cba59a6d
 [file "Gemfile"]
 	url = https://github.com/devlooped/.github/blob/main/Gemfile
 	etag = d45832acd078778ffebf260000f6d25172a131f51684744d7e982da2a47170ce
@@ -153,6 +153,6 @@
 	sha = f2dc1370469bec1b2d32d82faf659b050cdc7e2a
 [file ".github/workflows/dotnet-file.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/dotnet-file.yml
-	sha = 3e864109790fc5c4a42edc106d9dd3ad4b204973
-	etag = 209e73911e3ae74c2ead29a17854398f0802023bbb8d83e91bbb303e254ac1e3
+	sha = 094043587f7e7313a0a77dece1532fbcb1ce8555
+	etag = 15333d15756257ec2d7975ea3ba5a22d1e3fae98aab35d83d67a728628e90cea
 	weak
