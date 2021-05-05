@@ -50,6 +50,8 @@ Examples:
     dotnet file add [url]           // downloads a file to the current directory and adds its URL+ETag in dotnet-config
     dotnet file add [url] [file]    // downloads the url to the (relative) file local path specifed and adds
                                     // its URL+ETag in dotnet-config
+    dotnet file add [url] .         // downloads the url to the current directory and stores URL+ETag in dotnet-config
+    dotnet file add [url] docs/     // downloads the url to the specified directory and stores URL+ETag in dotnet-config
     dotnet file update [file]       // updates a specific file, based on its dotnet-config configuration
     dotnet file update [url]        // updates a specific file by its url, based on its dotnet-config configuration
     dotnet file update              // updates all recorded files, according to the dotnet-config configuration
@@ -58,6 +60,11 @@ Examples:
     dotnet file list                // lists all configured files
     dotnet file changes             // lists all configured files and their status with regards to the configured 
                                     // remote URL and ETag matching
+
+> NOTE: to download a file from GitHub to the current directory, ignoring the remote folder structure, 
+> specify `.` as the `[file]` argument after the `[url]`. Otherwise, the default will be to match the 
+> directory structure of the source file.  
+
 
 After downloading a file, a new entry is created in a local `.netconfig` file, which
 leverages [dotnet config](https://github.com/kzu/dotnet-config):
@@ -72,6 +79,12 @@ to source control, so that updating is simply a matter of running `dotnet file u
 
 > Note: `dotnet file update [url]` behaves just like `dotnet file add [url]` when a matching 
 > entry for the file isn't found in the `.netconfig` file.
+
+If you want to skip further synchronization of a file, you can add `skip` to the entire: 
+
+    [file "readme.md"]
+      url = [url]
+      skip
 
 Symbols are used to denote actions (pending or performed) on files:
 
@@ -91,8 +104,6 @@ GH CLI command:
 If you can view the output (would be the README from the repo), you can download files from it
 with `dotnet-file`.
 
-> Note: you can add `skip` to particular file entry (i.e. the `readme.md`) to avoid 
-> updating it in a repo/folder update. 
 
 Private repositories are supported from GitHub and BitBucket through the 
 [Git Credentials Manager Core](https://github.blog/2020-07-02-git-credential-manager-core-building-a-universal-authentication-experience/) 
@@ -101,42 +112,51 @@ project.
 
 Concrete examples:
 
-    > dotnet file add https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
-    azure-pipelines.yml √ <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
+    > dotnet file add https://github.com/devlooped/dotnet-file/blob/main/azure-pipelines.yml
+    azure-pipelines.yml √ <- https://github.com/devlooped/dotnet-file/blob/main/azure-pipelines.yml
 
-    > dotnet file add https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png img/icon.png
-    img/icon.png √ <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
+    > dotnet file add https://github.com/devlooped/dotnet-file/blob/main/docs/img/icon.png img/icon.png
+    img/icon.png √ <- https://github.com/devlooped/dotnet-file/blob/main/docs/img/icon.png
 
     > dotnet file list
-    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        = <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/main/azure-pipelines.yml
+    img/icon.png        = <- https://github.com/devlooped/dotnet-file/blob/main/docs/img/icon.png
 
     > del img\icon.png
     > dotnet file list
-    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        ? <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/main/azure-pipelines.yml
+    img/icon.png        ? <- https://github.com/devlooped/dotnet-file/blob/main/docs/img/icon.png
 
-    ; missing file downloaded successfully
+    # missing file downloaded successfully
     > dotnet file update
-    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        √ <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/blob/main/azure-pipelines.yml
+    img/icon.png        √ <- https://github.com/devlooped/dotnet-file/blob/main/docs/img/icon.png
 
-    ; file updated on remote, changes detected
+    # file updated on remote, changes detected
     > dotnet file changes
-    azure-pipelines.yml ^ <- https://github.com/devlooped/dotnet-file/blob/master/azure-pipelines.yml
-    img/icon.png        = <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml ^ <- https://github.com/devlooped/dotnet-file/blob/main/azure-pipelines.yml
+    img/icon.png        = <- https://github.com/devlooped/dotnet-file/blob/main/docs/img/icon.png
 
-    ; file renamed or deleted from remote
+    # file renamed or deleted from remote
     > dotnet file changes
-    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/raw/master/azure-pipelines.yml
-    img/icon.png        x <- https://github.com/devlooped/dotnet-file/blob/master/docs/img/icon.png
+    azure-pipelines.yml = <- https://github.com/devlooped/dotnet-file/raw/main/azure-pipelines.yml
+    img/icon.png        x <- https://github.com/devlooped/dotnet-file/blob/main/docs/img/icon.png
                              404: Not Found
 
-    > dotnet file add https://github.com/dotnet/runtime/tree/master/docs/coding-guidelines/api-guidelines
+    # download entire directory to local dir matching remote folder structure
+    > dotnet file add https://github.com/dotnet/runtime/tree/main/docs/coding-guidelines/api-guidelines
     api-guidelines  => fetching via gh cli...
-    docs/coding-guidelines/api-guidelines/README.md        √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/README.md
-    docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/System.Memory.md
-    docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://github.com/dotnet/runtime/master/docs/coding-guidelines/api-guidelines/nullability.md
+    docs/coding-guidelines/api-guidelines/README.md        √ <- https://github.com/dotnet/runtime/main/docs/coding-guidelines/api-guidelines/README.md
+    docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://github.com/dotnet/runtime/main/docs/coding-guidelines/api-guidelines/System.Memory.md
+    docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://github.com/dotnet/runtime/main/docs/coding-guidelines/api-guidelines/nullability.md
+    ...
+
+    # download entire directory to a local subdirectory, from where dir structure will match remote structure
+    > dotnet file add https://github.com/dotnet/runtime/tree/main/docs/coding-guidelines/api-guidelines external/dotnet/
+    external/dotnet/ => fetching via gh cli...
+    external/dotnet/docs/coding-guidelines/api-guidelines/README.md        √ <- https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/api-guidelines/README.md
+    external/dotnet/docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/api-guidelines/System.Memory.md
+    external/dotnet/docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/api-guidelines/nullability.md
     ...
 
 
