@@ -1,5 +1,21 @@
 
 
+## [v1.1.0](https://github.com/devlooped/dotnet-file/tree/v1.1.0) (2021-05-05)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.0.1...v1.1.0)
+
+:sparkles: Implemented enhancements:
+
+- When no target path is provided, recreate source URI folder structure by default [\#37](https://github.com/devlooped/dotnet-file/issues/37)
+
+:twisted_rightwards_arrows: Merged:
+
+- Bump files with dotnet-file sync [\#40](https://github.com/devlooped/dotnet-file/pull/40) (@kzu)
+- Implement default path heuristics for easier directory structure cloning [\#38](https://github.com/devlooped/dotnet-file/pull/38) (@kzu)
+- Bump files with dotnet-file sync [\#36](https://github.com/devlooped/dotnet-file/pull/36) (@kzu)
+- Bump files with dotnet-file sync [\#35](https://github.com/devlooped/dotnet-file/pull/35) (@kzu)
+- 🔄 dotnet-file sync [\#33](https://github.com/devlooped/dotnet-file/pull/33) (@kzu)
+
 ## [v1.0.1](https://github.com/devlooped/dotnet-file/tree/v1.0.1) (2021-03-01)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.0.0...v1.0.1)
@@ -47,6 +63,10 @@
 
 - Allow seeding from remote .netconfig URL\(s\) [\#18](https://github.com/devlooped/dotnet-file/issues/18)
 
+:twisted_rightwards_arrows: Merged:
+
+- 🌱 Create init command to seed directory from remote config  [\#19](https://github.com/devlooped/dotnet-file/pull/19) (@kzu)
+
 ## [v0.9.2](https://github.com/devlooped/dotnet-file/tree/v0.9.2) (2020-12-10)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v0.9.1...v0.9.2)
@@ -81,7 +101,6 @@
 
 :twisted_rightwards_arrows: Merged:
 
-- 🌱 Create init command to seed directory from remote config  [\#19](https://github.com/devlooped/dotnet-file/pull/19) (@kzu)
 - 🖆 Apply kzu/oss template via dotnet file [\#11](https://github.com/devlooped/dotnet-file/pull/11) (@kzu)
 - Add Sync operation [\#9](https://github.com/devlooped/dotnet-file/pull/9) (@kzu)
 - Download to temp then move to local file [\#5](https://github.com/devlooped/dotnet-file/pull/5) (@atifaziz)
