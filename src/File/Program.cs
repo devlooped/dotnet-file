@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using DotNetConfig;
@@ -63,12 +64,22 @@ namespace Devlooped
                     // If the next arg is not a URI, use that as the file path for the uri
                     if (next < extraArgs.Count && !Uri.TryCreate(extraArgs[next], UriKind.Absolute, out _))
                     {
-                        files.Add(new FileSpec(extraArgs[next], uri));
+                        // If path == '.', persist directly on the current directory, which matches
+                        // the existing behavior
+                        if (extraArgs[next] == ".")
+                            files.Add(new FileSpec(uri));
+                        else
+                            files.Add(new FileSpec(extraArgs[next], uri));
+
                         skip = true;
                     }
                     else
                     {
-                        files.Add(new FileSpec(uri));
+                        // If the next file is a URI, then no path has been specified. 
+                        // We should attempt to recreate the same path structure locally, 
+                        // which is the most intuitive default. If users don't want that, 
+                        // they can specify '.' to get the old behavior.
+                        files.Add(FileSpec.WithDefaultPath(uri));
                     }
                 }
             }
