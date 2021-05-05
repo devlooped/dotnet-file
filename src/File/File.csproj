@@ -7,7 +7,7 @@
     <TargetFrameworks>netcoreapp2.1;netcoreapp3.1;net5.0</TargetFrameworks>
 
     <AssemblyName>file</AssemblyName>
-    <RootNamespace>Microsoft.DotNet</RootNamespace>
+    <RootNamespace>Devlooped</RootNamespace>
 
     <PackageId>dotnet-file</PackageId>
     <ToolCommandName>dotnet-file</ToolCommandName>
