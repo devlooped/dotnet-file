@@ -202,7 +202,7 @@ namespace Devlooped
                                     dynamic commit = commitJson;
                                     (string sha, DateTime date, string message) entry = ((string)commit.sha, DateTime.Parse((string)commit.commit.author.date),
                                         // Grab only first line of message
-                                        ((string)commit.commit.message).Split('\n', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault().Trim());
+                                        ((string)commit.commit.message).Split('\n', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.Trim() ?? "");
 
                                     // Retrieve the full commit so we can only filter the ones that have
                                     // the current changed file.
@@ -218,7 +218,7 @@ namespace Devlooped
                                 {
                                     (string sha, DateTime date, string message) entry = ((string)commit.sha, DateTime.Parse((string)commit.commit.author.date),
                                         // Grab only first line of message
-                                        ((string)commit.commit.message).Split('\n', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault().Trim());
+                                        ((string)commit.commit.message).Split('\n', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.Trim() ?? "");
 
                                     if (!commits.Contains(entry) &&
                                         TryApi($"repos/{group.Key}/commits/{entry.sha}", out var commitJson) &&
