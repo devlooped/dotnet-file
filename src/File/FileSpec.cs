@@ -25,13 +25,13 @@ namespace Devlooped
                 // This is a whole directory URL, so use that as the base dir,
                 // denoted by the ending in a path separator. Note we skip 4 parts 
                 // since those are org/repo/tree/branch, then comes the actual dir.
-                return new FileSpec(string.Join('/', parts.Skip(4)) + "/", uri);
+                return new FileSpec(string.Join('/', parts.Skip(4)) + "/", uri, finalPath: true);
             }
             else if (parts[2] == "blob" || parts[2] == "raw")
             {
                 // This is a specific file URL, so use that as the target path.
                 // Note we skip 4 parts since those are org/repo/[blob/raw]/branch.
-                return new FileSpec(string.Join('/', parts.Skip(4)), uri);
+                return new FileSpec(string.Join('/', parts.Skip(4)), uri, finalPath: true);
             }
             else
             {
@@ -48,20 +48,37 @@ namespace Devlooped
             // Raw always points to a specific file URL, so use that as the target path.
             // Note we skip 4 parts since those are org/repo/[blob/raw]/branch.
             if (uri.Host == "raw.githubusercontent.com" && parts.Length > 3)
-                return new FileSpec(string.Join('/', parts.Skip(3)), uri);
+                return new FileSpec(string.Join('/', parts.Skip(3)), uri, finalPath: true);
 
             return next(uri);
         }
 
         public FileSpec(Uri uri)
-            : this(System.IO.Path.GetFileName(uri.LocalPath), uri)
+            : this(System.IO.Path.GetFileName(uri.LocalPath), uri, finalPath: true)
         {
             IsDefaultPath = true;
         }
 
         public FileSpec(string path, Uri? uri = null, string? etag = null, string? sha = null)
-            => (Path, Uri, ETag, Sha, NewSha)
-            = (path, uri, etag, sha, sha);
+            : this(path, uri, etag, sha, false) { }
+
+        FileSpec(string path, Uri? uri = null, string? etag = null, string? sha = null, bool finalPath = false)
+        {
+            Uri = uri;
+            ETag = etag;
+            Sha = sha;
+            NewSha = sha;
+
+            if (!finalPath && uri != null &&
+                (path.EndsWith(System.IO.Path.DirectorySeparatorChar) || path.EndsWith(System.IO.Path.AltDirectorySeparatorChar)))
+            {
+                path = System.IO.Path.Combine(path, WithDefaultPath(uri!).Path);
+            }
+
+            Path = path
+                .TrimStart('.')
+                .TrimStart(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+        }
 
         public string Path { get; }
 
