@@ -1,5 +1,13 @@
 
 
+## [v1.1.1](https://github.com/devlooped/dotnet-file/tree/v1.1.1) (2021-05-06)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.1.0...v1.1.1)
+
+:bug: Fixed bugs:
+
+- When passing base directory for single-file download, default file path should be appended [\#41](https://github.com/devlooped/dotnet-file/issues/41)
+
 ## [v1.1.0](https://github.com/devlooped/dotnet-file/tree/v1.1.0) (2021-05-05)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.0.1...v1.1.0)
