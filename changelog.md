@@ -1,28 +1,21 @@
 
 
-## [v1.1.1](https://github.com/devlooped/dotnet-file/tree/v1.1.1) (2021-05-06)
+## [v1.2.0](https://github.com/devlooped/dotnet-file/tree/v1.2.0) (2021-05-07)
 
-[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.1.0...v1.1.1)
-
-:bug: Fixed bugs:
-
-- When passing base directory for single-file download, default file path should be appended [\#41](https://github.com/devlooped/dotnet-file/issues/41)
-
-## [v1.1.0](https://github.com/devlooped/dotnet-file/tree/v1.1.0) (2021-05-05)
-
-[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.0.1...v1.1.0)
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.0.1...v1.2.0)
 
 :sparkles: Implemented enhancements:
 
 - When no target path is provided, recreate source URI folder structure by default [\#37](https://github.com/devlooped/dotnet-file/issues/37)
 
+:bug: Fixed bugs:
+
+- When normalizing target path, leading dot in filename is removed [\#43](https://github.com/devlooped/dotnet-file/issues/43)
+- When passing base directory for single-file download, default file path should be appended [\#41](https://github.com/devlooped/dotnet-file/issues/41)
+
 :twisted_rightwards_arrows: Merged:
 
-- Bump files with dotnet-file sync [\#40](https://github.com/devlooped/dotnet-file/pull/40) (@kzu)
 - Implement default path heuristics for easier directory structure cloning [\#38](https://github.com/devlooped/dotnet-file/pull/38) (@kzu)
-- Bump files with dotnet-file sync [\#36](https://github.com/devlooped/dotnet-file/pull/36) (@kzu)
-- Bump files with dotnet-file sync [\#35](https://github.com/devlooped/dotnet-file/pull/35) (@kzu)
-- 🔄 dotnet-file sync [\#33](https://github.com/devlooped/dotnet-file/pull/33) (@kzu)
 
 ## [v1.0.1](https://github.com/devlooped/dotnet-file/tree/v1.0.1) (2021-03-01)
 
