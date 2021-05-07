@@ -1,5 +1,9 @@
 
 
+## [v1.2.0-icon](https://github.com/devlooped/dotnet-file/tree/v1.2.0-icon) (2021-05-07)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.2.0...v1.2.0-icon)
+
 ## [v1.2.0](https://github.com/devlooped/dotnet-file/tree/v1.2.0) (2021-05-07)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.0.1...v1.2.0)
