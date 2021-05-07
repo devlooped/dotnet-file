@@ -70,14 +70,17 @@ namespace Devlooped
             NewSha = sha;
 
             if (!finalPath && uri != null &&
-                (path.EndsWith(System.IO.Path.DirectorySeparatorChar) || path.EndsWith(System.IO.Path.AltDirectorySeparatorChar)))
+                (path.EndsWith('\\') || path.EndsWith('/')))
             {
                 path = System.IO.Path.Combine(path, WithDefaultPath(uri!).Path);
             }
 
-            Path = path
-                .TrimStart('.')
-                .TrimStart(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+            // This will also normalize double slashes.
+            var parts = path.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length > 0 && parts[0] == ".")
+                Path = string.Join('/', parts.Skip(1));
+            else
+                Path = string.Join('/', parts);
         }
 
         public string Path { get; }
