@@ -1,8 +1,12 @@
 
 
-## [v1.2.0-icon](https://github.com/devlooped/dotnet-file/tree/v1.2.0-icon) (2021-05-07)
+## [v1.2.1](https://github.com/devlooped/dotnet-file/tree/v1.2.1) (2021-07-16)
 
-[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.2.0...v1.2.0-icon)
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.2.0...v1.2.1)
+
+:sparkles: Implemented enhancements:
+
+- Include readme in package for better discoverability [\#47](https://github.com/devlooped/dotnet-file/issues/47)
 
 ## [v1.2.0](https://github.com/devlooped/dotnet-file/tree/v1.2.0) (2021-05-07)
 
