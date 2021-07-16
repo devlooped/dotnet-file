@@ -1,12 +1,9 @@
-<h1 id="dotnet-file"><img src="https://raw.githubusercontent.com/devlooped/dotnet-file/main/docs/img/icon.svg" alt="icon" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">  dotnet-file</h1>
+![Icon](https://raw.githubusercontent.com/devlooped/dotnet-file/main/docs/img/icon-32.png) dotnet-file
+============
 
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
-[![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
-[![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
-[![License](https://img.shields.io/github/license/devlooped/dotnet-file.svg?color=blue)](https://github.com/devlooped/dotnet-file/blob/master/LICENSE)
-[![CI Status](https://github.com/devlooped/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+)
-[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
+[![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file) [![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file) [![License](https://img.shields.io/github/license/devlooped/dotnet-file.svg?color=blue)](https://github.com/devlooped/dotnet-file/blob/master/LICENSE) [![CI Status](https://github.com/devlooped/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+) [![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
 
 Installing or updating (same command can be used for both):
 
@@ -162,8 +159,6 @@ Concrete examples:
 
 ## Sponsors
 
-<h3 style="vertical-align: text-top" id="by-clarius">
-<img src="https://raw.githubusercontent.com/devlooped/oss/main/assets/images/sponsors.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">&nbsp;&nbsp;by&nbsp;<a href="https://github.com/clarius">@clarius</a>&nbsp;<img src="https://raw.githubusercontent.com/clarius/branding/main/logo/logo.svg" alt="sponsors" height="36" width="36" style="vertical-align: text-top; border: 0px; padding: 0px; margin: 0px">
-</h3>
+[![sponsored](https://raw.githubusercontent.com/devlooped/oss/main/assets/images/sponsors.svg)](https://github.com/sponsors/devlooped) [![clarius](https://raw.githubusercontent.com/clarius/branding/main/logo/byclarius.svg)](https://github.com/clarius)[![clarius](https://raw.githubusercontent.com/clarius/branding/main/logo/logo.svg)](https://github.com/clarius)
 
 *[get mentioned here too](https://github.com/sponsors/devlooped)!*

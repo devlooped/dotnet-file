@@ -12,10 +12,12 @@
     <PackageId>dotnet-file</PackageId>
     <ToolCommandName>dotnet-file</ToolCommandName>
     <PackAsTool>true</PackAsTool>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Help.txt" />
+    <None Include="..\..\readme.md" PackagePath="readme.md" Pack="true" />
     <Content Include="Help.txt" CopyToOutputDirectory="PreserveNewest" Condition="'$(TargetFramework)' != ''" />
     <Compile Remove="Range.cs" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
   </ItemGroup>
