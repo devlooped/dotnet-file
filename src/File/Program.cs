@@ -64,17 +64,7 @@ namespace Devlooped
                     // If the next arg is not a URI, use that as the file path for the uri
                     if (next < extraArgs.Count && !Uri.TryCreate(extraArgs[next], UriKind.Absolute, out _))
                     {
-                        // If path == '.', persist directly on the current directory, which matches
-                        // the existing behavior
-                        if (extraArgs[next] == ".")
-                            files.Add(new FileSpec(uri));
-                        // If there is a relative path before the '.', infer the target file name 
-                        // but avoid the directory structure
-                        else if (extraArgs[next].Split('/', '\\').LastOrDefault() == ".")
-                            files.Add(new FileSpec(extraArgs[next][..^1] + Path.GetFileName(uri.AbsolutePath), uri));
-                        else
-                            files.Add(new FileSpec(extraArgs[next], uri));
-
+                        files.Add(FileSpec.WithPath(extraArgs[next], uri));
                         skip = true;
                     }
                     else

@@ -5,14 +5,27 @@ namespace Devlooped
 {
     public class FileSpec
     {
-        public static FileSpec WithDefaultPath(Uri uri)
-            => WithGitHubUri(uri,
-                raw => WithGitHubRawUri(raw,
+        public static FileSpec WithPath(string path, Uri uri)
+        {
+            // If path == '.', persist directly on the current directory, which matches
+            // the old behavior
+            if (path == ".")
+                return new FileSpec(uri);
+            else if (path.Split('/', '\\').LastOrDefault() == ".")
+                return WithDefaultPath(uri, path);
+            else
+                return new FileSpec(path, uri, null, null);
+        }
+
+        public static FileSpec WithDefaultPath(Uri uri, string baseDir = "")
+            => WithGitHubUri(baseDir, uri,
+                raw => WithGitHubRawUri(baseDir, raw,
                     fallback => new FileSpec(fallback)));
 
-        static FileSpec WithGitHubUri(Uri uri, Func<Uri, FileSpec> next)
+        static FileSpec WithGitHubUri(string baseDir, Uri uri, Func<Uri, FileSpec> next)
         {
             var parts = uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            var flatten = baseDir.Split('/', '\\').LastOrDefault() == ".";
 
             if (uri.Host != "github.com" || parts.Length <= 4)
                 return next(uri);
@@ -25,13 +38,22 @@ namespace Devlooped
                 // This is a whole directory URL, so use that as the base dir,
                 // denoted by the ending in a path separator. Note we skip 4 parts 
                 // since those are org/repo/tree/branch, then comes the actual dir.
-                return new FileSpec(string.Join('/', parts.Skip(4)) + "/", uri, finalPath: true);
+                return new FileSpec(
+                        flatten ? baseDir :
+                        baseDir.Length == 0 ? string.Join('/', parts.Skip(4)) :
+                        System.IO.Path.Combine(baseDir, string.Join('/', parts.Skip(4))).Replace('\\', '/') + "/",
+                    uri, finalPath: true);
             }
             else if (parts[2] == "blob" || parts[2] == "raw")
             {
                 // This is a specific file URL, so use that as the target path.
                 // Note we skip 4 parts since those are org/repo/[blob/raw]/branch.
-                return new FileSpec(string.Join('/', parts.Skip(4)), uri, finalPath: true);
+                return new FileSpec(
+                        flatten ?
+                        System.IO.Path.Combine(baseDir[..^1], parts[^1]) :
+                        baseDir.Length == 0 ? string.Join('/', parts.Skip(4)) :
+                        System.IO.Path.Combine(baseDir, string.Join('/', parts.Skip(4))).Replace('\\', '/'),
+                    uri, finalPath: true);
             }
             else
             {
@@ -40,15 +62,21 @@ namespace Devlooped
             }
         }
 
-        static FileSpec WithGitHubRawUri(Uri uri, Func<Uri, FileSpec> next)
+        static FileSpec WithGitHubRawUri(string baseDir, Uri uri, Func<Uri, FileSpec> next)
         {
             var parts = uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries);
+            var flatten = baseDir.Split('/', '\\').LastOrDefault() == ".";
 
-            // https://raw.githubusercontent.com/kzu/dotnet-file/master/README.md
+            // https://raw.githubusercontent.com/kzu/dotnet-file/main/README.md
             // Raw always points to a specific file URL, so use that as the target path.
             // Note we skip 4 parts since those are org/repo/[blob/raw]/branch.
             if (uri.Host == "raw.githubusercontent.com" && parts.Length > 3)
-                return new FileSpec(string.Join('/', parts.Skip(3)), uri, finalPath: true);
+                return new FileSpec(
+                        flatten ?
+                        System.IO.Path.Combine(baseDir[..^1], parts[^1]) :
+                        baseDir.Length == 0 ? string.Join('/', parts.Skip(3)) :
+                        System.IO.Path.Combine(baseDir, string.Join('/', parts.Skip(3))).Replace('\\', '/'),
+                    uri, finalPath: true);
 
             return next(uri);
         }

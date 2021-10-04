@@ -99,16 +99,22 @@ namespace Devlooped
                         if ("file".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
                         {
                             var itemPath = item["path"]!.ToString();
+                            // If there is a relative path before the '.', infer the target file name 
+                            // but avoid the directory structure
+                            var flatten = baseDir.Split('/', '\\').LastOrDefault() == ".";
+
                             // In case the target path was specified as '.', don't recreate the full 
                             // repo directory structure and just start from the base repoDir instead
                             if (baseDir == "." && repoDir != null && itemPath.StartsWith(repoDir))
                                 itemPath = itemPath.Substring(repoDir.Length);
+                            else if (flatten)
+                                itemPath = Path.GetFileName(item["html_url"]!.ToString());
                             // Special case to avoid duplicate dirs following the base dir, such as "docs/docs/design/..."
                             else if (baseDir.Length > 0 && itemPath.StartsWith(baseDir))
                                 itemPath = itemPath.Substring(baseDir.Length);
 
                             files.Add(new FileSpec(
-                                Path.Combine(baseDir == "." ? "" : baseDir, itemPath.TrimStart('/'))
+                                Path.Combine(baseDir == "." ? "" : flatten ? baseDir.TrimEnd('.') : baseDir, itemPath.TrimStart('/'))
                                     .Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
                                 // We use the html url since our Http handler knows how to turn those into
                                 // raw URLs, and it's nicer to keep the browsable URL instead so users 

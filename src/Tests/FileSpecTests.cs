@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Xunit;
 
 namespace Devlooped
@@ -33,6 +32,17 @@ namespace Devlooped
         public void WhenPathIsDirAppendsDefaultPath(string url, string path, string expected)
         {
             var spec = new FileSpec(path, new Uri(url));
+
+            Assert.Equal(expected, spec.Path);
+        }
+
+        [Theory]
+        [InlineData("https://github.com/devlooped/dotnet-file/blob/main/src/Foo.cs", ".", "Foo.cs")]
+        [InlineData("https://github.com/devlooped/dotnet-file/blob/main/src/Foo.cs", "src/External/.", "src/External/Foo.cs")]
+        [InlineData("https://github.com/devlooped/dotnet-file/tree/main/src", "src/External/.", "src/External/.")]
+        public void WhenPathHasDot(string url, string path, string expected)
+        {
+            var spec = FileSpec.WithPath(path, new Uri(url));
 
             Assert.Equal(expected, spec.Path);
         }
