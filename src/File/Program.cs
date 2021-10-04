@@ -68,6 +68,10 @@ namespace Devlooped
                         // the existing behavior
                         if (extraArgs[next] == ".")
                             files.Add(new FileSpec(uri));
+                        // If there is a relative path before the '.', infer the target file name 
+                        // but avoid the directory structure
+                        else if (extraArgs[next].Split('/', '\\').LastOrDefault() == ".")
+                            files.Add(new FileSpec(extraArgs[next][..^1] + Path.GetFileName(uri.AbsolutePath), uri));
                         else
                             files.Add(new FileSpec(extraArgs[next], uri));
 

@@ -3,7 +3,9 @@
 
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
-[![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file) [![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file) [![License](https://img.shields.io/github/license/devlooped/dotnet-file.svg?color=blue)](https://github.com/devlooped/dotnet-file/blob/master/LICENSE) [![CI Status](https://github.com/devlooped/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+) [![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
+[![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
+[![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
+[![License](https://img.shields.io/github/license/devlooped/dotnet-file.svg?color=blue)](https://github.com/devlooped/dotnet-file/blob/master/LICENSE)
 
 Installing or updating (same command can be used for both):
 
@@ -47,8 +49,10 @@ Examples:
     dotnet file add [url]           // downloads a file to the current directory and adds its URL+ETag in dotnet-config
     dotnet file add [url] [file]    // downloads the url to the (relative) file local path specifed and adds
                                     // its URL+ETag in dotnet-config
-    dotnet file add [url] .         // downloads the url to the current directory and stores URL+ETag in dotnet-config
-    dotnet file add [url] docs/     // downloads the url to the specified directory and stores URL+ETag in dotnet-config
+    dotnet file add [url] .         // downloads the url to the current directory and stores URL+ETag in dotnet-config, 
+                                    // ignoring the source directory structure
+    dotnet file add [url] docs/     // downloads the url to the specified directory, preserving the source directory structure
+    dotnet file add [url] docs/.    // downloads the url to the specified directory, flattening the source directory structure
     dotnet file update [file]       // updates a specific file, based on its dotnet-config configuration
     dotnet file update [url]        // updates a specific file by its url, based on its dotnet-config configuration
     dotnet file update              // updates all recorded files, according to the dotnet-config configuration
@@ -106,6 +110,18 @@ Private repositories are supported from GitHub and BitBucket through the
 [Git Credentials Manager Core](https://github.blog/2020-07-02-git-credential-manager-core-building-a-universal-authentication-experience/) 
 project.
 
+When adding a file, it's possible to customize the local file location by specifying an absolute 
+or relative file path, as follows:
+
+* `src/External/File.cs`: fully custom target file path, doesn't need to match source URI file name 
+  or directory structure.
+* `src/External/`: use the given directory as the base directory, but otherwise preserve the source 
+  URI directory structure and file name.
+* `src/External/.`: download to the given directory, without recreating source URI directory structure, 
+  using the source file name only.
+* `.` (a single dot character as the target path): download to the current directory, don't preserve 
+  source URI directory structure, use source file name only.
+
 
 Concrete examples:
 
@@ -155,6 +171,21 @@ Concrete examples:
     external/dotnet/docs/coding-guidelines/api-guidelines/System.Memory.md √ <- https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/api-guidelines/System.Memory.md
     external/dotnet/docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/api-guidelines/nullability.md
     ...
+
+
+# Dogfooding
+
+[![CI Status](https://github.com/devlooped/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+)
+[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
+
+We also produce CI packages from branches and pull requests so you can dogfood builds as quickly as they are produced. 
+
+The CI feed is `https://pkg.kzu.io/index.json`. 
+
+The versioning scheme for packages is:
+
+- PR builds: *42.42.42-pr*`[NUMBER]`
+- Branch builds: *42.42.42-*`[BRANCH]`.`[COMMITS]`
 
 
 ## Sponsors
