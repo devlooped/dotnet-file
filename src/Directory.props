@@ -12,6 +12,7 @@
     <RestoreSources Condition="Exists('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin\')">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin'));$(RestoreSources)</RestoreSources>
 
     <PackageProjectUrl>https://clarius.org/dotnet-file</PackageProjectUrl>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
 
 </Project>
