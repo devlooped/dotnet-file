@@ -1,5 +1,13 @@
 
 
+## [v1.3.0](https://github.com/devlooped/dotnet-file/tree/v1.3.0) (2021-10-04)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.2.1...v1.3.0)
+
+:sparkles: Implemented enhancements:
+
+- Allow specifying a relative directory for target file [\#49](https://github.com/devlooped/dotnet-file/issues/49)
+
 ## [v1.2.1](https://github.com/devlooped/dotnet-file/tree/v1.2.1) (2021-07-16)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.2.0...v1.2.1)
@@ -46,7 +54,6 @@
 
 - Allow generating a changelog for updated/synced files [\#31](https://github.com/devlooped/dotnet-file/pull/31) (@kzu)
 - Store commit sha if available when updating file [\#29](https://github.com/devlooped/dotnet-file/pull/29) (@kzu)
-- 🖆 Apply kzu/oss template via dotnet-file [\#27](https://github.com/devlooped/dotnet-file/pull/27) (@kzu)
 
 ## [v0.9.4](https://github.com/devlooped/dotnet-file/tree/v0.9.4) (2021-01-25)
 
@@ -110,6 +117,7 @@
 
 :twisted_rightwards_arrows: Merged:
 
+- 🖆 Apply kzu/oss template via dotnet-file [\#27](https://github.com/devlooped/dotnet-file/pull/27) (@kzu)
 - 🖆 Apply kzu/oss template via dotnet file [\#11](https://github.com/devlooped/dotnet-file/pull/11) (@kzu)
 - Add Sync operation [\#9](https://github.com/devlooped/dotnet-file/pull/9) (@kzu)
 - Download to temp then move to local file [\#5](https://github.com/devlooped/dotnet-file/pull/5) (@atifaziz)
