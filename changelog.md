@@ -1,13 +1,5 @@
 
 
-## [v1.4.0](https://github.com/devlooped/dotnet-file/tree/v1.4.0) (2021-10-04)
-
-[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.3.0...v1.4.0)
-
-:sparkles: Implemented enhancements:
-
-- Allow flattening entire directory structure [\#52](https://github.com/devlooped/dotnet-file/issues/52)
-
 ## [v1.3.0](https://github.com/devlooped/dotnet-file/tree/v1.3.0) (2021-10-04)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.2.1...v1.3.0)
@@ -30,6 +22,7 @@
 
 :sparkles: Implemented enhancements:
 
+- Allow flattening entire directory structure [\#52](https://github.com/devlooped/dotnet-file/issues/52)
 - When no target path is provided, recreate source URI folder structure by default [\#37](https://github.com/devlooped/dotnet-file/issues/37)
 
 :bug: Fixed bugs:
