@@ -42,7 +42,7 @@
           Pack="true" PackagePath="%(Filename)%(Extension)"
           Condition="Exists('$(MSBuildThisFileDirectory)icon.png') and !Exists('$(MSBuildProjectDirectory)icon.png')" />
 
-    <None Include="$(MSBuildThisFileDirectory)readme.md" Link="readme.md" Visible="false" 
+    <None Include="$(MSBuildThisFileDirectory)readme.md" Link="readme.md"  
           Pack="true" PackagePath="%(Filename)%(Extension)"
           Condition="Exists('$(MSBuildThisFileDirectory)readme.md') and !Exists('$(MSBuildProjectDirectory)readme.md')" />
   </ItemGroup>
