@@ -29,7 +29,7 @@ namespace Devlooped
             var length = Files.Select(x => x.Path).Max(x => x.Length) + 1;
             void Write(string s) => Console.Write(s + new string(' ', length - s.Length));
 
-            var processed = new HashSet<string>();
+            var processed = new Dictionary<(string, Uri), object?>();
 
             // TODO: allow configuration to provide HTTP headers, i.e. auth?
             foreach (var file in Files)
@@ -62,7 +62,7 @@ namespace Devlooped
                     }
                 }
 
-                if (processed.Contains(uri.ToString()))
+                if (processed.ContainsKey((file.Path, uri)))
                     continue;
 
                 var etag = file.ETag ?? section.GetString("etag");
@@ -72,7 +72,7 @@ namespace Devlooped
 
                 try
                 {
-                    processed.Add(uri.ToString());
+                    processed.Add((file.Path, uri), null);
                     var request = new HttpRequestMessage(DryRun ? HttpMethod.Head : HttpMethod.Get, uri);
                     // Propagate previous values, used in GitHubRawHandler to optimize SHA retrieval
                     if (etag != null)
@@ -180,7 +180,7 @@ namespace Devlooped
                                     // Track all files as already processed to skip duplicate processing from 
                                     // existing expanded list.
                                     foreach (var repoFile in repoFiles)
-                                        processed.Add(repoFile.Uri!.ToString());
+                                        processed.Add((repoFile.Path, repoFile.Uri!), null);
 
                                     result = await command.ExecuteAsync();
 
