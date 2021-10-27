@@ -1,4 +1,12 @@
+# Changelog
 
+## [v1.3.1](https://github.com/devlooped/dotnet-file/tree/v1.3.1) (2021-10-27)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.3.0...v1.3.1)
+
+:bug: Fixed bugs:
+
+- When same Url file, different target path, does not update multiple [\#54](https://github.com/devlooped/dotnet-file/issues/54)
 
 ## [v1.3.0](https://github.com/devlooped/dotnet-file/tree/v1.3.0) (2021-10-04)
 
@@ -6,6 +14,7 @@
 
 :sparkles: Implemented enhancements:
 
+- Allow flattening entire directory structure [\#52](https://github.com/devlooped/dotnet-file/issues/52)
 - Allow specifying a relative directory for target file [\#49](https://github.com/devlooped/dotnet-file/issues/49)
 
 ## [v1.2.1](https://github.com/devlooped/dotnet-file/tree/v1.2.1) (2021-07-16)
@@ -22,7 +31,6 @@
 
 :sparkles: Implemented enhancements:
 
-- Allow flattening entire directory structure [\#52](https://github.com/devlooped/dotnet-file/issues/52)
 - When no target path is provided, recreate source URI folder structure by default [\#37](https://github.com/devlooped/dotnet-file/issues/37)
 
 :bug: Fixed bugs:
