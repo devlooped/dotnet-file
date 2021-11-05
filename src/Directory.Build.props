@@ -80,6 +80,9 @@
     
     <!-- Preserve transitively copied content in VS: https://github.com/dotnet/msbuild/issues/1054#issuecomment-847959047 -->
     <MSBuildCopyContentTransitively>true</MSBuildCopyContentTransitively>
+    
+    <!-- Global tools should run on whatever latest runtime is installed. See https://docs.microsoft.com/en-us/dotnet/core/versions/selection#framework-dependent-apps-roll-forward -->
+    <RollForward>LatestMinor</RollForward>
   </PropertyGroup>
 
   <PropertyGroup Label="StrongName" Condition="Exists('$(MSBuildThisFileDirectory)kzu.snk')">
