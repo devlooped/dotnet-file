@@ -17,18 +17,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Help.txt" />
     <None Include="..\..\readme.md" PackagePath="readme.md" Pack="true" />
-    <Content Include="Help.txt" CopyToOutputDirectory="PreserveNewest" Condition="'$(TargetFramework)' != ''" />
     <Compile Remove="Range.cs" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="docopt.net" Version="0.8.0" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly" Version="1.0.8" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.40.0" />
-    <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="DotNetConfig" Version="1.0.0-rc.1" />
     <PackageReference Include="Nullable" Version="1.3.0" PrivateAssets="all" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
   </ItemGroup>

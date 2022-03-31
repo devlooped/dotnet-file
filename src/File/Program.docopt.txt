@@ -1,6 +1,10 @@
-﻿Usage: dotnet file [add|changes|delete|init|list|sync|update] [file or url]*
+﻿Usage:
+    dotnet-file (add|changes|delete|init|list) <file-or-url>...
+    dotnet-file (sync|update) <file-or-url>... [--changelog=<md-file>]
+    dotnet-file --version
+    dotnet-file -h | --help
 
-Actions
+Actions:
     add        downloads a file or GitHub repository or directory from a URL
     changes    checks remote URLs for changes and lists the status of local files
     delete     deletes a file and its corresponding config entry from the local directory
@@ -9,12 +13,16 @@ Actions
     sync       synchronizes with remote URLs, deleting local files and directories as needed
     update     updates local files from remote URLs, does not prune deleted remote files
 
-Status
+Options:
+    -c, --changelog=<md-file>
+                  generate Markdown file with links to commits for updated files
+                    [default: dotnet-file.md]
+    -h, --help    show this screen
+    --version     show version
+
+Status:
   = <- [url]   remote file equals local file
   ✓ <- [url]   local file updated with remote file
   ^ <- [url]   remote file is newer (ETags mismatch)
   ? <- [url]   local file not found for remote file
   x <- [url]   error processing the entry
-
-For sync/update commands, an optional `c|changelog` parameter can be passed to generate 
-a markdown file with links to commits for updated files.
