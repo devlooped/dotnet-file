@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="docopt.net" Version="0.8.0" />
+    <PackageReference Include="docopt.net" Version="0.8.1" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly" Version="1.0.8" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
