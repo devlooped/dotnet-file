@@ -24,9 +24,14 @@ jobs:
           ref: main
           token: ${{ env.GH_TOKEN }}
 
+      - name: ⚙ ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.3
+
       - name: ⚙ changelog
         run: |
-          sudo gem install github_changelog_generator 
+          gem install github_changelog_generator 
           github_changelog_generator --user ${GITHUB_REPOSITORY%/*} --project ${GITHUB_REPOSITORY##*/} --token ${{ secrets.GITHUB_TOKEN }} --o changelog.md --config-file .github/.github_changelog_generator
 
       - name: 🚀 changelog

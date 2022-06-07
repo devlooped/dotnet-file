@@ -20,16 +20,21 @@ jobs:
       - name: 🏷 since
         run: echo "SINCE_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))" >> $GITHUB_ENV
 
+      - name: ⚙ ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.3
+
       - name: ⚙ changelog
         if: env.SINCE_TAG != ''
         run: |
-          sudo gem install github_changelog_generator 
+          gem install github_changelog_generator 
           github_changelog_generator --since-tag ${{ env.SINCE_TAG }} --user ${GITHUB_REPOSITORY%/*} --project ${GITHUB_REPOSITORY##*/} --token ${{ secrets.GITHUB_TOKEN }} --o changelog.md --config-file .github/.github_changelog_generator
 
       - name: ⚙ changelog
         if: env.SINCE_TAG == ''
         run: |
-          sudo gem install github_changelog_generator 
+          gem install github_changelog_generator 
           github_changelog_generator --user ${GITHUB_REPOSITORY%/*} --project ${GITHUB_REPOSITORY##*/} --token ${{ secrets.GITHUB_TOKEN }} --o changelog.md --config-file .github/.github_changelog_generator
 
       - name: 🖉 release
