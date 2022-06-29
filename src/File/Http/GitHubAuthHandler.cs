@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using GitHub;
-using Microsoft.Git.CredentialManager;
+using GitCredentialManager;
 
 namespace Devlooped
 {
@@ -49,7 +49,7 @@ namespace Devlooped
                 ["host"] = "github.com",
             });
 
-            var provider = new GitHubHostProvider(new CommandContext());
+            var provider = new GitHubHostProvider(new CommandContext(AppPath.Default));
 
             credential = await provider.GetCredentialAsync(input);
             return credential;
