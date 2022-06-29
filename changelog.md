@@ -1,5 +1,17 @@
 # Changelog
 
+## [v1.4.0](https://github.com/devlooped/dotnet-file/tree/v1.4.0) (2022-06-29)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.3.1...v1.4.0)
+
+:sparkles: Implemented enhancements:
+
+- Decrease package size by building 3.1 and using rollForward [\#56](https://github.com/devlooped/dotnet-file/issues/56)
+
+:twisted_rightwards_arrows: Merged:
+
+- Bump to latest GCM main [\#60](https://github.com/devlooped/dotnet-file/pull/60) (@kzu)
+
 ## [v1.3.1](https://github.com/devlooped/dotnet-file/tree/v1.3.1) (2021-10-27)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.3.0...v1.3.1)
