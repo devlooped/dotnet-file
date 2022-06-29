@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Atlassian.Bitbucket;
-using Microsoft.Git.CredentialManager;
+using GitCredentialManager;
 
 namespace Devlooped
 {
@@ -48,7 +48,7 @@ namespace Devlooped
                 ["path"] = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped),
             });
 
-            var provider = new BitbucketHostProvider(new CommandContext());
+            var provider = new BitbucketHostProvider(new CommandContext(AppPath.Default));
 
             credential = await provider.GetCredentialAsync(input);
             return credential;

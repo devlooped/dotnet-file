@@ -4,7 +4,7 @@
     <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.</Description>
 
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+    <TargetFramework>net6.0</TargetFramework>
     <RollForward>Major</RollForward>
 
     <AssemblyName>file</AssemblyName>
@@ -30,14 +30,13 @@
     <PackageReference Include="Spectre.Console" Version="0.40.0" />
     <PackageReference Include="Mono.Options" Version="6.6.0.161" />
     <PackageReference Include="DotNetConfig" Version="1.0.0-rc.1" />
-    <PackageReference Include="Nullable" Version="1.3.0" PrivateAssets="all" Condition="'$(TargetFramework)' == 'netcoreapp2.1'" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj" />
     <ProjectReference Include="..\..\gcm\src\shared\GitHub\GitHub.csproj" />
     <ProjectReference Include="..\..\gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj" />
-    <ProjectReference Include="..\..\gcm\src\shared\Microsoft.Git.CredentialManager\Microsoft.Git.CredentialManager.csproj" />
+    <ProjectReference Include="..\..\gcm\src\shared\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AzureRepos;
-using Microsoft.Git.CredentialManager;
+using GitCredentialManager;
 
 namespace Devlooped
 {
@@ -46,7 +46,7 @@ namespace Devlooped
                 ["path"] = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped),
             });
 
-            var provider = new AzureReposHostProvider(new CommandContext());
+            var provider = new AzureReposHostProvider(new CommandContext(AppPath.Default));
             credential = await provider.GetCredentialAsync(input);
 
             return credential;
