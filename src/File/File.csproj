@@ -33,10 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj" />
-    <ProjectReference Include="..\..\gcm\src\shared\GitHub\GitHub.csproj" />
-    <ProjectReference Include="..\..\gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj" />
-    <ProjectReference Include="..\..\gcm\src\shared\Core\Core.csproj" />
+    <ProjectReference Include="..\..\external\gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj" />
+    <ProjectReference Include="..\..\external\gcm\src\shared\GitHub\GitHub.csproj" />
+    <ProjectReference Include="..\..\external\gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj" />
+    <ProjectReference Include="..\..\external\gcm\src\shared\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

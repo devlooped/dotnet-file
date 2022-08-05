@@ -16,15 +16,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "File", "src\File\File.cspro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GCM", "GCM", "{F0D2DF05-3B25-467D-B27B-5D697C6ADE85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitHub", "gcm\src\shared\GitHub\GitHub.csproj", "{16C29C1C-E248-4DF5-84DA-DDF0D2ADD235}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitHub", "external\gcm\src\shared\GitHub\GitHub.csproj", "{16C29C1C-E248-4DF5-84DA-DDF0D2ADD235}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlassian.Bitbucket", "gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj", "{F51AD403-4C4B-4A09-AA7A-0C432982748E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Atlassian.Bitbucket", "external\gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj", "{F51AD403-4C4B-4A09-AA7A-0C432982748E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AzureRepos", "gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj", "{2E5862BA-4B16-4619-9EAA-D347D39F728F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AzureRepos", "external\gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj", "{2E5862BA-4B16-4619-9EAA-D347D39F728F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "src\Tests\Tests.csproj", "{86915414-399F-4B91-99C6-D64C987D9BF9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "gcm\src\shared\Core\Core.csproj", "{A5295AF2-1260-45D9-B1CC-055685EA87AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "external\gcm\src\shared\Core\Core.csproj", "{A5295AF2-1260-45D9-B1CC-055685EA87AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

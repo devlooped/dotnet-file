@@ -1,0 +1,3 @@
+# ignore submodule
+[gcm/**]
+generated_code = true
