@@ -2,7 +2,7 @@
   <!-- Extend the Directory.Build.targets -->
 
   <PropertyGroup>
-    <DevelopmentVersion>42.42.42</DevelopmentVersion>
+    <DevelopmentVersion>1.0.6</DevelopmentVersion>
   </PropertyGroup>
 
   <ItemGroup>
