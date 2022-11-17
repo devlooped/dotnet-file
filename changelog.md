@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.4.1](https://github.com/devlooped/dotnet-file/tree/v1.4.1) (2022-11-17)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.4.0...v1.4.1)
+
+:twisted_rightwards_arrows: Merged:
+
+- +M▼ includes [\#65](https://github.com/devlooped/dotnet-file/pull/65) (@github-actions[bot])
+- +M▼ includes [\#62](https://github.com/devlooped/dotnet-file/pull/62) (@github-actions[bot])
+
 ## [v1.4.0](https://github.com/devlooped/dotnet-file/tree/v1.4.0) (2022-06-29)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.3.1...v1.4.0)
