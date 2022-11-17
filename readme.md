@@ -1,11 +1,12 @@
 ![Icon](https://raw.githubusercontent.com/devlooped/dotnet-file/main/docs/img/icon-32.png) dotnet-file
 ============
 
-A dotnet global tool for downloading and updating loose files from arbitrary URLs.
-
 [![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
 [![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
 [![License](https://img.shields.io/github/license/devlooped/dotnet-file.svg?color=blue)](https://github.com/devlooped/dotnet-file/blob/master/LICENSE)
+
+<!-- #content -->
+A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
 Installing or updating (same command can be used for both):
 
@@ -172,6 +173,7 @@ Concrete examples:
     external/dotnet/docs/coding-guidelines/api-guidelines/nullability.md   √ <- https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/api-guidelines/nullability.md
     ...
 
+<!-- #content -->
 
 # Dogfooding
 
