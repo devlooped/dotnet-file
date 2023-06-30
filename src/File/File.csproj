@@ -18,13 +18,12 @@
 
   <ItemGroup>
     <None Remove="Help.txt" />
-    <None Include="..\..\readme.md" PackagePath="readme.md" Pack="true" />
     <Content Include="Help.txt" CopyToOutputDirectory="PreserveNewest" Condition="'$(TargetFramework)' != ''" />
     <Compile Remove="Range.cs" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly" Version="1.0.8" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.40.0" />

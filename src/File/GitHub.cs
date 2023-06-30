@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using ColoredConsole;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -212,7 +211,8 @@ namespace Devlooped
 
                                     // Retrieve the full commit so we can only filter the ones that have
                                     // the current changed file.
-                                    commits.Add(entry);
+                                    lock (commits)
+                                        commits.Add(entry);
                                 }
                             }
                             else if (TryApi($"repos/{group.Key}/compare/{change.Sha}...{change.NewSha}", out var json) &&
@@ -236,7 +236,8 @@ namespace Devlooped
                                         {
                                             // Retrieve the full commit so we can only filter the ones that have
                                             // the current changed file.
-                                            commits.Add(entry);
+                                            lock (commits)
+                                                commits.Add(entry);
                                         }
                                     }
 

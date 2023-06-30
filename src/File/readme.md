@@ -1,10 +1,4 @@
-![Icon](https://raw.githubusercontent.com/devlooped/dotnet-file/main/docs/img/icon-32.png) dotnet-file
-============
-
-[![Version](https://img.shields.io/nuget/v/dotnet-file.svg?color=royalblue)](https://www.nuget.org/packages/dotnet-file)
-[![Downloads](https://img.shields.io/nuget/dt/dotnet-file.svg?color=darkmagenta)](https://www.nuget.org/packages/dotnet-file)
-[![License](https://img.shields.io/github/license/devlooped/dotnet-file.svg?color=blue)](https://github.com/devlooped/dotnet-file/blob/master/LICENSE)
-
+<!-- include ../../readme.md#content -->
 <!-- #content -->
 A dotnet global tool for downloading and updating loose files from arbitrary URLs.
 
@@ -174,20 +168,7 @@ Concrete examples:
     ...
 
 <!-- #content -->
-
-# Dogfooding
-
-[![CI Status](https://github.com/devlooped/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+)
-[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
-
-We also produce CI packages from branches and pull requests so you can dogfood builds as quickly as they are produced. 
-
-The CI feed is `https://pkg.kzu.io/index.json`. 
-
-The versioning scheme for packages is:
-
-- PR builds: *42.42.42-pr*`[NUMBER]`
-- Branch builds: *42.42.42-*`[BRANCH]`.`[COMMITS]`
+<!-- ../../readme.md#content -->
 
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
 # Sponsors 

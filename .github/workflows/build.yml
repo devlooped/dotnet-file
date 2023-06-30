@@ -87,10 +87,5 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: ⚙ dotnet
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
-
       - name: ✓ ensure format
         run: dotnet format --verify-no-changes -v:diag --exclude ~/.nuget
