@@ -46,7 +46,7 @@ namespace Devlooped
                 ["path"] = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped),
             });
 
-            var provider = new AzureReposHostProvider(new CommandContext(AppPath.Default));
+            var provider = new AzureReposHostProvider(new CommandContext());
             credential = await provider.GetCredentialAsync(input);
 
             return credential;
