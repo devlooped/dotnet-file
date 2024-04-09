@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.5.1-beta](https://github.com/devlooped/dotnet-file/tree/v1.5.1-beta) (2024-04-09)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.4.1...v1.5.1-beta)
+
+:twisted_rightwards_arrows: Merged:
+
+- Bump to GCM v2.0.785 [\#78](https://github.com/devlooped/dotnet-file/pull/78) (@kzu)
+
 ## [v1.4.1](https://github.com/devlooped/dotnet-file/tree/v1.4.1) (2022-11-17)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.4.0...v1.4.1)
