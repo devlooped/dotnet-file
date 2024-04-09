@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.</Description>
 
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RollForward>Major</RollForward>
 
     <AssemblyName>file</AssemblyName>
@@ -23,19 +23,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ThisAssembly" Version="1.0.8" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
-    <PackageReference Include="Spectre.Console" Version="0.47.0" />
+    <PackageReference Include="Spectre.Console" Version="0.48.0" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="DotNetConfig" Version="1.0.0-rc.1" />
+    <PackageReference Include="git-credential-manager" Version="2.4.1" IncludeAssets="tools" GeneratePathProperty="true" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\external\gcm\src\shared\Atlassian.Bitbucket\Atlassian.Bitbucket.csproj" />
-    <ProjectReference Include="..\..\external\gcm\src\shared\GitHub\GitHub.csproj" />
-    <ProjectReference Include="..\..\external\gcm\src\shared\Microsoft.AzureRepos\Microsoft.AzureRepos.csproj" />
-    <ProjectReference Include="..\..\external\gcm\src\shared\Core\Core.csproj" />
+  <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">
+    <Reference Include="Atlassian.Bitbucket" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\Atlassian.Bitbucket.dll" />
+    <Reference Include="Microsoft.AzureRepos" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\Microsoft.AzureRepos.dll" />
+    <Reference Include="GitHub" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\GitHub.dll" />
+    <Reference Include="GitLab" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\GitLab.dll" />
+    <Reference Include="gcmcore" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\gcmcore.dll" />
   </ItemGroup>
 
 </Project>

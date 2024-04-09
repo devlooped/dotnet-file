@@ -48,7 +48,7 @@ namespace Devlooped
                 ["path"] = uri.GetComponents(UriComponents.Path, UriFormat.Unescaped),
             });
 
-            var provider = new BitbucketHostProvider(new CommandContext(AppPath.Default));
+            var provider = new BitbucketHostProvider(new CommandContext());
 
             credential = await provider.GetCredentialAsync(input);
             return credential;

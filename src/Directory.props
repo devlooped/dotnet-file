@@ -7,10 +7,6 @@
     <!-- Because PackOnBuild is sooo much better than GeneratePackageOnBuild! -->
     <GeneratePackageOnBuild>$(PackOnBuild)</GeneratePackageOnBuild>
     <PackageOutputPath Condition="'$(PackOnBuild)' == 'true' And '$(PackageOutputPath)' == ''">$(MSBuildThisFileDirectory)..\bin</PackageOutputPath>
-
-    <RestoreSources Condition="Exists('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin\')">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\ThisAssembly\bin'));$(RestoreSources)</RestoreSources>
-    <RestoreSources Condition="Exists('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin\')">$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..\dotnet-config\bin'));$(RestoreSources)</RestoreSources>
-
     <PackageProjectUrl>https://clarius.org/dotnet-file</PackageProjectUrl>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>

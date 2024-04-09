@@ -49,7 +49,7 @@ namespace Devlooped
                 ["host"] = "github.com",
             });
 
-            var provider = new GitHubHostProvider(new CommandContext(AppPath.Default));
+            var provider = new GitHubHostProvider(new CommandContext());
 
             credential = await provider.GetCredentialAsync(input);
             return credential;
