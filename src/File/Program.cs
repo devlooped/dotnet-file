@@ -48,6 +48,8 @@ namespace Devlooped
             // to the command. Allows skipping the -f|-u switches.
             var skip = false;
             var files = new List<FileSpec>();
+            List<FileSpec>? configured = default;
+
             for (var i = 0; i < extraArgs.Count; i++)
             {
                 if (skip)
@@ -75,6 +77,13 @@ namespace Devlooped
                         // they can specify '.' to get the old behavior.
                         files.Add(FileSpec.WithDefaultPath(uri));
                     }
+                }
+                else
+                {
+                    // Attempt to match a simple filename to a configured one
+                    configured ??= command.GetConfiguredFiles().ToList();
+                    if (configured.FirstOrDefault(x => x.Path == extraArgs[i]) is { } spec)
+                        files.Add(spec);
                 }
             }
 
