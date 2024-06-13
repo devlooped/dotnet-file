@@ -3,6 +3,9 @@
 [file ".netconfig"]
 	url = https://github.com/devlooped/oss/blob/main/.netconfig
 	skip
+[file "SponsorLink.sln"]
+	url = https://github.com/devlooped/oss/blob/main/SponsorLink.sln
+	skip
 [file "readme.md"]
 	url = https://github.com/devlooped/oss/blob/main/readme.md
 	skip
