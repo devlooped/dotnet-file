@@ -12,6 +12,7 @@ env:
   Configuration: Release
   PackOnBuild: true
   GeneratePackageOnBuild: true
+  VersionLabel: ${{ github.ref }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   
 jobs:
@@ -19,13 +20,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🤘 checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with: 
           submodules: recursive
           fetch-depth: 0
 
       - name: 🙏 build
-        run: dotnet build -m:1 -p:version=${GITHUB_REF#refs/*/v} -bl:build.binlog
+        run: dotnet build -m:1 -bl:build.binlog
 
       - name: 🧪 test
         uses: ./.github/workflows/test

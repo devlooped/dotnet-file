@@ -17,10 +17,10 @@ on:
 
 env:
   DOTNET_NOLOGO: true
-  VersionPrefix: 42.42.${{ github.run_number }}
-  VersionLabel: ${{ github.ref }}
   PackOnBuild: true
   GeneratePackageOnBuild: true
+  VersionPrefix: 42.42.${{ github.run_number }}
+  VersionLabel: ${{ github.ref }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
   
 defaults:
@@ -34,7 +34,7 @@ jobs:
       matrix: ${{ steps.lookup.outputs.matrix }}
     steps:
       - name: 🤘 checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
       - name: 🔎 lookup
         id: lookup
@@ -53,7 +53,7 @@ jobs:
         os: ${{ fromJSON(needs.os-matrix.outputs.matrix) }}
     steps:
       - name: 🤘 checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with: 
           submodules: recursive
           fetch-depth: 0
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🤘 checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with: 
           submodules: recursive
           fetch-depth: 0
