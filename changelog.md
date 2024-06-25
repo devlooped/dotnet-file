@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.5.0](https://github.com/devlooped/dotnet-file/tree/v1.5.0) (2024-06-25)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.5.1-beta...v1.5.0)
+
+:sparkles: Implemented enhancements:
+
+- Support "Etag" header in addition to "X-Etag" [\#86](https://github.com/devlooped/dotnet-file/issues/86)
+- Bump to LTS .NET8 [\#112](https://github.com/devlooped/dotnet-file/pull/112) (@kzu)
+- When updating single file, infer URL from config [\#107](https://github.com/devlooped/dotnet-file/pull/107) (@kzu)
+
+:bug: Fixed bugs:
+
+- How can I update a specific file? [\#85](https://github.com/devlooped/dotnet-file/issues/85)
+
 ## [v1.5.1-beta](https://github.com/devlooped/dotnet-file/tree/v1.5.1-beta) (2024-04-09)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.4.1...v1.5.1-beta)
