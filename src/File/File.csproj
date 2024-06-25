@@ -4,7 +4,7 @@
     <Description>A dotnet global tool for downloading and updating loose files from arbitrary URLs.</Description>
 
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RollForward>Major</RollForward>
 
     <AssemblyName>file</AssemblyName>
@@ -17,18 +17,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Help.txt" />
-    <Content Include="Help.txt" CopyToOutputDirectory="PreserveNewest" Condition="'$(TargetFramework)' != ''" />
-    <Compile Remove="Range.cs" Condition="'$(TargetFramework)' != 'netcoreapp2.1'" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="NuGetizer" Version="1.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ThisAssembly" Version="1.0.8" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
-    <PackageReference Include="DotNetConfig" Version="1.0.0-rc.1" />
+    <PackageReference Include="DotNetConfig" Version="1.1.1" />
     <PackageReference Include="git-credential-manager" Version="2.4.1" IncludeAssets="tools" GeneratePathProperty="true" />
   </ItemGroup>
 
@@ -38,6 +33,10 @@
     <Reference Include="GitHub" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\GitHub.dll" />
     <Reference Include="GitLab" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\GitLab.dll" />
     <Reference Include="gcmcore" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\gcmcore.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Help.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
