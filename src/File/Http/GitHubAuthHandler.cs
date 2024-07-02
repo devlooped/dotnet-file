@@ -20,25 +20,35 @@ namespace Devlooped
             if (request.RequestUri == null)
                 return await base.SendAsync(request, cancellationToken);
 
-            var creds = await GetCredentialAsync();
-            var builder = new UriBuilder(request.RequestUri)
+            var response = await base.SendAsync(request, cancellationToken);
+            if (response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+                response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                UserName = creds.Password,
-                Password = "x-auth-basic"
-            };
+                var creds = await GetCredentialAsync();
+                if (creds == null)
+                    return response;
 
-            // retry the request
-            var retry = new HttpRequestMessage(HttpMethod.Get, builder.Uri);
-            retry.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(creds.Password)));
-            foreach (var etag in request.Headers.IfNoneMatch)
-            {
-                retry.Headers.IfNoneMatch.Add(etag);
+                var builder = new UriBuilder(request.RequestUri)
+                {
+                    UserName = creds.Password,
+                    Password = "x-auth-basic"
+                };
+
+                // retry the request
+                var retry = new HttpRequestMessage(HttpMethod.Get, builder.Uri);
+                retry.Headers.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes(creds.Password)));
+                foreach (var etag in request.Headers.IfNoneMatch)
+                {
+                    retry.Headers.IfNoneMatch.Add(etag);
+                }
+
+                return await base.SendAsync(retry, cancellationToken);
             }
 
-            return await base.SendAsync(retry, cancellationToken);
+            return response;
         }
 
-        async Task<ICredential> GetCredentialAsync()
+        async Task<ICredential?> GetCredentialAsync()
         {
             if (credential != null)
                 return credential;
@@ -51,8 +61,15 @@ namespace Devlooped
 
             var provider = new GitHubHostProvider(new CommandContext());
 
-            credential = await provider.GetCredentialAsync(input);
-            return credential;
+            try
+            {
+                credential = await provider.GetCredentialAsync(input);
+                return credential;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
