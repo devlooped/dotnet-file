@@ -2,11 +2,15 @@
 #nullable enable
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Devlooped.Sponsors;
@@ -60,6 +64,39 @@ static partial class SponsorLink
             .Max().DateTime is var exp && exp == DateTime.MinValue ? null : exp;
 
     /// <summary>
+    /// Gets all necessary additional files to determine status.
+    /// </summary>
+    public static ImmutableArray<AdditionalText> GetSponsorAdditionalFiles(this AnalyzerOptions? options) 
+        => options == null ? ImmutableArray.Create<AdditionalText>() : options.AdditionalFiles
+            .Where(x => x.IsSponsorManifest(options.AnalyzerConfigOptionsProvider) || x.IsSponsorableAnalyzer(options.AnalyzerConfigOptionsProvider))
+            .ToImmutableArray();
+
+    /// <summary>
+    /// Gets all sponsor manifests from the provided analyzer options.
+    /// </summary>
+    public static IncrementalValueProvider<ImmutableArray<AdditionalText>> GetSponsorAdditionalFiles(this IncrementalGeneratorInitializationContext context)
+        => context.AdditionalTextsProvider.Combine(context.AnalyzerConfigOptionsProvider)
+            .Where(source =>
+            {
+                var (text, provider) = source;
+                return text.IsSponsorManifest(provider) || text.IsSponsorableAnalyzer(provider);
+            })
+            .Select((source, c) => source.Left)
+            .Collect();
+
+    static bool IsSponsorManifest(this AdditionalText text, AnalyzerConfigOptionsProvider provider)
+        => provider.GetOptions(text).TryGetValue("build_metadata.SponsorManifest.ItemType", out var itemType) &&
+           itemType == "SponsorManifest" &&
+           Sponsorables.ContainsKey(Path.GetFileNameWithoutExtension(text.Path));
+
+    static bool IsSponsorableAnalyzer(this AdditionalText text, AnalyzerConfigOptionsProvider provider)
+        => provider.GetOptions(text) is { } options && 
+           options.TryGetValue("build_metadata.Analyzer.ItemType", out var itemType) &&
+           options.TryGetValue("build_metadata.Analyzer.NuGetPackageId", out var packageId) &&
+           itemType == "Analyzer" &&
+           packageId == Funding.PackageId;
+
+    /// <summary>
     /// Reads all manifests, validating their signatures.
     /// </summary>
     /// <param name="principal">The combined principal with all identities (and their claims) from each provided and valid JWT</param>
@@ -85,12 +122,12 @@ static partial class SponsorLink
             if (string.IsNullOrWhiteSpace(value.jwt) || string.IsNullOrEmpty(value.jwk))
                 continue;
 
-            if (Validate(value.jwt, value.jwk, out var token, out var claims, false) == ManifestStatus.Valid && claims != null)
+            if (Validate(value.jwt, value.jwk, out var token, out var identity, false) == ManifestStatus.Valid && identity != null)
             {
                 if (principal == null)
-                    principal = claims;
+                    principal = new JwtRolesPrincipal(identity);
                 else
-                    principal.AddIdentities(claims.Identities);
+                    principal.AddIdentity(identity);
             }
         }
 
@@ -103,13 +140,13 @@ static partial class SponsorLink
     /// <param name="jwt">The JWT to validate.</param>
     /// <param name="jwk">The key to validate the manifest signature with.</param>
     /// <param name="token">Except when returning <see cref="Status.Unknown"/>, returns the security token read from the JWT, even if signature check failed.</param>
-    /// <param name="principal">The associated claims, only when return value is not <see cref="Status.Unknown"/>.</param>
+    /// <param name="identity">The associated claims, only when return value is not <see cref="Status.Unknown"/>.</param>
     /// <param name="requireExpiration">Whether to check for expiration.</param>
     /// <returns>The status of the validation.</returns>
-    public static ManifestStatus Validate(string jwt, string jwk, out SecurityToken? token, out ClaimsPrincipal? principal, bool validateExpiration)
+    public static ManifestStatus Validate(string jwt, string jwk, out SecurityToken? token, out ClaimsIdentity? identity, bool validateExpiration)
     {
         token = default;
-        principal = default;
+        identity = default;
 
         SecurityKey key;
         try
@@ -121,7 +158,7 @@ static partial class SponsorLink
             return ManifestStatus.Unknown;
         }
 
-        var handler = new JwtSecurityTokenHandler { MapInboundClaims = false };
+        var handler = new JsonWebTokenHandler { MapInboundClaims = false };
 
         if (!handler.CanReadToken(jwt))
             return ManifestStatus.Unknown;
@@ -138,32 +175,40 @@ static partial class SponsorLink
             NameClaimType = "sub",
         };
 
-        try
+        var result = handler.ValidateTokenAsync(jwt, validation).Result;
+        if (result.Exception != null)
         {
-            principal = handler.ValidateToken(jwt, validation, out token);
-            if (validateExpiration && token.ValidTo == DateTime.MinValue)
+            if (result.Exception is SecurityTokenInvalidSignatureException)
+            {
+                var jwtToken = handler.ReadJsonWebToken(jwt);
+                token = jwtToken;
+                identity = new ClaimsIdentity(jwtToken.Claims);
                 return ManifestStatus.Invalid;
+            }
+            else
+            {
+                var jwtToken = handler.ReadJsonWebToken(jwt);
+                token = jwtToken;
+                identity = new ClaimsIdentity(jwtToken.Claims);
+                return ManifestStatus.Invalid;
+            }
+        }
 
-            // The sponsorable manifest does not have an expiration time.
-            if (validateExpiration && token.ValidTo < DateTimeOffset.UtcNow)
-                return ManifestStatus.Expired;
+        token = result.SecurityToken;
+        identity = new ClaimsIdentity(result.ClaimsIdentity.Claims, "JWT");
 
-            return ManifestStatus.Valid;
-        }
-        catch (SecurityTokenInvalidSignatureException)
-        {
-            var jwtToken = handler.ReadJwtToken(jwt);
-            token = jwtToken;
-            principal = new ClaimsPrincipal(new ClaimsIdentity(jwtToken.Claims));
+        if (validateExpiration && token.ValidTo == DateTime.MinValue)
             return ManifestStatus.Invalid;
-        }
-        catch (SecurityTokenException)
-        {
-            var jwtToken = handler.ReadJwtToken(jwt);
-            token = jwtToken;
-            principal = new ClaimsPrincipal(new ClaimsIdentity(jwtToken.Claims));
-            return ManifestStatus.Invalid;
-        }
+
+        // The sponsorable manifest does not have an expiration time.
+        if (validateExpiration && token.ValidTo < DateTimeOffset.UtcNow)
+            return ManifestStatus.Expired;
+
+        return ManifestStatus.Valid;
     }
 
+    class JwtRolesPrincipal(ClaimsIdentity identity) : ClaimsPrincipal([identity])
+    {
+        public override bool IsInRole(string role) => HasClaim("roles", role) || base.IsInRole(role);
+    }
 }
