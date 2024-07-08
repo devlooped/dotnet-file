@@ -66,7 +66,7 @@ namespace Devlooped
             {
                 if (parts[2] == "tree")
                 {
-                    // tree urls contain branch and optionally 
+                    // tree urls contain branch and optionally a subdirectory
                     branch = parts[3];
                     if (parts.Length >= 4)
                         repoDir = string.Join('/', parts[4..]);
@@ -85,11 +85,15 @@ namespace Devlooped
 
             Console.Write("=> fetching via gh cli");
 
+            // Construct target path by combining the baseDir and only the relative dir 
+            // from each file's URL except for the source path.
+            var relativeFrom = spec.Uri.PathAndQuery.EndsWith('/') ? (repoDir ?? "") : "";
+
             if (Process.TryExecute("gh", "api " + apiUrl + apiPath + apiQuery, out var data) &&
                 JsonConvert.DeserializeObject<JToken>(data) is JArray array)
             {
                 Action<string>? getFiles = default;
-                void addFiles(JArray array)
+                void addFiles(JArray array, string relativeFrom)
                 {
                     foreach (var item in array)
                     {
@@ -97,7 +101,8 @@ namespace Devlooped
                         Console.Write(".");
                         if ("file".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
                         {
-                            var itemPath = item["path"]!.ToString();
+                            var itemPath = item["path"]!.ToString().Replace(relativeFrom, "");
+
                             // If there is a relative path before the '.', infer the target file name 
                             // but avoid the directory structure
                             var flatten = baseDir.Split('/', '\\').LastOrDefault() == ".";
@@ -112,9 +117,14 @@ namespace Devlooped
                             else if (baseDir.Length > 0 && itemPath.StartsWith(baseDir))
                                 itemPath = itemPath.Substring(baseDir.Length);
 
-                            files.Add(new FileSpec(
-                                Path.Combine(baseDir == "." ? "" : flatten ? baseDir.TrimEnd('.') : baseDir, itemPath.TrimStart('/'))
-                                    .Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                            files.Add(new FileSpec(Path
+                                .Combine(baseDir == "."
+                                    ? ""
+                                    : flatten
+                                        ? baseDir.TrimEnd('.')
+                                        : baseDir,
+                                    itemPath.TrimStart('/'))
+                                .Replace(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
                                 // We use the html url since our Http handler knows how to turn those into
                                 // raw URLs, and it's nicer to keep the browsable URL instead so users 
                                 // can easily click on that and browse the content on the web.
@@ -131,10 +141,10 @@ namespace Devlooped
                     if (Process.TryExecute("gh", "api " + apiUrl + path + apiQuery, out var data) &&
                         JsonConvert.DeserializeObject<JToken>(data) is JArray array)
                     {
-                        addFiles(array);
+                        addFiles(array, relativeFrom);
                     }
                 };
-                addFiles(array);
+                addFiles(array, relativeFrom);
                 return GitHubResult.Success;
             }
             else
