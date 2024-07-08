@@ -20,7 +20,7 @@ namespace Devlooped
 
         public override async Task<int> ExecuteAsync()
         {
-            var http = HttpClientFactory.Create();
+            using var http = HttpClientFactory.Create();
             var result = 0;
 
             if (Files.Count == 0)
@@ -294,6 +294,6 @@ namespace Devlooped
         /// <summary>
         /// Creates a clone of the current instance.
         /// </summary>
-        protected virtual AddCommand Clone() => new AddCommand(Configuration);
+        protected virtual AddCommand Clone() => new AddCommand(Config.Build());
     }
 }
