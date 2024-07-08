@@ -23,7 +23,7 @@
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
-    <PackageReference Include="DotNetConfig" Version="1.1.1" />
+    <PackageReference Include="DotNetConfig" Version="1.2.0" />
     <PackageReference Include="git-credential-manager" Version="2.4.1" IncludeAssets="tools" GeneratePathProperty="true" />
   </ItemGroup>
 

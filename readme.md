@@ -63,10 +63,11 @@ Examples:
     dotnet file changes             // lists all configured files and their status with regards to the configured 
                                     // remote URL and ETag matching
 
-> NOTE: to download a file from GitHub to the current directory, ignoring the remote folder structure, 
-> specify `.` as the `[file]` argument after the `[url]`. Otherwise, the default will be to match the 
-> directory structure of the source file.  
-
+The target path is determined by the following rules:
+* If `[file]` = `.`: download to the current directory, ignoring the source directory structure.
+* If `[url]` ends with `/`: download to the current directory, preserving the source directory structure 
+  from that point onwards (i.e. for GitHub tree/dir URLs)
+* Otherwise, match the directory structure of the source file.  
 
 After downloading a file, a new entry is created in a local `.netconfig` file, which
 leverages [dotnet config](https://github.com/kzu/dotnet-config):

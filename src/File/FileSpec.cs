@@ -38,10 +38,17 @@ namespace Devlooped
                 // This is a whole directory URL, so use that as the base dir,
                 // denoted by the ending in a path separator. Note we skip 4 parts 
                 // since those are org/repo/tree/branch, then comes the actual dir.
-                return new FileSpec(
-                        flatten ? baseDir :
-                        baseDir.Length == 0 ? string.Join('/', parts.Skip(4)) :
-                        System.IO.Path.Combine(baseDir, string.Join('/', parts.Skip(4))).Replace('\\', '/') + "/",
+                return new FileSpec(flatten
+                    ? baseDir // Flattened folder structure, just use base dir as target path
+                    : baseDir.Length == 0 // Otherwise, perform some heuristics to determine the target path
+                        ? uri.PathAndQuery.EndsWith('/')
+                            // A URI ending in / has a similar effect to a target path ending in /, meaning 
+                            // Copy the whole directory structure to the target directory from that path onwards, 
+                            // without prepending the source (web) directory structure.
+                            ? ""
+                            // Otherwise, just like previous behavior, prepend upstream dir structure.
+                            : string.Join('/', parts.Skip(4))
+                        : System.IO.Path.Combine(baseDir, string.Join('/', parts.Skip(4))).Replace('\\', '/') + "/",
                     uri, finalPath: true);
             }
             else if (parts[2] == "blob" || parts[2] == "raw")
