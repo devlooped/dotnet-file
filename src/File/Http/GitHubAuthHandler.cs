@@ -1,4 +1,5 @@
-﻿using System;
+﻿extern alias Devlooped;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
@@ -24,7 +25,7 @@ namespace Devlooped
             if (response.StatusCode == System.Net.HttpStatusCode.Forbidden ||
                 response.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                var creds = await GetCredentialAsync();
+                var creds = await GetCredentialAsync(request.RequestUri);
                 if (creds == null)
                     return response;
 
@@ -48,10 +49,23 @@ namespace Devlooped
             return response;
         }
 
-        async Task<ICredential?> GetCredentialAsync()
+        async Task<ICredential?> GetCredentialAsync(Uri? uri)
         {
             if (credential != null)
                 return credential;
+
+            if (uri != null &&
+                uri.PathAndQuery.Split('/', StringSplitOptions.RemoveEmptyEntries) is { Length: >= 2 } parts)
+            {
+                // Try using GCM via API first to retrieve creds
+                var store = Devlooped::GitCredentialManager.CredentialManager.Create();
+                if (GetCredential(store, $"https://github.com/{parts[0]}/{parts[1]}") is { } repo)
+                    return repo;
+                else if (GetCredential(store, $"https://github.com/{parts[0]}") is { } owner)
+                    return owner;
+                else if (GetCredential(store, "https://github.com") is { } global)
+                    return global;
+            }
 
             var input = new InputArguments(new Dictionary<string, string>
             {
@@ -71,5 +85,22 @@ namespace Devlooped
                 return null;
             }
         }
+
+        ICredential? GetCredential(Devlooped::GitCredentialManager.ICredentialStore store, string url)
+        {
+            var accounts = store.GetAccounts(url);
+            if (accounts.Count == 1)
+            {
+                var creds = store.Get(url, accounts[0]);
+                if (creds != null)
+                {
+                    credential = new Credential(accounts[0], creds.Password);
+                    return credential;
+                }
+            }
+            return default;
+        }
+
+        record Credential(string Account, string Password) : ICredential;
     }
 }

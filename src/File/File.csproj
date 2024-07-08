@@ -17,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Devlooped.CredentialManager" Version="2.5.0.1" Aliases="Devlooped" />
     <PackageReference Include="NuGetizer" Version="1.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ThisAssembly" Version="1.0.8" />
