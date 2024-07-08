@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using DotNetConfig;
 
@@ -16,12 +17,21 @@ namespace Devlooped
 
             // Clear empty directories
             var dir = new FileInfo(spec.Path).DirectoryName;
-            if (dir != null && !Directory.EnumerateFiles(dir).Any())
-                Directory.Delete(dir);
+            DeleteEmptyDirectories(dir);
 
             Configuration.RemoveSection("file", spec.Path);
 
             return true;
+        }
+
+        void DeleteEmptyDirectories(string? dir)
+        {
+            if (dir != null && !Directory.EnumerateFiles(dir).Any() && !Directory.EnumerateDirectories(dir).Any())
+            {
+                var parent = new DirectoryInfo(dir).Parent?.FullName;
+                Directory.Delete(dir);
+                DeleteEmptyDirectories(parent);
+            }
         }
     }
 }

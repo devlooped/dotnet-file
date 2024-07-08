@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Devlooped
 {
+    [DebuggerDisplay("{Path}")]
     public class FileSpec
     {
         public static FileSpec WithPath(string path, Uri uri)
