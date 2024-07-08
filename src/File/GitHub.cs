@@ -101,7 +101,9 @@ namespace Devlooped
                         Console.Write(".");
                         if ("file".Equals(item["type"]?.ToString(), StringComparison.Ordinal))
                         {
-                            var itemPath = item["path"]!.ToString().Replace(relativeFrom, "");
+                            var itemPath = item["path"]!.ToString();
+                            if (!string.IsNullOrEmpty(relativeFrom))
+                                itemPath = itemPath.Replace(relativeFrom, "");
 
                             // If there is a relative path before the '.', infer the target file name 
                             // but avoid the directory structure
