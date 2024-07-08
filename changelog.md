@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.6.1](https://github.com/devlooped/dotnet-file/tree/v1.6.1) (2024-07-08)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.6.0...v1.6.1)
+
 ## [v1.6.0](https://github.com/devlooped/dotnet-file/tree/v1.6.0) (2024-07-08)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.5.0...v1.6.0)
