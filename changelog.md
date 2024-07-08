@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.6.2](https://github.com/devlooped/dotnet-file/tree/v1.6.2) (2024-07-08)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.6.1...v1.6.2)
+
+:sparkles: Implemented enhancements:
+
+- Smarter empty directory cleanup [\#117](https://github.com/devlooped/dotnet-file/pull/117) (@kzu)
+- Perform more optimal GCM API credentials retrieval if available [\#116](https://github.com/devlooped/dotnet-file/pull/116) (@kzu)
+
 ## [v1.6.1](https://github.com/devlooped/dotnet-file/tree/v1.6.1) (2024-07-08)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.6.0...v1.6.1)
