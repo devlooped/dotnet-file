@@ -1,5 +1,14 @@
 # Changelog
 
+## [v1.6.0](https://github.com/devlooped/dotnet-file/tree/v1.6.0) (2024-07-08)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.5.0...v1.6.0)
+
+:sparkles: Implemented enhancements:
+
+- Add a new relative target path heuristic with `/` in url [\#115](https://github.com/devlooped/dotnet-file/pull/115) (@kzu)
+- Only authenticate with GH if necessary [\#114](https://github.com/devlooped/dotnet-file/pull/114) (@kzu)
+
 ## [v1.5.0](https://github.com/devlooped/dotnet-file/tree/v1.5.0) (2024-06-25)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.5.1-beta...v1.5.0)
