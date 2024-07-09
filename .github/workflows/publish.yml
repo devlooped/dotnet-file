@@ -5,7 +5,7 @@
 name: publish
 on:
   release:
-    types: [released]
+    types: [prereleased, released]
 
 env:
   DOTNET_NOLOGO: true
@@ -14,7 +14,8 @@ env:
   GeneratePackageOnBuild: true
   VersionLabel: ${{ github.ref }}
   GH_TOKEN: ${{ secrets.GH_TOKEN }}
-  
+  MSBUILDTERMINALLOGGER: auto
+    
 jobs:
   publish:
     runs-on: ubuntu-latest
