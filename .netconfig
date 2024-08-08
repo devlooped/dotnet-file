@@ -26,9 +26,9 @@
 	sha = 49661dbf0720cde93eb5569be7523b5912351560
 [file ".github/workflows/build.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/build.yml
-	etag = 7ab5fbbf1235cdb0c2216ef236c25f8c5ce0f28d372109817f1ae62cacc62ec1
+	etag = 35b2a5b03c26cbe7522e30b2b987e04991e8ba18accd38b7ebd88191f1698c2d
 	weak
-	sha = fef463525739d0fb514dfb9e2bcbc2b1e5f81e38
+	sha = 7ec91019eddb4fc7e0b09118538b256087f82e18
 [file ".gitignore"]
 	url = https://github.com/devlooped/oss/blob/main/.gitignore
 	etag = a9c37ae312afac14b78436a7d018af4483d88736b5f780576f2c5a0b3f14998c
@@ -61,9 +61,9 @@
 	sha = fa83a5161ba52bc5d510ce0ba75ee0b1f8d4bc63
 [file "Directory.Build.rsp"]
 	url = https://github.com/devlooped/oss/blob/main/Directory.Build.rsp
-	etag = 6a6c6e1d3895df953abf14c82b0899e3eea75cdcd679f6212dcfea15183d73d6
+	etag = 0ccae83fc51f400bfd7058170bfec7aba11455e24a46a0d7e6a358da6486e255
 	weak
-	sha = ae25fae9d7daf0cb47d537ba870914aa3052f0c9
+	sha = 0f7f7f7e8a29de9b535676f75fe7c67e629a5e8c
 [file "assets/css/style.scss"]
 	url = https://github.com/devlooped/oss/blob/main/assets/css/style.scss
 	etag = f710d8919abfd5a8d00050b74ba7d0bb05c6d02e40842a3012eb96555c208504
@@ -76,26 +76,21 @@
 	sha = 5fb172362c767bef7c36478f1a6bdc264723f8f9
 [file ".github/workflows/publish.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/publish.yml
-	etag = 2bc45eaf0bb289ced535c2720975c573ff70841edf1181885e64614e2cafb89f
+	etag = 5a85d51e8c6cc6fbda43e12b3712a1e908a8e99b0908c4033ac9f4c66e5f233e
 	weak
-	sha = 27a5c9a5f58f901056d4b048a79ba5843c6f6789
+	sha = b5bb972199aa6ff220dda196588b23c21bb2780f
 [file ".github/workflows/dotnet-file.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/dotnet-file.yml
 	sha = 7afe350f7e80a230e922db026d4e1198ba15cae1
 	etag = 65e9794df6caff779eb989c8f71ddf4d4109b24a75af79e4f8d0fe6ba7bd9702
-	weak
-[file ".github/workflows/test/action.yml"]
-	url = https://github.com/devlooped/oss/blob/main/.github/workflows/test/action.yml
-	sha = 9a1b07589b9bde93bc12528e9325712a32dec418
-	etag = b54216ac431a83ce5477828d391f02046527e7f6fffd21da1d03324d352c3efb
 	weak
 [file "src/nuget.config"]
 	url = https://github.com/devlooped/oss/blob/main/src/nuget.config
 	skip
 [file ".github/workflows/includes.yml"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/includes.yml
-	sha = 5fb172362c767bef7c36478f1a6bdc264723f8f9
-	etag = e5ee22e115c925fb85ec931cda3ac811fcc453c03904554fa3f573935b221d34
+	sha = d152e7437fd0d6f6d9363d23cb3b78c07335ea49
+	etag = ec40db34f379d0c6d83b2ec15624f330318a172cc4f85b5417c63e86eaf601df
 	weak
 [file ".github/workflows/changelog.config"]
 	url = https://github.com/devlooped/oss/blob/main/.github/workflows/changelog.config
