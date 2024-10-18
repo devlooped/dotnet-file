@@ -1,5 +1,15 @@
 # Changelog
 
+## [v1.7.0](https://github.com/devlooped/dotnet-file/tree/v1.7.0) (2024-10-18)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.6.2...v1.7.0)
+
+:sparkles: Implemented enhancements:
+
+- Optimize retrieval and propagation of X-Sha [\#124](https://github.com/devlooped/dotnet-file/pull/124) (@kzu)
+- Detect fetching folders/trees to avoid unnecessary auth [\#122](https://github.com/devlooped/dotnet-file/pull/122) (@kzu)
+- Don't timeout while debugging [\#120](https://github.com/devlooped/dotnet-file/pull/120) (@kzu)
+
 ## [v1.6.2](https://github.com/devlooped/dotnet-file/tree/v1.6.2) (2024-07-08)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.6.1...v1.6.2)
