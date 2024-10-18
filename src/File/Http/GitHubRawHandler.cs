@@ -33,11 +33,15 @@ namespace Devlooped
             // NOTE: we WILL make a raw URL for top-level org/repo URLs too, causing a 
             // BadRequest or NotFound which is REQUIRED for AddCommand to detect and 
             // fallback to a gh CLI call, so DO NOT change that behavior here.
-
-            request.RequestUri = new Uri(new Uri("https://raw.githubusercontent.com/"), string.Join('/',
+            var rawUri = new Uri(new Uri("https://raw.githubusercontent.com/"), string.Join('/',
                 parts.Take(2).Concat(parts.Skip(3))));
 
+            // Move the original to the referer, so it can be used by other handlers.
+            request.Headers.Referrer = request.RequestUri;
+            request.RequestUri = rawUri;
+
             var response = await base.SendAsync(request, cancellationToken);
+
             var originalEtag = request.Headers.TryGetValues("X-ETag", out var etags) ? etags.FirstOrDefault() : null;
             var originalSha = request.Headers.TryGetValues("X-Sha", out var shas) ? shas.FirstOrDefault() : null;
 
