@@ -25,15 +25,15 @@
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="DotNetConfig" Version="1.2.0" />
-    <PackageReference Include="git-credential-manager" Version="2.4.1" IncludeAssets="tools" GeneratePathProperty="true" />
+    <PackageReference Include="git-credential-manager" Version="2.6.0" IncludeAssets="tools" GeneratePathProperty="true" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">
-    <Reference Include="Atlassian.Bitbucket" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\Atlassian.Bitbucket.dll" />
-    <Reference Include="Microsoft.AzureRepos" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\Microsoft.AzureRepos.dll" />
-    <Reference Include="GitHub" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\GitHub.dll" />
-    <Reference Include="GitLab" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\GitLab.dll" />
-    <Reference Include="gcmcore" HintPath="$(Pkggit-credential-manager)\tools\net7.0\any\gcmcore.dll" />
+    <Reference Include="Atlassian.Bitbucket" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\Atlassian.Bitbucket.dll" />
+    <Reference Include="Microsoft.AzureRepos" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\Microsoft.AzureRepos.dll" />
+    <Reference Include="GitHub" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitHub.dll" />
+    <Reference Include="GitLab" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\GitLab.dll" />
+    <Reference Include="gcmcore" HintPath="$(Pkggit-credential-manager)\tools\net8.0\any\gcmcore.dll" />
   </ItemGroup>
 
   <ItemGroup>
