@@ -59,14 +59,10 @@ namespace Devlooped
                 (originalEtag != newEtag || originalSha == null) &&
                 parts.Length > 2 &&
                 GitHub.IsInstalled &&
-                GitHub.TryApi($"repos/{parts[0]}/{parts[1]}/commits?per_page=1&path={string.Join('/', parts.Skip(4))}", out var json) &&
-                json is JArray commits &&
-                commits[0] is JObject obj &&
-                obj.Property("sha") is JProperty prop &&
-                prop != null &&
-                prop.Value.Type == JTokenType.String)
+                GitHub.TryApi($"repos/{parts[0]}/{parts[1]}/commits?per_page=1&path={string.Join('/', parts.Skip(4))}", ".[0]?.sha", out var json) &&
+                json is { Length: > 0 })
             {
-                newSha = prop.Value.ToObject<string>();
+                newSha = json;
             }
 
             // Just propagate back what we had initially, as an optimization for HEAD and cases 
@@ -75,7 +71,13 @@ namespace Devlooped
                 newSha = originalSha;
 
             if (newSha != null)
+            {
+                // Make sure the X-Sha matches what we have now.
+                if (response.Headers.TryGetValues("X-Sha", out _))
+                    response.Headers.Remove("X-Sha");
+
                 response.Headers.TryAddWithoutValidation("X-Sha", newSha);
+            }
 
             return response;
         }

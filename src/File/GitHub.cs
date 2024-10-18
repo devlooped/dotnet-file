@@ -33,6 +33,9 @@ namespace Devlooped
         public static bool TryIsInstalled(out string output)
             => Process.TryExecute("gh", "--version", out output) && output.StartsWith("gh version");
 
+        public static bool TryApi(string endpoint, string jq, out string? output)
+            => Process.TryExecute("gh", $"api {endpoint} --jq \"{jq}\"", out output);
+
         public static bool TryApi(string endpoint, out JToken? json)
         {
             json = null;
