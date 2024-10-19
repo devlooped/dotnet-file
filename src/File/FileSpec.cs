@@ -106,18 +106,22 @@ namespace Devlooped
             Sha = sha;
             NewSha = sha;
 
-            if (!finalPath && uri != null &&
+            if (!finalPath && uri != null && !uri.AbsolutePath.EndsWith('/') &&
                 (path.EndsWith('\\') || path.EndsWith('/')))
             {
                 path = System.IO.Path.Combine(path, WithDefaultPath(uri!).Path);
             }
 
             // This will also normalize double slashes.
-            var parts = path.Split(new[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            var parts = path.Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries);
             if (parts.Length > 0 && parts[0] == ".")
                 Path = string.Join('/', parts.Skip(1));
             else
                 Path = string.Join('/', parts);
+
+            // Preserve trailing slash if present, for consistency with url ending in /.
+            if (path.EndsWith('/') || path.EndsWith("\\"))
+                Path += "/";
         }
 
         public string Path { get; }

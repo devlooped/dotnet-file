@@ -39,10 +39,19 @@ namespace Devlooped
         [Fact]
         public void WhenSourceUriEndsInSlathThenTargetPathIsBaseDir()
         {
-            var spec = new FileSpec("docs/", new Uri("https://github.com/devlooped/dotnet-file/tree/main/src/api/documentation/"));
+            var spec = new FileSpec("docs", new Uri("https://github.com/devlooped/dotnet-file/tree/main/src/api/documentation/"));
 
             // NOTE: the relative `src/api/documentation` is not appended to the file path.
             Assert.Equal("docs", spec.Path);
+        }
+
+        [Fact]
+        public void WhenSpecAndSourceUriEndInSlathThenPreservesBaseDirSlash()
+        {
+            var spec = new FileSpec("docs/", new Uri("https://github.com/devlooped/dotnet-file/tree/main/src/api/documentation/"));
+
+            // NOTE: the relative `src/api/documentation` is not appended to the file path.
+            Assert.Equal("docs/", spec.Path);
         }
 
         [Theory]
