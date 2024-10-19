@@ -2,20 +2,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Devlooped
+namespace Devlooped.Http;
+
+interface IAuthHandler
 {
-    interface IAuthHandler
-    {
-        Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken);
-    }
+    Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken);
+}
 
-    abstract class AuthHandler : DelegatingHandler, IAuthHandler
-    {
-        public AuthHandler(HttpMessageHandler inner) : base(inner)
-        {
-        }
-
-        Task<HttpResponseMessage> IAuthHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-            => SendAsync(request, cancellationToken);
-    }
+abstract class AuthHandler(HttpMessageHandler inner) : DelegatingHandler(inner), IAuthHandler
+{
+    Task<HttpResponseMessage> IAuthHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        => SendAsync(request, cancellationToken);
 }

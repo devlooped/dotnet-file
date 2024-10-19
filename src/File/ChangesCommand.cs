@@ -1,13 +1,10 @@
 ﻿using DotNetConfig;
 
-namespace Devlooped
+namespace Devlooped;
+
+class ChangesCommand(Config configuration) : UpdateCommand(configuration)
 {
-    class ChangesCommand : UpdateCommand
-    {
-        public ChangesCommand(Config configuration) : base(configuration) { }
+    protected override bool DryRun => true;
 
-        protected override bool DryRun => true;
-
-        protected override AddCommand Clone() => new ChangesCommand(Configuration);
-    }
+    protected override AddCommand Clone() => new ChangesCommand(Configuration);
 }
