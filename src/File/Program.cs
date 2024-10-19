@@ -59,7 +59,7 @@ namespace Devlooped
                 }
 
                 // Try to pair Uri+File to allow intuitive download>path mapping, such as 
-                // https://gitub.com/org/repo/docs/file.md docs/file.md
+                // https://gitub.com/org/repo/docs/file.md > docs/file.md
                 if (Uri.TryCreate(extraArgs[i], UriKind.Absolute, out var uri))
                 {
                     var next = i + 1;
