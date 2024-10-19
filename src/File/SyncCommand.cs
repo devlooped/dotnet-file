@@ -3,35 +3,32 @@ using System.IO;
 using System.Linq;
 using DotNetConfig;
 
-namespace Devlooped
+namespace Devlooped;
+
+class SyncCommand(Config configuration) : UpdateCommand(configuration)
 {
-    class SyncCommand : UpdateCommand
+    protected override bool OnRemoteUrlMissing(FileSpec spec)
     {
-        public SyncCommand(Config configuration) : base(configuration) { }
+        // If the file exists locally, delete it. Remove the config entry.
+        if (File.Exists(spec.Path))
+            File.Delete(spec.Path);
 
-        protected override bool OnRemoteUrlMissing(FileSpec spec)
+        // Clear empty directories
+        var dir = new FileInfo(spec.Path).DirectoryName;
+        DeleteEmptyDirectories(dir);
+
+        Configuration.RemoveSection("file", spec.Path);
+
+        return true;
+    }
+
+    static void DeleteEmptyDirectories(string? dir)
+    {
+        if (dir != null && !Directory.EnumerateFiles(dir).Any() && !Directory.EnumerateDirectories(dir).Any())
         {
-            // If the file exists locally, delete it. Remove the config entry.
-            if (File.Exists(spec.Path))
-                File.Delete(spec.Path);
-
-            // Clear empty directories
-            var dir = new FileInfo(spec.Path).DirectoryName;
-            DeleteEmptyDirectories(dir);
-
-            Configuration.RemoveSection("file", spec.Path);
-
-            return true;
-        }
-
-        void DeleteEmptyDirectories(string? dir)
-        {
-            if (dir != null && !Directory.EnumerateFiles(dir).Any() && !Directory.EnumerateDirectories(dir).Any())
-            {
-                var parent = new DirectoryInfo(dir).Parent?.FullName;
-                Directory.Delete(dir);
-                DeleteEmptyDirectories(parent);
-            }
+            var parent = new DirectoryInfo(dir).Parent?.FullName;
+            Directory.Delete(dir);
+            DeleteEmptyDirectories(parent);
         }
     }
 }

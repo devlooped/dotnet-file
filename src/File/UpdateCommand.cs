@@ -2,38 +2,35 @@
 using System.Threading.Tasks;
 using DotNetConfig;
 
-namespace Devlooped
+namespace Devlooped;
+
+class UpdateCommand(Config configuration) : AddCommand(configuration)
 {
-    class UpdateCommand : AddCommand
+    public override Task<int> ExecuteAsync()
     {
-        public UpdateCommand(Config configuration) : base(configuration) { }
-
-        public override Task<int> ExecuteAsync()
+        var configured = Files;
+        if (configured.Count == 0)
         {
-            var configured = Files;
-            if (configured.Count == 0)
-            {
-                // Implicitly, running update with no files means updating all
-                configured = GetConfiguredFiles().ToList();
-            }
-            else
-            {
-                // Switch to the configured versions to get url and etag
-                configured = GetConfiguredFiles().Intersect(Files, FileSpecComparer.Default).ToList();
-            }
-
-            // Add the new ones that are just passed in as URLs
-            configured = Files
-                .Except(configured, FileSpecComparer.Default)
-                .Concat(configured)
-                .ToList();
-
-            Files.Clear();
-            Files.AddRange(configured);
-
-            return base.ExecuteAsync();
+            // Implicitly, running update with no files means updating all
+            configured = GetConfiguredFiles().ToList();
+        }
+        else
+        {
+            // Switch to the configured versions to get url and etag
+            configured = GetConfiguredFiles().Intersect(Files, FileSpecComparer.Default).ToList();
         }
 
-        protected override AddCommand Clone() => new UpdateCommand(Configuration);
+        // Add the new ones that are just passed in as URLs
+        configured = Files
+            .Except(configured, FileSpecComparer.Default)
+            .Concat(configured)
+            .ToList();
+
+        Files.Clear();
+        Files.AddRange(configured);
+
+        return base.ExecuteAsync();
     }
+
+    protected override AddCommand Clone() => new UpdateCommand(Configuration);
 }

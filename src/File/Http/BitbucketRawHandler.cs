@@ -3,40 +3,37 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Devlooped
+namespace Devlooped.Http;
+
+/// <summary>
+/// Converts URLs for github.com files into raw.githubusercontent.com.
+/// </summary>
+class BitbucketRawHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
 {
-    /// <summary>
-    /// Converts URLs for github.com files into raw.githubusercontent.com.
-    /// </summary>
-    class BitbucketRawHandler : DelegatingHandler
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        public BitbucketRawHandler(HttpMessageHandler inner) : base(inner) { }
-
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        // For raw downloads, we need to use raw.githubusercontent.com instead. For example:
+        if (request.RequestUri?.Host.Equals("bitbucket.com") == true)
         {
-            // For raw downloads, we need to use raw.githubusercontent.com instead. For example:
-            if (request.RequestUri?.Host.Equals("bitbucket.com") == true)
+            // https://bitbucket.org/kzu/public/src/master/README.md
+            // => 
+            // https://bitbucket.org/kzu/public/raw/master/README.md
+
+            var parts = request.RequestUri
+                .GetComponents(UriComponents.Path, UriFormat.Unescaped)
+                .Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+            if (parts.Length > 3 && parts[2].Equals("src", StringComparison.OrdinalIgnoreCase))
             {
-                // https://bitbucket.org/kzu/public/src/master/README.md
-                // => 
-                // https://bitbucket.org/kzu/public/raw/master/README.md
-
-                var parts = request.RequestUri
-                    .GetComponents(UriComponents.Path, UriFormat.Unescaped)
-                    .Split('/', StringSplitOptions.RemoveEmptyEntries);
-
-                if (parts.Length > 3 && parts[2].Equals("src", StringComparison.OrdinalIgnoreCase))
+                parts[2] = "raw";
+                var builder = new UriBuilder(request.RequestUri)
                 {
-                    parts[2] = "raw";
-                    var builder = new UriBuilder(request.RequestUri)
-                    {
-                        Path = string.Join('/', parts)
-                    };
-                    request.RequestUri = builder.Uri;
-                }
+                    Path = string.Join('/', parts)
+                };
+                request.RequestUri = builder.Uri;
             }
-
-            return await base.SendAsync(request, cancellationToken);
         }
+
+        return await base.SendAsync(request, cancellationToken);
     }
 }
