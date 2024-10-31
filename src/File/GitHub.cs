@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -202,7 +203,7 @@ public static class GitHub
                         tasks[change] = ctx.AddTask($"[blue]{filename}[/]");
                     }
 
-                    group.AsParallel().ForAll(change =>
+                    group.AsParallel().WithDegreeOfParallelism(Debugger.IsAttached ? 1 : Environment.ProcessorCount).ForAll(change =>
                     {
                         var task = tasks[change];
                         if (compared.Contains((change.Sha, change.NewSha)))
@@ -267,6 +268,7 @@ public static class GitHub
                 });
 
             output.AppendLine($"# {group.Key}").AppendLine();
+            ColorConsole.WriteLine($"# {group.Key}".Gray());
 
             // GitHub REST API does not seem to handle unicode the same way the website 
             // does. Unicode emoji shows up perfectly fine on the web (see https://github.com/devlooped/oss/commits/main/.github/workflows/build.yml)
@@ -300,7 +302,11 @@ public static class GitHub
             };
 
             foreach (var (sha, date, message) in commits)
-                output.AppendLine($"- {removeUnicodeEmoji(message).Trim()} https://github.com/{group.Key}/commit/{sha[..7]}");
+            {
+                var line = $"- {removeUnicodeEmoji(message).Trim()} https://github.com/{group.Key}/commit/{sha[..7]}";
+                output.AppendLine(line);
+                ColorConsole.WriteLine(line.Gray());
+            }
 
             output.AppendLine();
         }
