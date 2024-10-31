@@ -270,40 +270,9 @@ public static class GitHub
             output.AppendLine($"# {group.Key}").AppendLine();
             ColorConsole.WriteLine($"# {group.Key}".Gray());
 
-            // GitHub REST API does not seem to handle unicode the same way the website 
-            // does. Unicode emoji shows up perfectly fine on the web (see https://github.com/devlooped/oss/commits/main/.github/workflows/build.yml)
-            // yet each emoji shows up as multiple separate chars in the responses. We 
-            // implement a simple cleanup that works in our tests with devlooped/oss repo. 
-            static string removeUnicodeEmoji(string message)
-            {
-                var result = new StringBuilder(message.Length);
-                var index = 0;
-                while (index < message.Length)
-                {
-                    // Consider up to U+036F / 879 char as "regular" text.
-                    // This would allow some formatting chars still.
-                    // Anything higher, consider as the start of an unicode emoji
-                    // symbol comprising more chars until the next high one.
-                    if (message[index] > 879)
-                    {
-                        while (++index <= message.Length && message[index] <= 879 && !char.IsWhiteSpace(message[index]))
-                            ;
-
-                        index++;
-                    }
-                    else
-                    {
-                        result.Append(message[index]);
-                        index++;
-                    }
-                }
-
-                return result.ToString();
-            };
-
             foreach (var (sha, date, message) in commits)
             {
-                var line = $"- {removeUnicodeEmoji(message).Trim()} https://github.com/{group.Key}/commit/{sha[..7]}";
+                var line = $"- {message.Trim()} https://github.com/{group.Key}/commit/{sha[..7]}";
                 output.AppendLine(line);
                 ColorConsole.WriteLine(line.Gray());
             }

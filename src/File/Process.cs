@@ -10,7 +10,8 @@ class Process
         var info = new ProcessStartInfo(program, arguments)
         {
             RedirectStandardOutput = true,
-            RedirectStandardError = true
+            RedirectStandardError = true,
+            StandardOutputEncoding = System.Text.Encoding.UTF8,
         };
 
         try
