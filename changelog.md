@@ -1,5 +1,19 @@
 # Changelog
 
+## [v1.7.1](https://github.com/devlooped/dotnet-file/tree/v1.7.1) (2024-10-31)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.0...v1.7.1)
+
+:sparkles: Implemented enhancements:
+
+- Enable full unicode in commit change logs [\#130](https://github.com/devlooped/dotnet-file/pull/130) (@kzu)
+- Render intermediate changelog to output [\#129](https://github.com/devlooped/dotnet-file/pull/129) (@kzu)
+- Preserve trailing slash in file spec for directory [\#125](https://github.com/devlooped/dotnet-file/pull/125) (@kzu)
+
+:twisted_rightwards_arrows: Merged:
+
+- Modernize codebase [\#126](https://github.com/devlooped/dotnet-file/pull/126) (@kzu)
+
 ## [v1.7.0](https://github.com/devlooped/dotnet-file/tree/v1.7.0) (2024-10-18)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.6.2...v1.7.0)
