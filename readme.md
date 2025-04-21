@@ -17,7 +17,7 @@ dotnet tool update -g dotnet-file
 To get the CI version:
 
 ```
-dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.io/index.json
+dotnet tool update -g dotnet-file --no-cache --add-source https://pkg.kzu.app/index.json
 ```
 
 Usage:
@@ -179,11 +179,11 @@ Concrete examples:
 # Dogfooding
 
 [![CI Status](https://github.com/devlooped/dotnet-file/workflows/build/badge.svg?branch=main)](https://github.com/devlooped/dotnet-file/actions?query=branch%3Amain+workflow%3Abuild+)
-[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.io/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.io/index.json)
+[![CI Version](https://img.shields.io/endpoint?url=https://shields.kzu.app/vpre/dotnet-file/main&label=nuget.ci&color=brightgreen)](https://pkg.kzu.app/index.json)
 
 We also produce CI packages from branches and pull requests so you can dogfood builds as quickly as they are produced. 
 
-The CI feed is `https://pkg.kzu.io/index.json`. 
+The CI feed is `https://pkg.kzu.app/index.json`. 
 
 The versioning scheme for packages is:
 
