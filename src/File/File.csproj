@@ -20,9 +20,9 @@
     <PackageReference Include="Devlooped.CredentialManager" Version="2.6.0" Aliases="Devlooped" />
     <PackageReference Include="NuGetizer" Version="1.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="ThisAssembly" Version="1.0.8" />
+    <PackageReference Include="ThisAssembly" Version="2.0.14" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
-    <PackageReference Include="Spectre.Console" Version="0.48.0" />
+    <PackageReference Include="Spectre.Console" Version="0.50.0" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="DotNetConfig" Version="1.2.0" />
     <PackageReference Include="git-credential-manager" Version="2.6.0" IncludeAssets="tools" GeneratePathProperty="true" />
