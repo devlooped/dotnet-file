@@ -25,7 +25,7 @@
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
     <PackageReference Include="DotNetConfig" Version="1.2.0" />
-    <PackageReference Include="git-credential-manager" Version="2.6.0" IncludeAssets="tools" GeneratePathProperty="true" />
+    <PackageReference Include="git-credential-manager" Version="2.6.1" IncludeAssets="tools" GeneratePathProperty="true" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(Pkggit-credential-manager)' != ''">
