@@ -144,7 +144,7 @@ public static class GitHub
             }
             getFiles = path =>
             {
-                if (Process.TryExecute("gh", "api " + apiUrl + path + apiQuery, out var data) &&
+                if (Process.TryExecute("gh", "api " + apiUrl + "/" + path + apiQuery, out var data) &&
                     JsonConvert.DeserializeObject<JToken>(data) is JArray array)
                 {
                     addFiles(array, relativeFrom);
