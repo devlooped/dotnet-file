@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.7.2](https://github.com/devlooped/dotnet-file/tree/v1.7.2) (2025-08-18)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.1...v1.7.2)
+
+:bug: Fixed bugs:
+
+- Fix issue when traversing directories [\#152](https://github.com/devlooped/dotnet-file/pull/152) (@kzu)
+
 ## [v1.7.1](https://github.com/devlooped/dotnet-file/tree/v1.7.1) (2024-10-31)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.0...v1.7.1)
