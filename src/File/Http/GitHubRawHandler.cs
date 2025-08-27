@@ -56,15 +56,34 @@ class GitHubRawHandler(HttpMessageHandler inner) : DelegatingHandler(inner)
             // when we already have it persisted from a previous request
             (originalEtag != newEtag || originalSha == null) &&
             parts.Length > 2 &&
-            GitHub.IsInstalled &&
-            GitHub.TryApi($"repos/{parts[0]}/{parts[1]}/commits?per_page=1&path={string.Join('/', parts.Skip(4))}", out var json) &&
-            json is JArray commits &&
-            commits[0] is JObject obj &&
-            obj.Property("sha") is JProperty prop &&
-            prop != null &&
-            prop.Value.Type == JTokenType.String)
+            // Skip raw|blob|tree part. we need at least 2 remaining items: ref+path
+            parts[3..] is { Length: >= 2 } rest &&
+            GitHub.IsInstalled)
         {
-            newSha = prop.Value.ToObject<string>();
+            // branch might have / as a separator
+            // Try i parts for ref, remaining for path
+            for (var i = 1; i < rest.Length; i++)
+            {
+                var refCandidate = string.Join('/', rest.Take(i));
+                var pathCandidate = string.Join('/', rest.Skip(i));
+
+                // Validate by asking for just 1 commit that touched this path on this ref
+                var url = $"repos/{Uri.EscapeDataString(parts[0])}/{Uri.EscapeDataString(parts[1])}/commits" +
+                          $"?sha={Uri.EscapeDataString(refCandidate)}" +
+                          $"&path={Uri.EscapeDataString(pathCandidate)}" +
+                          $"&per_page=1";
+
+                if (GitHub.TryApi(url, out var json) &&
+                    json is JArray commits &&
+                    commits[0] is JObject obj &&
+                    obj.Property("sha") is JProperty prop &&
+                    prop != null &&
+                    prop.Value.Type == JTokenType.String)
+                {
+                    newSha = prop.Value.ToObject<string>();
+                    break;
+                }
+            }
         }
 
         // Just propagate back what we had initially, as an optimization for HEAD and cases 
