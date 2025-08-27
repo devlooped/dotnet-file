@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.7.3](https://github.com/devlooped/dotnet-file/tree/v1.7.3) (2025-08-27)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.2...v1.7.3)
+
+:bug: Fixed bugs:
+
+- Fix issue with github raw links containing / in branch [\#155](https://github.com/devlooped/dotnet-file/pull/155) (@kzu)
+
 ## [v1.7.2](https://github.com/devlooped/dotnet-file/tree/v1.7.2) (2025-08-18)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.1...v1.7.2)
