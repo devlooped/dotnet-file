@@ -44,6 +44,21 @@ class Program
         // Remove first arg which is the command to use.
         extraArgs.RemoveAt(0);
 
+        // Handle --init [url] option for the sync command.
+        if (command is SyncCommand sync &&
+            extraArgs.FindIndex(a => a == "--init") is var index && index >= 0)
+        {
+            if (index + 1 < extraArgs.Count && !extraArgs[index + 1].StartsWith('-'))
+            {
+                sync.InitUrl = extraArgs[index + 1];
+                extraArgs.RemoveRange(index, 2);
+            }
+            else
+            {
+                extraArgs.RemoveAt(index);
+            }
+        }
+
         // Add remainder arguments as if they were just files or urls provided 
         // to the command. Allows skipping the -f|-u switches.
         var skip = false;
