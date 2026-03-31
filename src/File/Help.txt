@@ -9,6 +9,9 @@ Actions
     sync       synchronizes with remote URLs, deleting local files and directories as needed
     update     updates local files from remote URLs, does not prune deleted remote files
 
+Options
+    sync --init [url]   honor new skip entries in an upstream init .netconfig
+
 Status
   = <- [url]   remote file equals local file
   ✓ <- [url]   local file updated with remote file
