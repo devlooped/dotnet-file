@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.7.4](https://github.com/devlooped/dotnet-file/tree/v1.7.4) (2026-03-31)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.3...v1.7.4)
+
+:sparkles: Implemented enhancements:
+
+- Allow preserving skips from init upstream file [\#167](https://github.com/devlooped/dotnet-file/pull/167) (@kzu)
+
 ## [v1.7.3](https://github.com/devlooped/dotnet-file/tree/v1.7.3) (2025-08-27)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.2...v1.7.3)
