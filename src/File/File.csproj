@@ -6,6 +6,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <RollForward>Major</RollForward>
+    <LangVersion>Latest</LangVersion>
 
     <AssemblyName>file</AssemblyName>
     <RootNamespace>Devlooped</RootNamespace>
