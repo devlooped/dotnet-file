@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.7.6](https://github.com/devlooped/dotnet-file/tree/v1.7.6) (2026-04-01)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.5...v1.7.6)
+
+:sparkles: Implemented enhancements:
+
+- Simplify --init handling, make it cross-cutting [\#170](https://github.com/devlooped/dotnet-file/pull/170) (@kzu)
+
 ## [v1.7.5](https://github.com/devlooped/dotnet-file/tree/v1.7.5) (2026-04-01)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.4...v1.7.5)
