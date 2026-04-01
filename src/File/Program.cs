@@ -96,7 +96,7 @@ class Program
             else
             {
                 // Attempt to match a simple filename to a configured one
-                configured ??= command.GetConfiguredFiles().ToList();
+                configured ??= [.. command.GetConfiguredFiles()];
                 if (configured.FirstOrDefault(x => x.Path == extraArgs[i]) is { } spec)
                     files.Add(spec);
             }

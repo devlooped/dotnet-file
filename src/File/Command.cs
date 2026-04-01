@@ -11,7 +11,7 @@ abstract class Command(Config configuration)
 {
     public List<FileSpec> Files { get; } = [];
 
-    public Config Configuration { get; } = configuration;
+    public Config Configuration { get; protected set; } = configuration;
 
     public abstract Task<int> ExecuteAsync();
 
