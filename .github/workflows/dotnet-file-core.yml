@@ -63,7 +63,7 @@ jobs:
 
           dotnet tool update -g dotnet-file
           $changelog = "$([System.IO.Path]::GetTempPath())dotnet-file.md"
-          dotnet file sync -c:$changelog
+          dotnet file sync -c:$changelog --init https://github.com/devlooped/oss/blob/main/.netconfig
           if (test-path $changelog) {
             echo 'CHANGES<<EOF' >> $env:GITHUB_ENV
             cat $changelog >> $env:GITHUB_ENV
@@ -79,7 +79,7 @@ jobs:
           validate: false
 
       - name: ✍ pull request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           base: main
           branch: dotnet-file-sync
