@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.7.5](https://github.com/devlooped/dotnet-file/tree/v1.7.5) (2026-04-01)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.4...v1.7.5)
+
+:bug: Fixed bugs:
+
+- Update command configuration after init retrieval [\#168](https://github.com/devlooped/dotnet-file/pull/168) (@kzu)
+
 ## [v1.7.4](https://github.com/devlooped/dotnet-file/tree/v1.7.4) (2026-03-31)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.3...v1.7.4)
