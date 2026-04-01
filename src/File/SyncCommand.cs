@@ -50,6 +50,8 @@ class SyncCommand(Config configuration) : UpdateCommand(configuration)
 
                     localConfig = localConfig.SetBoolean("file", path, "skip", true);
                 }
+
+                Configuration = localConfig;
             }
             finally
             {
