@@ -1,5 +1,21 @@
 # Changelog
 
+## [v1.7.7](https://github.com/devlooped/dotnet-file/tree/v1.7.7) (2026-04-02)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.6...v1.7.7)
+
+:sparkles: Implemented enhancements:
+
+- Cleanup temp files from init [\#172](https://github.com/devlooped/dotnet-file/pull/172) (@kzu)
+
+:bug: Fixed bugs:
+
+- Fix sync --init skip behavior on Linu [\#171](https://github.com/devlooped/dotnet-file/pull/171) (@kzu)
+
+:twisted_rightwards_arrows: Merged:
+
+- To simplify debugging, allow passing working dir [\#173](https://github.com/devlooped/dotnet-file/pull/173) (@kzu)
+
 ## [v1.7.6](https://github.com/devlooped/dotnet-file/tree/v1.7.6) (2026-04-01)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.5...v1.7.6)
