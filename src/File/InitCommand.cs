@@ -25,33 +25,48 @@ class InitCommand(Config configuration) : Command(configuration)
         {
             var tempConfig = Path.GetTempFileName();
             var tempFile = Path.GetTempFileName();
-            var command = new AddCommand(Config.Build(tempConfig));
-            command.Files.Add(new FileSpec(tempFile, spec.Uri));
+            try
+            {
+                var command = new AddCommand(Config.Build(tempConfig));
+                command.Files.Add(new FileSpec(tempFile, spec.Uri));
 
-            ColorConsole.WriteLine("Downloading seed config file(s)...".Yellow());
-            if (await command.ExecuteAsync() != 0)
-                result = -1;
+                ColorConsole.WriteLine("Downloading seed config file(s)...".Yellow());
+                if (await command.ExecuteAsync() != 0)
+                    result = -1;
 
-            configs.Add(tempFile);
+                configs.Add(tempFile);
+            }
+            finally
+            {
+                File.Delete(tempConfig);
+            }
         }
 
-        // Then merge with the current config
-        foreach (var entry in configs.SelectMany(x => Config.Build(x)).Where(x => x.Level == null))
+        try
         {
-            // Internally, setting a null string is actually valid. Maybe reflect that in the API too?
-            Configuration.SetString(entry.Section, entry.Subsection, entry.Variable, entry.RawValue!);
+            // Then merge with the current config
+            foreach (var entry in configs.SelectMany(x => Config.Build(x)).Where(x => x.Level == null))
+            {
+                // Internally, setting a null string is actually valid. Maybe reflect that in the API too?
+                Configuration.SetString(entry.Section, entry.Subsection, entry.Variable, entry.RawValue!);
+            }
+
+            foreach (var config in configs.Select(x => Config.Build(x)))
+            {
+                // Process each downloaded .netconfig as a source of files 
+                var files = new UpdateCommand(config).GetConfiguredFiles();
+                // And update them against the current dir config.
+                var update = new UpdateCommand(Config.Build());
+                update.Files.AddRange(files);
+
+                if (await update.ExecuteAsync() != 0)
+                    result = -1;
+            }
         }
-
-        foreach (var config in configs.Select(x => Config.Build(x)))
+        finally
         {
-            // Process each downloaded .netconfig as a source of files 
-            var files = new UpdateCommand(config).GetConfiguredFiles();
-            // And update them against the current dir config.
-            var update = new UpdateCommand(Config.Build());
-            update.Files.AddRange(files);
-
-            if (await update.ExecuteAsync() != 0)
-                result = -1;
+            foreach (var tempFile in configs)
+                File.Delete(tempFile);
         }
 
         return result;
