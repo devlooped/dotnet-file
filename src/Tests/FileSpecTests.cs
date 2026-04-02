@@ -72,4 +72,15 @@ public class FileSpecTests
 
         Assert.Equal(".editorconfig", spec.Path);
     }
+
+    [Fact]
+    public void WhenPathIsAbsoluteUnixPreservesRoot()
+    {
+        // Unix absolute paths like /tmp/tmpXXXXXX.tmp must not lose their leading /
+        // when split by RemoveEmptyEntries — otherwise AddCommand writes content to a
+        // relative path while callers still reference the original absolute path.
+        var spec = new FileSpec("/tmp/somefile.tmp", new Uri("https://example.com/file.txt"));
+
+        Assert.Equal("/tmp/somefile.tmp", spec.Path);
+    }
 }

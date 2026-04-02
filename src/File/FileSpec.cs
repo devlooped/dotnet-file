@@ -119,6 +119,12 @@ public class FileSpec
         else
             Path = string.Join('/', parts);
 
+        // Preserve Unix absolute path root: splitting "/tmp/foo" with RemoveEmptyEntries
+        // discards the empty string before the first '/', losing the leading '/'.
+        // Windows absolute paths (e.g. "C:/...") are unaffected because "C:" survives the split.
+        if (System.IO.Path.IsPathRooted(path) && !Path.Contains(':'))
+            Path = "/" + Path;
+
         // Preserve trailing slash if present, for consistency with url ending in /.
         if (path.EndsWith('/') || path.EndsWith("\\"))
             Path += "/";
