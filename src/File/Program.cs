@@ -10,15 +10,20 @@ using Mono.Options;
 
 var help = false;
 string? changelog = null;
+string? workingDir = null;
 var options = new OptionSet
         {
             { "?|h|help", "Display this help", h => help = h != null },
             { "c|changelog:", "Write a changelog", c => changelog = string.IsNullOrEmpty(c) ? "dotnet-file.md" : c },
+            { "w|workingDir:", "Working directory", w => workingDir = string.IsNullOrEmpty(w) ? null : w },
         };
 
 var extraArgs = options.Parse(args);
 if ((args.Length == 1 && help) || extraArgs.Count == 0)
     return ShowHelp();
+
+if (workingDir != null)
+    Directory.SetCurrentDirectory(workingDir);
 
 var commandName = extraArgs[0].ToLowerInvariant();
 extraArgs.RemoveAt(0);
