@@ -21,7 +21,7 @@
     <PackageReference Include="Devlooped.CredentialManager" Version="2.7.0" Aliases="Devlooped" />
     <PackageReference Include="NuGetizer" Version="1.4.7" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="ThisAssembly" Version="2.1.2" />
+    <PackageReference Include="ThisAssembly" Version="2.1.4" />
     <PackageReference Include="ColoredConsole" Version="1.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.57.0" />
     <PackageReference Include="Mono.Options" Version="6.12.0.148" />
