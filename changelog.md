@@ -14,6 +14,7 @@
 
 :twisted_rightwards_arrows: Merged:
 
+- Publish to nuget.org with Trusted Publishing \(GitHub Actions OIDC\) [\#210](https://github.com/devlooped/dotnet-file/pull/210) (@kzu)
 - Consolidate five dependency updates [\#199](https://github.com/devlooped/dotnet-file/pull/199) (@Copilot)
 
 ## [v1.7.7](https://github.com/devlooped/dotnet-file/tree/v1.7.7) (2026-04-02)
