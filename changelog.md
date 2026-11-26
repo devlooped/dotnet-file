@@ -1,5 +1,21 @@
 # Changelog
 
+## [v1.8.0](https://github.com/devlooped/dotnet-file/tree/v1.8.0) (2026-11-26)
+
+[Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.7...v1.8.0)
+
+:bug: Fixed bugs:
+
+- Preserve moved file paths on sync of repo and --init URLs [\#207](https://github.com/devlooped/dotnet-file/pull/207) (@kzu)
+
+:hammer: Other:
+
+- Bump all open dependency updates together [\#198](https://github.com/devlooped/dotnet-file/issues/198)
+
+:twisted_rightwards_arrows: Merged:
+
+- Consolidate five dependency updates [\#199](https://github.com/devlooped/dotnet-file/pull/199) (@Copilot)
+
 ## [v1.7.7](https://github.com/devlooped/dotnet-file/tree/v1.7.7) (2026-04-02)
 
 [Full Changelog](https://github.com/devlooped/dotnet-file/compare/v1.7.6...v1.7.7)
