@@ -1,6 +1,6 @@
-﻿# Builds a final release version and pushes to nuget.org 
+# Builds a final release version and pushes to nuget.org 
 # whenever a release is published.
-# Requires: secrets.NUGET_API_KEY
+# nuget.org: Trusted Publishing (GitHub Actions OIDC) in the nuget job, stable releases only.
 
 name: publish
 on:
@@ -54,12 +54,12 @@ jobs:
             exit 1
           }
 
-      - name: 🚀 nuget
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        if: ${{ env.NUGET_API_KEY != '' && github.event.action != 'prereleased' }}
-        working-directory: bin
-        run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --skip-duplicate
+      - name: 📦 packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages
+          path: bin/*.nupkg
+          if-no-files-found: error
 
       - name: 🚀 sleet
         env:
@@ -68,3 +68,45 @@ jobs:
         run: |
           dotnet tool update sleet -g --allow-downgrade --version $(curl -s --compressed ${{ vars.SLEET_FEED_URL }} | jq '.["sleet:version"]' -r)        
           sleet push bin --config none -f --verbose -p "SLEET_FEED_CONTAINER=nuget" -p "SLEET_FEED_CONNECTIONSTRING=${{ secrets.SLEET_CONNECTION }}" -p "SLEET_FEED_TYPE=azure" || echo "No packages found"
+
+  # Stable releases only: prereleases do not publish to nuget.org.
+  # Only this job may request a GitHub OIDC token, which NuGet/login exchanges
+  # for a short-lived API key: no long-lived NuGet API key is stored.
+  #
+  # Trusted publishing policy on https://www.nuget.org/account/trustedpublishing,
+  # created by kzu (NuGet/login rejects an organization username, so the user is
+  # vars.NUGET_OIDC, or secrets.NUGET_OIDC, and not Devlooped):
+  #   Package owner: Devlooped
+  #   Repository owner: devlooped
+  #   Repository: dotnet-file
+  #   Workflow file: publish.yml
+  #   Environment: nuget
+  #   Scope: Push only new package versions, of package dotnet-file
+  # The GitHub environment must be named nuget too. A release run's GITHUB_REF is
+  # refs/tags/<tag_name>: a deployment branch/tag rule on it must allow that ref.
+  # https://learn.microsoft.com/nuget/nuget-org/trusted-publishing
+  # https://github.com/NuGet/login
+  nuget:
+    needs: publish
+    if: github.event.action == 'released'
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: 📥 packages
+        uses: actions/download-artifact@v4
+        with:
+          name: packages
+          path: bin
+
+      - name: 🔑 nuget login
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_OIDC || secrets.NUGET_OIDC }}
+
+      - name: 🚀 nuget
+        working-directory: bin
+        run: dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k ${{ steps.login.outputs.NUGET_API_KEY }} --skip-duplicate
