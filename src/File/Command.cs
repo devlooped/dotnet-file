@@ -62,6 +62,26 @@ abstract class Command(Config configuration)
         }
     }
 
+    /// <summary>
+    /// Gets the path of the configured file entry that downloads from the given URL, 
+    /// which may differ from the default path the URL maps to when the user moved it.
+    /// </summary>
+    internal static string? GetConfiguredPath(Config configuration, Uri url)
+        => configuration
+            .FirstOrDefault(x => x.Section == "file" && x.Subsection != null && x.Variable == "url" &&
+                url.ToString().Equals(x.RawValue, StringComparison.OrdinalIgnoreCase))
+            ?.Subsection;
+
+    /// <summary>
+    /// Replaces the path of each file with the path of the configured entry that 
+    /// downloads from the same URL, if any, so its settings (like skip) are honored.
+    /// </summary>
+    internal IEnumerable<FileSpec> WithConfiguredPaths(IEnumerable<FileSpec> files)
+        => files.Select(file =>
+            file.Uri != null && GetConfiguredPath(Configuration, file.Uri) is string path && path != file.Path
+                ? new FileSpec(path, file.Uri)
+                : file);
+
     public static Command NullCommand { get; } =
         new NoOpCommand(Config.Build(Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString())));
 

@@ -38,6 +38,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Not InternalsVisibleTo, which appends the oss PublicKey even though SignAssembly is off -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>File.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Help.txt" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 

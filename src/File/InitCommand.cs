@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,36 @@ namespace Devlooped;
 
 class InitCommand(Config configuration) : Command(configuration)
 {
+    /// <summary>
+    /// Merges the skip=true file entries of a remote .netconfig into the local config, 
+    /// so upstream skips are honored. A local entry for the same path or URL takes precedence.
+    /// </summary>
+    internal static Config MergeSkips(Config config, Config remoteConfig)
+    {
+        foreach (var path in remoteConfig
+            .Where(x => x.Level == null && x.Section == "file" && x.Subsection != null)
+            .Select(x => x.Subsection!)
+            .Distinct())
+        {
+            if (remoteConfig.GetBoolean("file", path, "skip") != true)
+                continue;
+
+            if (config.Any(x => x.Section == "file" && x.Subsection == path))
+                continue;
+
+            var url = remoteConfig.GetString("file", path, "url");
+            if (url != null && GetConfiguredPath(config, new Uri(url)) != null)
+                continue;
+
+            if (url != null)
+                config = config.SetString("file", path, "url", url);
+
+            config = config.SetBoolean("file", path, "skip", true);
+        }
+
+        return config;
+    }
+
     public override async Task<int> ExecuteAsync()
     {
         if (Files.Count == 0)

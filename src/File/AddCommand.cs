@@ -162,7 +162,9 @@ class AddCommand(Config configuration) : Command(configuration)
                         // BadRequest from our conversion to raw URLs in GitHubRawHandler
                         response.StatusCode == HttpStatusCode.BadRequest))
                     {
-                        var gh = GitHub.TryGetFiles(file, out var repoFiles);
+                        var gh = GitHub.TryGetFiles(file, out var fetchedFiles);
+                        // Keep files the user moved from their upstream location (i.e. 'src/' to 'dotnet/') where they are.
+                        var repoFiles = WithConfiguredPaths(fetchedFiles).ToList();
                         switch (gh)
                         {
                             case GitHubResult.Success:

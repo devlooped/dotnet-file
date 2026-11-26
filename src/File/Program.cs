@@ -50,25 +50,7 @@ if (extraArgs.FindIndex(a => a == "--init") is var initIndex && initIndex >= 0 &
         ColorConsole.WriteLine("Downloading init config file(s)...".Yellow());
         await addCmd.ExecuteAsync();
 
-        var remoteConfig = Config.Build(tempFile);
-        foreach (var group in remoteConfig
-            .Where(x => x.Level == null && x.Section == "file" && x.Subsection != null)
-            .GroupBy(x => x.Subsection!))
-        {
-            var path = group.Key;
-            if (remoteConfig.GetBoolean("file", path, "skip") != true)
-                continue;
-
-            // Local entry takes precedence — only add skip if no local entry exists
-            if (config.Where(x => x.Section == "file" && x.Subsection == path).Any())
-                continue;
-
-            var url = remoteConfig.GetString("file", path, "url");
-            if (url != null)
-                config = config.SetString("file", path, "url", url);
-
-            config = config.SetBoolean("file", path, "skip", true);
-        }
+        config = InitCommand.MergeSkips(config, Config.Build(tempFile));
     }
     finally
     {
